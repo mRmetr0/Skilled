@@ -1,0 +1,103 @@
+[gd_scene load_steps=5 format=3 uid="uid://dhb0kuf5us6cp"]
+
+[ext_resource type="Script" path="res://Scripts/buttons.gd" id="1_cjuig"]
+[ext_resource type="Texture2D" uid="uid://g85ytj3s2dt5" path="res://border_1.png" id="2_kt6vo"]
+[ext_resource type="Texture2D" uid="uid://bp02gm7wfnvhc" path="res://Scenes/Stages/TheEnd/the_end_border.png" id="3_15fby"]
+[ext_resource type="Texture2D" uid="uid://s7fbefyr062n" path="res://border_3.png" id="3_e5h00"]
+
+[node name="StageSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cjuig")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -102.5
+offset_right = 102.5
+offset_bottom = 52.0
+grow_horizontal = 2
+pivot_offset = Vector2(102.5, 0)
+theme_override_font_sizes/font_size = 90
+text = "STAGE CLEARED
+SELECT NEXT DISTINATION"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StageA" type="Button" parent="."]
+custom_minimum_size = Vector2(250, 500)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 400.0
+offset_top = -150.0
+offset_right = 650.0
+offset_bottom = 350.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+text = "Stage A"
+flat = true
+
+[node name="Sprite2D" type="Sprite2D" parent="StageA"]
+scale = Vector2(1.02, 1.02)
+texture = ExtResource("2_kt6vo")
+centered = false
+
+[node name="StageB" type="Button" parent="."]
+custom_minimum_size = Vector2(250, 500)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -650.0
+offset_top = -150.0
+offset_right = -400.0
+offset_bottom = 350.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+text = "Stage B"
+flat = true
+
+[node name="Sprite2D" type="Sprite2D" parent="StageB"]
+scale = Vector2(1.02, 1.02)
+texture = ExtResource("2_kt6vo")
+centered = false
+
+[node name="Final_Stage" type="Button" parent="."]
+custom_minimum_size = Vector2(250, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -150.0
+offset_right = 125.0
+offset_bottom = 350.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.3, 1.3)
+pivot_offset = Vector2(129.3, 155.305)
+theme_override_font_sizes/font_size = 50
+icon = ExtResource("3_15fby")
+flat = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Final_Stage"]
+scale = Vector2(1.02, 1.02)
+texture = ExtResource("3_e5h00")
+centered = false
+
+[connection signal="pressed" from="StageA" to="." method="_on_stage_a_pressed"]
+[connection signal="pressed" from="StageB" to="." method="_on_stage_b_pressed"]
+[connection signal="pressed" from="Final_Stage" to="." method="_on_final_stage_pressed"]

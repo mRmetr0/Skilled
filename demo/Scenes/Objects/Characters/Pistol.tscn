@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3 uid="uid://buejqygxug2pm"]
+
+[ext_resource type="Texture2D" uid="uid://b6sjuklqkbqdt" path="res://Assets/Person.png" id="1_5n0g1"]
+[ext_resource type="PackedScene" uid="uid://gqbslx8m3sa3" path="res://Scenes/Objects/healthbar.tscn" id="2_c2nep"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e34r8"]
+
+[node name="Pistol" type="Player"]
+health = 10
+slow_speed = 200.0
+update_frequency = 1.1
+process_mode = 0
+editor_description = "Uses pistol"
+priority = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 1, 1)
+texture = ExtResource("1_5n0g1")
+metadata/_edit_lock_ = true
+
+[node name="ProgressBar" parent="." instance=ExtResource("2_c2nep")]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(5, 5)
+shape = SubResource("RectangleShape2D_e34r8")
+metadata/_edit_lock_ = true
+
+[node name="Weapon" type="Weapon" parent="."]
+reload_duration = 1.7
+magazine_size = 11
+bullet_damage = 3
+fire_range = 1000.0
+crit_rate = 3
+editor_description = "Pistol"
+metadata/_edit_lock_ = true
+
+[connection signal="reload" from="Weapon" to="ProgressBar" method="_set_reload"]

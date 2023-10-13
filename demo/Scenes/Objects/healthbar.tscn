@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://gqbslx8m3sa3"]
+
+[ext_resource type="Script" path="res://Scripts/healthbar.gd" id="1_4mj7q"]
+[ext_resource type="Texture2D" uid="uid://5c4ifjvfirkt" path="res://icon.svg" id="2_lkg1m"]
+
+[node name="ProgressBar" type="ProgressBar"]
+self_modulate = Color(1, 0, 0, 1)
+offset_left = -60.0
+offset_top = -89.0
+offset_right = 61.0
+offset_bottom = -66.0
+max_value = 10.0
+value = 10.0
+show_percentage = false
+script = ExtResource("1_4mj7q")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+position = Vector2(60, 11.5)
+scale = Vector2(0.98, 0.210938)
+texture = ExtResource("2_lkg1m")
+
+[node name="ReloadBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_top = -27.38
+offset_right = 121.0
+offset_bottom = -4.38
+show_percentage = false

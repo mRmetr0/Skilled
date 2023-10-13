@@ -1,0 +1,181 @@
+[gd_scene load_steps=15 format=3 uid="uid://btgwticpvtjlq"]
+
+[ext_resource type="Script" path="res://Scripts/main.gd" id="1_khu33"]
+[ext_resource type="Texture2D" uid="uid://33n26awgrx4b" path="res://Assets/Ground_tiles.png" id="2_2fpd8"]
+[ext_resource type="Texture2D" uid="uid://cy4rwikpm8yg4" path="res://Assets/Wooden_Crate.png" id="3_ww60u"]
+[ext_resource type="Texture2D" uid="uid://d3cmfkcuefhha" path="res://Assets/Metal_Crate_File.png" id="4_vmkpq"]
+[ext_resource type="Script" path="res://Scripts/AStar2D.gd" id="5_g3w6k"]
+[ext_resource type="Script" path="res://Scripts/player_manager.gd" id="6_df5hd"]
+[ext_resource type="Texture2D" uid="uid://b6sjuklqkbqdt" path="res://Assets/Person.png" id="7_uvcwf"]
+[ext_resource type="PackedScene" uid="uid://gqbslx8m3sa3" path="res://Scenes/Objects/healthbar.tscn" id="8_kh7iq"]
+[ext_resource type="Script" path="res://Scripts/enemy_manager.gd" id="9_x13ad"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6t3je"]
+resource_name = "Grass"
+texture = ExtResource("2_2fpd8")
+texture_region_size = Vector2i(100, 100)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ewyyf"]
+texture = ExtResource("3_ww60u")
+texture_region_size = Vector2i(100, 100)
+0:0/next_alternative_id = 5
+0:0/0 = 0
+1:0/next_alternative_id = 2
+1:0/0 = 0
+2:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5q1vh"]
+resource_name = "MMetal wall"
+texture = ExtResource("4_vmkpq")
+texture_region_size = Vector2i(100, 100)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_3so1l"]
+tile_size = Vector2i(100, 100)
+sources/5 = SubResource("TileSetAtlasSource_5q1vh")
+sources/2 = SubResource("TileSetAtlasSource_ewyyf")
+sources/0 = SubResource("TileSetAtlasSource_6t3je")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e34r8"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_khu33")
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_3so1l")
+format = 2
+layer_0/name = "Ground"
+layer_0/tile_data = PackedInt32Array(0, 0, 2, 1, 0, 2, 2, 0, 2, 3, 0, 2, 4, 0, 2, 5, 0, 2, 6, 0, 2, 7, 0, 2, 8, 0, 2, 9, 0, 2, 10, 0, 2, 11, 0, 2, 12, 0, 2, 13, 0, 2, 14, 0, 2, 15, 0, 2, 16, 0, 2, 17, 0, 2, 18, 0, 2, 65554, 0, 2, 65553, 0, 2, 65552, 0, 2, 65551, 0, 2, 65550, 0, 2, 65549, 0, 2, 65548, 0, 2, 65547, 0, 2, 65546, 0, 2, 65545, 0, 2, 65544, 0, 2, 65543, 0, 2, 65542, 0, 2, 65541, 0, 2, 65540, 0, 2, 65539, 0, 2, 65538, 0, 2, 65537, 0, 2, 65536, 0, 2, 131072, 0, 2, 196608, 0, 2, 262144, 0, 2, 327680, 0, 2, 393216, 0, 2, 458752, 0, 2, 524288, 0, 2, 589824, 0, 2, 655360, 0, 0, 131073, 0, 2, 196609, 0, 2, 262145, 0, 2, 327681, 0, 2, 393217, 0, 2, 458753, 0, 2, 524289, 0, 2, 589825, 0, 2, 655361, 0, 0, 131074, 0, 2, 196610, 0, 2, 262146, 0, 2, 327682, 0, 2, 393218, 0, 2, 458754, 0, 2, 524290, 0, 2, 589826, 0, 2, 655362, 0, 0, 131075, 0, 2, 196611, 0, 2, 262147, 0, 2, 327683, 0, 2, 393219, 0, 2, 458755, 0, 2, 524291, 0, 2, 589827, 0, 2, 655363, 0, 0, 131076, 0, 2, 196612, 0, 2, 262148, 0, 2, 327684, 0, 2, 393220, 0, 2, 458756, 0, 2, 524292, 0, 2, 589828, 0, 2, 655364, 0, 0, 131077, 0, 2, 196613, 0, 2, 262149, 327685, 0, 327685, 327685, 0, 393221, 0, 2, 458757, 0, 2, 524293, 0, 2, 589829, 0, 2, 655365, 0, 0, 131078, 0, 2, 196614, 0, 2, 262150, 5, 0, 327686, 5, 0, 393222, 0, 2, 458758, 0, 2, 524294, 0, 2, 589830, 0, 2, 655366, 0, 0, 131079, 0, 2, 196615, 327685, 0, 262151, 0, 2, 327687, 0, 2, 393223, 327685, 0, 458759, 0, 2, 524295, 0, 2, 589831, 0, 2, 655367, 0, 0, 131080, 327685, 0, 196616, 0, 2, 262152, 0, 2, 327688, 0, 2, 393224, 0, 2, 458760, 327685, 0, 524296, 0, 2, 589832, 0, 2, 655368, 0, 0, 131081, 327685, 0, 196617, 0, 2, 262153, 0, 2, 327689, 0, 2, 393225, 0, 2, 458761, 327685, 0, 524297, 0, 2, 589833, 0, 2, 655369, 0, 0, 131082, 327685, 0, 196618, 0, 2, 262154, 0, 2, 327690, 0, 2, 393226, 0, 2, 458762, 327685, 0, 524298, 0, 2, 589834, 0, 2, 655370, 0, 0, 131083, 327685, 0, 196619, 0, 2, 262155, 0, 2, 327691, 0, 2, 393227, 0, 2, 458763, 327685, 0, 524299, 0, 2, 589835, 0, 2, 655371, 0, 0, 131084, 0, 2, 196620, 327685, 0, 262156, 0, 2, 327692, 0, 2, 393228, 327685, 0, 458764, 0, 2, 524300, 0, 2, 589836, 0, 2, 655372, 0, 0, 131085, 0, 2, 196621, 0, 2, 262157, 5, 0, 327693, 5, 0, 393229, 0, 2, 458765, 0, 2, 524301, 0, 2, 589837, 0, 2, 655373, 0, 0, 131086, 0, 2, 196622, 0, 2, 262158, 327685, 0, 327694, 327685, 0, 393230, 0, 2, 458766, 0, 2, 524302, 0, 2, 589838, 0, 2, 655374, 0, 0, 131087, 0, 2, 196623, 0, 2, 262159, 0, 2, 327695, 0, 2, 393231, 0, 2, 458767, 0, 2, 524303, 0, 2, 589839, 0, 2, 655375, 0, 0, 131088, 0, 2, 196624, 0, 2, 262160, 0, 2, 327696, 0, 2, 393232, 0, 2, 458768, 0, 2, 524304, 0, 2, 589840, 0, 2, 655376, 0, 0, 131089, 0, 2, 196625, 0, 2, 262161, 0, 2, 327697, 0, 2, 393233, 0, 2, 458769, 0, 2, 524305, 0, 2, 589841, 0, 2, 655377, 0, 0, 131090, 0, 2, 196626, 0, 2, 262162, 0, 2, 327698, 0, 2, 393234, 0, 2, 458770, 0, 2, 524306, 0, 2, 589842, 0, 2, 655378, 0, 0, 131091, 0, 2, 196627, 0, 2, 262163, 0, 2, 327699, 0, 2, 393235, 0, 2, 458771, 0, 2, 524307, 0, 2, 589843, 0, 2, 655379, 0, 0, 19, 0, 2, 65555, 0, 2, 720896, 0, 0, 786432, 0, 0, 851968, 0, 0, 917504, 0, 0, 983040, 0, 0, 720897, 0, 0, 786433, 0, 0, 851969, 0, 0, 917505, 0, 0, 983041, 0, 0, 720898, 0, 0, 786434, 0, 0, 851970, 0, 0, 917506, 0, 0, 983042, 0, 0, 720899, 0, 0, 786435, 0, 0, 851971, 0, 0, 917507, 0, 0, 983043, 0, 0, 720900, 0, 0, 786436, 0, 0, 851972, 0, 0, 917508, 0, 0, 983044, 0, 0, 720901, 0, 0, 786437, 0, 0, 851973, 0, 0, 917509, 0, 0, 983045, 0, 0, 720902, 0, 0, 786438, 0, 0, 851974, 0, 0, 917510, 0, 0, 983046, 0, 0, 720903, 0, 0, 786439, 0, 0, 851975, 0, 0, 917511, 0, 0, 983047, 0, 0, 720904, 0, 0, 786440, 0, 0, 851976, 0, 0, 917512, 0, 0, 983048, 0, 0, 720905, 0, 0, 786441, 0, 0, 851977, 0, 0, 917513, 0, 0, 983049, 0, 0, 720906, 0, 0, 786442, 0, 0, 851978, 0, 0, 917514, 0, 0, 983050, 0, 0, 720907, 0, 0, 786443, 0, 0, 851979, 0, 0, 917515, 0, 0, 983051, 0, 0, 720908, 0, 0, 786444, 0, 0, 851980, 0, 0, 917516, 0, 0, 983052, 0, 0, 720909, 0, 0, 786445, 0, 0, 851981, 0, 0, 917517, 0, 0, 983053, 0, 0, 720910, 0, 0, 786446, 0, 0, 851982, 0, 0, 917518, 0, 0, 983054, 0, 0, 720911, 0, 0, 786447, 0, 0, 851983, 0, 0, 917519, 0, 0, 983055, 0, 0, 720912, 0, 0, 786448, 0, 0, 851984, 0, 0, 917520, 0, 0, 983056, 0, 0, 720913, 0, 0, 786449, 0, 0, 851985, 0, 0, 917521, 0, 0, 983057, 0, 0, 720914, 0, 0, 786450, 0, 0, 851986, 0, 0, 917522, 0, 0, 983058, 0, 0, 720915, 0, 0, 786451, 0, 0, 851987, 0, 0, 917523, 0, 0, 983059, 0, 0, 20, 0, 0, 65556, 0, 0, 131092, 0, 0, 196628, 0, 0, 262164, 0, 0, 327700, 0, 0, 393236, 0, 0, 458772, 0, 0, 524308, 0, 0, 589844, 0, 0, 655380, 0, 0, 720916, 0, 0, 786452, 0, 0, 851988, 0, 0, 917524, 0, 0, 983060, 0, 0, 21, 0, 0, 65557, 0, 0, 131093, 0, 0, 196629, 0, 0, 262165, 0, 0, 327701, 0, 0, 393237, 0, 0, 458773, 0, 0, 524309, 0, 0, 589845, 0, 0, 655381, 0, 0, 720917, 0, 0, 786453, 0, 0, 851989, 0, 0, 917525, 0, 0, 983061, 0, 0, 22, 0, 0, 65558, 0, 0, 131094, 0, 0, 196630, 0, 0, 262166, 0, 0, 327702, 0, 0, 393238, 0, 0, 458774, 0, 0, 524310, 0, 0, 589846, 0, 0, 655382, 0, 0, 720918, 0, 0, 786454, 0, 0, 851990, 0, 0, 917526, 0, 0, 983062, 0, 0, 23, 0, 0, 65559, 0, 0, 131095, 0, 0, 196631, 0, 0, 262167, 0, 0, 327703, 0, 0, 393239, 0, 0, 458775, 0, 0, 524311, 0, 0, 589847, 0, 0, 655383, 0, 0, 720919, 0, 0, 786455, 0, 0, 851991, 0, 0, 917527, 0, 0, 983063, 0, 0, 24, 0, 0, 65560, 0, 0, 131096, 0, 0, 196632, 0, 0, 262168, 0, 0, 327704, 0, 0, 393240, 0, 0, 458776, 0, 0, 524312, 0, 0, 589848, 0, 0, 655384, 0, 0, 720920, 0, 0, 786456, 0, 0, 851992, 0, 0, 917528, 0, 0, 983064, 0, 0, 25, 0, 0, 65561, 0, 0, 131097, 0, 0, 196633, 0, 0, 262169, 0, 0, 327705, 0, 0, 393241, 0, 0, 458777, 0, 0, 524313, 0, 0, 589849, 0, 0, 655385, 0, 0, 720921, 0, 0, 786457, 0, 0, 851993, 0, 0, 917529, 0, 0, 983065, 0, 0)
+layer_1/name = "Walls"
+layer_1/enabled = true
+layer_1/modulate = Color(1, 1, 1, 1)
+layer_1/y_sort_enabled = false
+layer_1/y_sort_origin = 0
+layer_1/z_index = 0
+layer_1/tile_data = PackedInt32Array()
+script = ExtResource("5_g3w6k")
+metadata/_edit_lock_ = true
+
+[node name="PlayerManager" type="Node" parent="."]
+script = ExtResource("6_df5hd")
+
+[node name="Player1" type="Player" parent="PlayerManager"]
+health = 10
+slow_speed = 200.0
+update_frequency = 3.0
+process_mode = 0
+editor_description = "Uses pistol"
+position = Vector2(1250, 546)
+priority = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="PlayerManager/Player1"]
+modulate = Color(0, 0, 1, 1)
+texture = ExtResource("7_uvcwf")
+metadata/_edit_lock_ = true
+
+[node name="ProgressBar" parent="PlayerManager/Player1" instance=ExtResource("8_kh7iq")]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerManager/Player1"]
+scale = Vector2(5, 5)
+shape = SubResource("RectangleShape2D_e34r8")
+metadata/_edit_lock_ = true
+
+[node name="Weapon" type="Weapon" parent="PlayerManager/Player1"]
+reload_duration = 2.0
+magazine_size = 11
+fire_range = 1000.0
+editor_description = "Pistol"
+metadata/_edit_lock_ = true
+
+[node name="Player2" type="Player" parent="PlayerManager"]
+normal_speed = 350.0
+slow_speed = 200.0
+update_frequency = 1.0
+process_mode = 0
+editor_description = "Uses sniper"
+position = Vector2(851, 651)
+priority = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="PlayerManager/Player2"]
+modulate = Color(0, 1, 1, 1)
+texture = ExtResource("7_uvcwf")
+metadata/_edit_lock_ = true
+
+[node name="ProgressBar" parent="PlayerManager/Player2" instance=ExtResource("8_kh7iq")]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerManager/Player2"]
+scale = Vector2(5, 5)
+shape = SubResource("RectangleShape2D_e34r8")
+metadata/_edit_lock_ = true
+
+[node name="Weapon" type="Weapon" parent="PlayerManager/Player2"]
+magazine_size = 1
+bullet_damage = 5
+bullet_pierce = 2
+editor_description = "Sniper"
+metadata/_edit_lock_ = true
+
+[node name="Player3" type="Player" parent="PlayerManager"]
+normal_speed = 500.0
+slow_speed = 150.0
+update_frequency = 4.0
+process_mode = 0
+editor_description = "uses shoptgun"
+position = Vector2(854, 349)
+priority = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="PlayerManager/Player3"]
+modulate = Color(1, 1, 0, 1)
+texture = ExtResource("7_uvcwf")
+metadata/_edit_lock_ = true
+
+[node name="ProgressBar" parent="PlayerManager/Player3" instance=ExtResource("8_kh7iq")]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerManager/Player3"]
+scale = Vector2(5, 5)
+shape = SubResource("RectangleShape2D_e34r8")
+metadata/_edit_lock_ = true
+
+[node name="Weapon" type="Weapon" parent="PlayerManager/Player3"]
+reload_duration = 3.0
+magazine_size = 4
+spread = 0.2
+shot_amout = 3
+fire_range = 600.0
+editor_description = "Shotgun"
+metadata/_edit_lock_ = true
+
+[node name="EnemyManager" type="Node" parent="."]
+script = ExtResource("9_x13ad")
+horde_amount = 7
+spawn_amount_max = 3
+
+[connection signal="log" from="PlayerManager/Player1" to="." method="_log"]
+[connection signal="log" from="PlayerManager/Player1/Weapon" to="." method="_log"]
+[connection signal="reload" from="PlayerManager/Player1/Weapon" to="PlayerManager/Player1/ProgressBar" method="_set_reload"]
+[connection signal="log" from="PlayerManager/Player2" to="." method="_log"]
+[connection signal="log" from="PlayerManager/Player2/Weapon" to="." method="_log"]
+[connection signal="reload" from="PlayerManager/Player2/Weapon" to="PlayerManager/Player2/ProgressBar" method="_set_reload"]
+[connection signal="log" from="PlayerManager/Player3" to="." method="_log"]
+[connection signal="log" from="PlayerManager/Player3/Weapon" to="." method="_log"]
+[connection signal="reload" from="PlayerManager/Player3/Weapon" to="PlayerManager/Player3/ProgressBar" method="_set_reload"]

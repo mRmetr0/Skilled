@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3 uid="uid://dxcobejhmdfdd"]
+
+[ext_resource type="Texture2D" uid="uid://b6sjuklqkbqdt" path="res://Assets/Person.png" id="1_pw2ub"]
+[ext_resource type="PackedScene" uid="uid://gqbslx8m3sa3" path="res://Scenes/Objects/healthbar.tscn" id="2_ibvfg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e34r8"]
+
+[node name="Rifle" type="Player"]
+normal_speed = 350.0
+slow_speed = 200.0
+update_frequency = 1.0
+process_mode = 0
+editor_description = "Uses sniper"
+priority = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 1, 1, 1)
+texture = ExtResource("1_pw2ub")
+metadata/_edit_lock_ = true
+
+[node name="ProgressBar" parent="." instance=ExtResource("2_ibvfg")]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(5, 5)
+shape = SubResource("RectangleShape2D_e34r8")
+metadata/_edit_lock_ = true
+
+[node name="Weapon" type="Weapon" parent="."]
+reload_duration = 3.6
+magazine_size = 3
+bullet_damage = 7
+bullet_pierce = 2
+crit_rate = 15
+editor_description = "Sniper"
+metadata/_edit_lock_ = true
+
+[connection signal="reload" from="Weapon" to="ProgressBar" method="_set_reload"]
