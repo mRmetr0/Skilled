@@ -10,7 +10,7 @@ class Weapon : public Node2D {
     GDCLASS(Weapon, Node2D)
 
 private:
-    Ref<PackedScene> bullet;
+    Node* bullet_pool;
 
     //AI 
     double fire_range;

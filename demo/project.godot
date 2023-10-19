@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameManager="*res://Scripts/game_manager.gd"
+BulletPool="*res://Scripts/bullet_pool.gd"
 
 [display]
 

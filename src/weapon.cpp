@@ -81,8 +81,7 @@ Weapon::~Weapon() {
 void Weapon::_ready(){
     bullet_amount = magazine_size;
 
-    ResourceLoader* loader = ResourceLoader::get_singleton();
-    bullet = loader->load("res://Scenes/Objects/bullet.tscn");
+    bullet_pool = Object::cast_to<Node>(get_node_or_null("/root/BulletPool"));
 }
 
 void Weapon::_process(double delta){
@@ -108,11 +107,11 @@ void Weapon::shoot(Vector2 position, double angle){
     for (int i = 0; i < shot_amount; i++){
         //setting up everything:
         float offset = (i-(shot_amount/2))*spread;
-        Node2D* init = cast_to<Node2D>( bullet->instantiate());
+        Node2D* init = cast_to<Node2D>(bullet_pool->call("_get_bullet"));
         init->call("_set_bullet", bullet_damage, bullet_pierce, crit_rate);
 
         //Marking everything down:
-        get_parent()->get_parent()->add_child(init);
+        // get_parent()->get_parent()->add_child(init);
         init->set_position(position);
         init->set_rotation(angle + offset);
     }

@@ -4,20 +4,22 @@ extends Area2D
 @export var damage: int = 1
 @export var pierce: int = 1
 
-func _ready():
-	pass
+@onready var run_speed = speed
 
 func _physics_process(delta):
-	position += transform.x * speed * delta
+	position += transform.x * run_speed * delta
 
 func _on_Bullet_body_entered(body):
 	if body.is_in_group("shootables"):
 		body._take_damage(damage)
 		pierce -= 1
 		if (pierce <= 0):
-			queue_free()
+			_die()
 		
 func _set_bullet(p_damage: int, p_pierce: int, p_crit: int = 0):
+	run_speed = speed
+	print("SPEED", speed)
+	print("RUN_SPEED", run_speed)
 	damage = p_damage;
 	pierce = p_pierce;
 	if randi_range(0, 100) <= p_crit:
@@ -25,4 +27,11 @@ func _set_bullet(p_damage: int, p_pierce: int, p_crit: int = 0):
 		get_node("Sprite2D").modulate = Color(1, 0, 0)
 
 func _on_exit_screen():
-	queue_free()
+	_die()
+	
+func _die():
+	if BulletPool.pool.has(self):
+		BulletPool._return_bullet(self)
+	else:
+		print("NOT PART OF POOL, DELETING")
+		queue_free()
