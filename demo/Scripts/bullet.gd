@@ -18,13 +18,13 @@ func _on_Bullet_body_entered(body):
 		
 func _set_bullet(p_damage: int, p_pierce: int, p_crit: int = 0):
 	run_speed = speed
-	print("SPEED", speed)
-	print("RUN_SPEED", run_speed)
 	damage = p_damage;
 	pierce = p_pierce;
 	if randi_range(0, 100) <= p_crit:
 		damage *= 2
 		get_node("Sprite2D").modulate = Color(1, 0, 0)
+	else:
+		get_node("Sprite2D").modulate = Color(1, 1, 1)
 
 func _on_exit_screen():
 	_die()

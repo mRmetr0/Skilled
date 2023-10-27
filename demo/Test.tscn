@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://mnjmu33sudam"]
+
+[ext_resource type="Script" path="res://Scripts/main.gd" id="1_lvh7h"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_lvh7h")
+
+[node name="Worm" type="Worm" parent="."]
+
+[connection signal="log" from="Worm" to="." method="_log"]

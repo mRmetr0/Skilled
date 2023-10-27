@@ -1,32 +1,33 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include <godot_cpp/classes/character_body2d.hpp>
+#include <godot_cpp/classes/area2d.hpp>
+#include <godot_cpp/classes/progress_bar.hpp>
 
 namespace godot {
 
-class Entity : public CharacterBody2D {
-    GDCLASS(Entity, CharacterBody2D)
+class Entity : public Area2D {
+    GDCLASS(Entity, Area2D)
 
 private:
+    ProgressBar* hp_bar;
+
+    int health;
+
+    void astar_set();
+    void astar_move(double delta);
 
 protected:
-    double time_passed;
-    double speed;
     static void _bind_methods();
 
 public:
-    int health;
-
     Entity();
     ~Entity();
-    
-    void _take_damage(int damage);
 
-    void set_speed(const double p_speed);
-    double get_speed() const;
-    void set_health(const int p_health);
-    int get_health() const;
+    void _ready();
+    void _process(double delta);
+    void _physics_process(double delta);
+    void _take_damage(int p_damage);
 };
 
 }

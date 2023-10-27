@@ -7,6 +7,9 @@
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 
+#include "entity.h"
+#include "worm.h"
+
 #include "player.h"
 #include "gdexample.h"
 #include "enemy.h"
@@ -18,6 +21,10 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
         return;
     }
+
+    ClassDB::register_class<Entity>();
+    ClassDB::register_class<Worm>();
+
 
     ClassDB::register_class<GDExample>();
     ClassDB::register_class<Player>();
