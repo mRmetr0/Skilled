@@ -11,8 +11,8 @@ class Entity : public Area2D {
 
 private:
     ProgressBar* hp_bar;
+    double speed;
 
-    int health;
 
     void astar_set();
     void astar_move(double delta);
@@ -21,6 +21,8 @@ protected:
     static void _bind_methods();
 
 public:
+    int health;
+
     Entity();
     ~Entity();
 
@@ -28,6 +30,12 @@ public:
     void _process(double delta);
     void _physics_process(double delta);
     void _take_damage(int p_damage);
+
+    //Getters & setters:
+    void set_health(const int p_health);
+    int get_health() const;
+    void set_speed(const double p_speed);
+    double get_speed() const;
 };
 
 }

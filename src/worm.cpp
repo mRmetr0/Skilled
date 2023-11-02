@@ -16,5 +16,5 @@ Worm::Worm(){
 Worm::~Worm(){}
 
 void Worm::_process(double delta) {
-    emit_signal("log", this, "WORM");
+    //emit_signal("log", this, "WORM");
 }
