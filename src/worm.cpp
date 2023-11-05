@@ -5,6 +5,7 @@
 using namespace godot;
 
 void Worm::_bind_methods() {
+    Entity::_bind_methods();
 }
 
 Worm::Worm(){

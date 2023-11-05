@@ -10,24 +10,25 @@ class Entity : public Area2D {
     GDCLASS(Entity, Area2D)
 
 private:
-    ProgressBar* hp_bar;
-
-    int health;
-
-    void astar_set();
-    void astar_move(double delta);
 
 protected:
+    ProgressBar* hp_bar;
+
     static void _bind_methods();
 
 public:
+    int health;
+    float speed;
+
     Entity();
     ~Entity();
 
     void _ready();
-    void _process(double delta);
-    void _physics_process(double delta);
     void _take_damage(int p_damage);
+
+    //getters & setters
+    void set_health(const int p_health);
+    int get_health() const;
 };
 
 }

@@ -17,7 +17,7 @@ func _ready():
 		print("NO PLAYER!")
 		
 	if GameManager.new_character != null:
-		_add_character(GameManager.new_character)
+		# _add_character(GameManager.new_character)
 		GameManager.new_character = null
 
 func _input(event):

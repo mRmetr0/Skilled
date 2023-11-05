@@ -1,10 +1,32 @@
-[gd_scene load_steps=2 format=3 uid="uid://mnjmu33sudam"]
+[gd_scene load_steps=4 format=3 uid="uid://mnjmu33sudam"]
 
-[ext_resource type="Script" path="res://Scripts/main.gd" id="1_lvh7h"]
+[ext_resource type="Texture2D" uid="uid://b6sjuklqkbqdt" path="res://Assets/Person.png" id="2_nwjel"]
+[ext_resource type="PackedScene" uid="uid://gqbslx8m3sa3" path="res://Scenes/Objects/healthbar.tscn" id="3_25ot2"]
 
-[node name="Main" type="Node2D"]
-script = ExtResource("1_lvh7h")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u34ay"]
 
-[node name="Worm" type="Worm" parent="."]
+[node name="EPlayer" type="EPlayer"]
+id = 0.0
+position = Vector2(406, 225)
 
-[connection signal="log" from="Worm" to="." method="_log"]
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 1, 1)
+texture = ExtResource("2_nwjel")
+metadata/_edit_lock_ = true
+
+[node name="ProgressBar" parent="." instance=ExtResource("3_25ot2")]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(5, 5)
+shape = SubResource("RectangleShape2D_u34ay")
+metadata/_edit_lock_ = true
+
+[node name="Weapon" type="Weapon" parent="."]
+reload_duration = 1.7
+magazine_size = 11
+bullet_damage = 3
+fire_range = 1000.0
+crit_rate = 3
+editor_description = "Pistol"
+metadata/_edit_lock_ = true

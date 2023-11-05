@@ -9,6 +9,7 @@
 
 #include "entity.h"
 #include "worm.h"
+#include "e_player.h"
 
 #include "player.h"
 #include "gdexample.h"
@@ -24,6 +25,7 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
 
     ClassDB::register_class<Entity>();
     ClassDB::register_class<Worm>();
+    ClassDB::register_class<EPlayer>();
 
 
     ClassDB::register_class<GDExample>();
