@@ -138,10 +138,12 @@ func _save_player_data():
 			continue
 		player_health.append(player.health)
 		player_name.append(player.name)
-		
-		
+
+
 func _set_player_data():
+	print(player_health.size())
 	if player_health.size() == 0:
+		print("SAVING")
 		_save_player_data()
 		return
 	

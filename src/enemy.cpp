@@ -56,9 +56,54 @@ void Enemy::_ready() {
     player_manager = Object::cast_to<Node>(get_node_or_null(NodePath("/root/Main/PlayerManager")));
     hp_bar = Object::cast_to<ProgressBar>(get_node_or_null(NodePath("ProgressBar")));
     tile_map = Object::cast_to<TileMap>(get_node_or_null(NodePath("/root/Main/TileMap")));
+
+    state = STORMING;
+    health_max = health;
 }
 
 void Enemy::_process(double delta){
+    /**/
+    PackedVector2Array check_path;
+
+    switch(state){
+        case STORMING:
+            if (!can_update(delta)) return;
+            check_path = tile_map->call("_get_path_raw", get_position(), player->get_position());
+            if (check_path.size() > 7) {
+                emit_signal("log", this, "STORMING");
+                astar_storm();
+            } else {
+                switch_state(HUNTING);
+            }
+            break;
+        case ATTACKING:
+            player->_take_damage(1);
+            switch_state(WANDERING);
+            break;
+        case WANDERING: 
+            if (check_path.size() < 3) {
+                switch_state(HUNTING);
+            } else if (check_path.size() > 10) {
+                switch_state(STORMING);
+            }
+            //TODO: WALK TO RANDOM POSITIONS
+            if (!can_update(delta)) return;
+            check_path = tile_map->call("_get_path_raw", get_position(), player->get_position());
+            break;
+        case HUNTING:
+            if (!can_update(delta)) return;
+            check_path = tile_map->call("_get_path_raw", get_position(), player->get_position());
+            if (get_position().distance_to(player->get_position()) <= attack_range){
+                switch_state(ATTACKING);
+            } else {
+                astar_hunt();
+            }
+            break;
+        default: 
+            break;
+    }
+
+    /**
     if (!can_attack){
         attack_timer += delta;
         if (attack_timer >= attack_frequency){
@@ -66,7 +111,6 @@ void Enemy::_process(double delta){
             attack_timer = 0.0;
         }
     }
-
     update_timer += delta;
     if (update_timer < update_frequency) return;
     update_timer = 0.0;
@@ -75,19 +119,20 @@ void Enemy::_process(double delta){
 
     if (player == NULL || player == nullptr){
         emit_signal("log", this, "Player NULL");
-        astar_stalk();
+        astar_storm();
         return;
     }
 
     PackedVector2Array check_path = tile_map->call("_get_path_raw", get_position(), player->get_position());
 
     if (check_path.size() > 7){ //Stalk
-        emit_signal("log", this, "STALKING");
-        astar_stalk();
+        emit_signal("log", this, "STORMING");
+        astar_storm();
     }  else { //HUNT
         emit_signal("log", this, "HUNTING");
         astar_hunt();
     }
+    /**/
 
 }
 
@@ -95,7 +140,7 @@ void Enemy::_physics_process(double delta){
     astar_move(delta);
 }
 
-void Enemy::astar_stalk(){
+void Enemy::astar_storm(){
     crate = tile_map->call("_get_wall_raw", get_position());
     if (crate == Vector2i(-1,-1)) return;
     PackedVector2Array new_path = tile_map->call("_get_path_adjacent_raw", get_position(), tile_map->map_to_local(crate));
@@ -121,10 +166,11 @@ void Enemy::astar_move(double delta){
         if (crate != Vector2(-1,-1) && get_position().distance_to(tile_map->map_to_local(crate)) <= attack_range){
             tile_map->call("_damage_tile_raw", tile_map->map_to_local(crate));
             crate = Vector2i(-1,-1);
-        } else if (player != nullptr && get_position().distance_to(player->get_position()) <= attack_range) {
-            player->_take_damage(1);
-            player == nullptr;
-        }
+        } 
+        // else if (player != nullptr && get_position().distance_to(player->get_position()) <= attack_range) {
+        //     player->_take_damage(1);
+        //     player == nullptr;
+        // }
         can_attack = false;
     }
 
@@ -149,6 +195,41 @@ void Enemy::_take_damage(int p_damage){
         return;
     }
 	hp_bar->call("_health_update", health);
+}
+
+void Enemy::switch_state(State p_state){
+    state = p_state;
+    update_timer = 0.0;
+    can_attack = false;
+    attack_timer = 0.0;
+
+    if (path.size() > 0)
+        path = tile_map->call("_get_path_raw", get_position(), get_position());
+}
+
+bool Enemy::can_update(double delta){
+
+    if (!can_attack){
+        attack_timer += delta;
+        if (attack_timer >= attack_frequency){
+            can_attack = true;
+            attack_timer = 0.0;
+        }
+    }
+
+    update_timer += delta;
+    if (update_timer < update_frequency) return false;
+    update_timer = 0.0;
+
+    player = Object::cast_to<Player>(player_manager->call("_get_closest_character", get_position()));
+
+    if (player == nullptr) {
+        emit_signal("log", this, "Player NULL");
+        path = tile_map->call("_get_path_raw", get_position(), get_position());
+        return false;
+    }
+
+    return true;
 }
 
 void Enemy::_handle_overlap(Variant p_var){

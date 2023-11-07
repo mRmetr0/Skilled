@@ -199,7 +199,7 @@ double Player::get_frequency() const {
 }
 
 void Player::set_health(const int p_health) {
-    health = p_health;
+    health -= CLAMP(p_health, 0, health_max);
 }
 int Player::get_health() const {
     return health;

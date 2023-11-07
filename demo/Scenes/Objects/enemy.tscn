@@ -9,7 +9,7 @@
 health = 10
 speed = 150.0
 update_frequency = 2.0
-attack_frequency = 2.0
+attack_frequency = 1.0
 attack_range = 125.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

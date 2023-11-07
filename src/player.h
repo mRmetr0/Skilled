@@ -34,6 +34,8 @@ private:
     int progress;
     bool is_player;
 
+    int health_max;
+
     void astar_set();
     void astar_move(double delta);
     bool is_ground();

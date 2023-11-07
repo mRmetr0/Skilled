@@ -49,7 +49,7 @@ func _on_continue_pressed():
 		get_node("selected_name").text = "please select a character first"
 	else:
 		GameManager.player_name.append(selected_character)
-		GameManager.player_health.append(5)
+		GameManager.player_health.append(100)
 		
 		var i = GameManager.available_characters.find(selected_character)
 		GameManager.available_characters.remove_at(i)

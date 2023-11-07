@@ -14,6 +14,16 @@ class Enemy : public Area2D {
     GDCLASS(Enemy, Area2D)
 
 private:
+    enum State {
+        STALKING,
+        ATTACKING,
+        STORMING,
+        WANDERING,
+        HUNTING,
+    };
+
+    State state;
+
     Node* player_manager;
     TileMap* tile_map;
     ProgressBar* hp_bar;
@@ -34,9 +44,13 @@ private:
     int progress;
     bool can_attack;
 
-    void astar_stalk();
+    int health_max;
+
+    void astar_storm();
     void astar_hunt();
     void astar_move(double delta);
+    void switch_state(State p_state);
+    bool can_update(double delta);
 
 protected:
     static void _bind_methods();
