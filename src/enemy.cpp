@@ -57,15 +57,21 @@ void Enemy::_ready() {
     hp_bar = Object::cast_to<ProgressBar>(get_node_or_null(NodePath("ProgressBar")));
     tile_map = Object::cast_to<TileMap>(get_node_or_null(NodePath("/root/Main/TileMap")));
 
-    state = STORMING;
+    //state = memnew (StormingState);
+    //enum_state = STORMING;
     health_max = health;
 }
 
 void Enemy::_process(double delta){
-    /**/
-    PackedVector2Array check_path;
 
-    switch(state){
+    // EnemyState* _state = state->update(*this, delta);
+    // if (_state != nullptr){
+    //     memdelete(state);
+    //     state = _state;
+    // }
+
+    /**
+    switch(enum_state){
         case STORMING:
             if (!can_update(delta)) return;
             check_path = tile_map->call("_get_path_raw", get_position(), player->get_position());
@@ -102,7 +108,7 @@ void Enemy::_process(double delta){
         default: 
             break;
     }
-
+    /**/
     /**
     if (!can_attack){
         attack_timer += delta;
@@ -198,7 +204,7 @@ void Enemy::_take_damage(int p_damage){
 }
 
 void Enemy::switch_state(State p_state){
-    state = p_state;
+    enum_state = p_state;
     update_timer = 0.0;
     can_attack = false;
     attack_timer = 0.0;
@@ -281,3 +287,61 @@ double Enemy::get_attack_frequency() const {
 }
 
 #pragma endregion getters_setters
+
+#pragma region EnemyState
+
+EnemyState* EnemyState::update (Enemy& enemy, double delta) {
+    return nullptr;
+}
+
+void EnemyState::fixed_update(Enemy& enemy, double delta){
+    return;
+}
+
+// // EnemyState* WanderingState::update(Enemy& enemy, double delta) {
+// //     if (enemy.check_path.size() < 3) {
+// //         return memnew(HuntingState);
+// //         //enemy.switch_state(enemy.HUNTING);
+// //     } else if (enemy.check_path.size() > 10) {
+// //         return memnew(StormingState);
+// //         //enemy.switch_state(enemy.STORMING);
+// //     }
+// //     //TODO: WALK TO RANDOM POSITIONS
+// //     if (!enemy.can_update(delta)) return nullptr;
+// //         enemy.check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
+// //     return nullptr;
+// // }
+
+// EnemyState* HuntingState::update (Enemy& enemy, double delta) {
+//     // if (!enemy.can_update(delta)) return nullptr;
+//     // enemy.check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
+//     // if (enemy.get_position().distance_to(enemy.player->get_position()) <= enemy.attack_range){
+//     //     // EnemyState* e = memnew(EnemyState);
+//     //     // return e;
+//     // } else {
+//     //     enemy.astar_hunt();
+//     // }
+//     return nullptr;
+// }
+// void HuntingState::fixed_update(Enemy& enemy, double delta){
+//     return;
+// }
+// EnemyState* HuntingState::number(EnemyState* h, double d){
+//     // EnemyState* e = (EnemyState*)memalloc(sizeof(EnemyState));
+//     // memnew_placement(&e, EnemyState);
+//     // EnemyState* e = memnew(EnemyState);
+//     // Area2D* a = memnew(Area2D);
+//     return h;
+// }
+
+
+#pragma endregion EnemyState
+
+// Parent* Parent::update(Parent* p){
+//     return nullptr;
+// }
+
+// Parent* Child::update(Parent* p){
+//     // return memnew(Child);
+//     return nullptr;
+// }

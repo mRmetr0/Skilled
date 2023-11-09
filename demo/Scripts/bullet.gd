@@ -15,7 +15,7 @@ func _on_Bullet_body_entered(body):
 		pierce -= 1
 		if (pierce <= 0):
 			_die()
-		
+
 func _set_bullet(p_damage: int, p_pierce: int, p_crit: int = 0):
 	run_speed = speed
 	damage = p_damage;
@@ -28,7 +28,7 @@ func _set_bullet(p_damage: int, p_pierce: int, p_crit: int = 0):
 
 func _on_exit_screen():
 	_die()
-	
+
 func _die():
 	if BulletPool.pool.has(self):
 		BulletPool._return_bullet(self)

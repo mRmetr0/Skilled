@@ -6,7 +6,6 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e34r8"]
 
 [node name="Pistol" type="Player"]
-health = 10
 slow_speed = 200.0
 update_frequency = 1.1
 process_mode = 0

@@ -26,12 +26,20 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<Entity>();
     ClassDB::register_class<Worm>();
     ClassDB::register_class<EPlayer>();
-
+    
 
     ClassDB::register_class<GDExample>();
+    
     ClassDB::register_class<Player>();
     ClassDB::register_class<Enemy>();
     ClassDB::register_class<Weapon>();
+
+    // ClassDB::register_class<EnemyState>();
+    // ClassDB::register_class<AttackingState>();
+    // ClassDB::register_class<HuntingState>();
+
+    // ClassDB::register_class<Parent>();
+    // ClassDB::register_class<Child>();
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {

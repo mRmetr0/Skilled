@@ -5,30 +5,21 @@
 #include <godot_cpp/classes/progress_bar.hpp>
 #include <godot_cpp/classes/tile_map.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
+// #include <godot_cpp/classes/node3d.hpp>
 
 #include "player.h"
 
 namespace godot {
 
+//class EnemyState;
+
 class Enemy : public Area2D {
     GDCLASS(Enemy, Area2D)
 
 private:
-    enum State {
-        STALKING,
-        ATTACKING,
-        STORMING,
-        WANDERING,
-        HUNTING,
-    };
-
-    State state;
-
     Node* player_manager;
-    TileMap* tile_map;
     ProgressBar* hp_bar;
     PackedVector2Array path;
-    Player* player;
     Vector2 target;
     Vector2i crate;
 
@@ -39,24 +30,35 @@ private:
 
     double attack_frequency;
     double attack_timer;
-    double attack_range;
 
     int progress;
     bool can_attack;
 
     int health_max;
 
-    void astar_storm();
-    void astar_hunt();
     void astar_move(double delta);
-    void switch_state(State p_state);
-    bool can_update(double delta);
 
 protected:
     static void _bind_methods();
 
 public:
+    enum State {
+        STALKING,
+        ATTACKING,
+        STORMING,
+        WANDERING,
+        HUNTING,
+    };
+
+    State enum_state;
+
+    PackedVector2Array check_path;
+    TileMap* tile_map;
+    Player* player;
+    // EnemyState* state;
+
     int health;
+    double attack_range;
     
     Enemy();
     ~Enemy();
@@ -64,8 +66,15 @@ public:
     void _ready();
     void _process(double delta);
     void _physics_process(double delta);
+
     void _take_damage(int p_damage);
     void _handle_overlap(Variant p_var);
+    bool can_update(double delta);
+
+    //Might delete later
+    void astar_storm();
+    void astar_hunt();
+    void switch_state(State p_state);
 
     void set_health(const int p_health);
     int get_health() const;
@@ -79,6 +88,65 @@ public:
     void set_attack_frequency(const double p_speed);
     double get_attack_frequency() const;
 };
+
+class EnemyState : public Object {
+    GDCLASS(EnemyState, Object);
+    protected:
+        static void _bind_methods(){}
+
+    public:
+        EnemyState(){}
+        ~EnemyState(){}
+        virtual EnemyState* update(Enemy& enemy, double delta);    
+        virtual void fixed_update(Enemy& enemy, double delta);
+        
+        // virtual EnemyState* number(EnemyState* h, double d);
+};
+
+class HuntingState : public EnemyState {
+    public:
+        HuntingState();
+        ~HuntingState();
+        EnemyState* update (Enemy& enemy, double delta) override;
+        void fixed_update(Enemy& enemy, double delta) override;
+
+        // EnemyState* number(EnemyState* h, double d) override;
+};
+// class StormingState : public EnemyState {
+//     public:
+//         StormingState();
+//         ~StormingState();
+//         EnemyState* update (Enemy& enemy, double delta);
+// };
+// class WanderingState : public EnemyState {
+//     public:
+//         WanderingState();
+//         ~WanderingState();
+//         EnemyState* update (Enemy& enemy, double delta);
+// };
+// class AttackingState : public EnemyState {
+//     public:
+//         AttackingState();
+//         ~AttackingState();
+//         EnemyState* update (Enemy& enemy, double delta) override;
+// };
+
+// class Parent : public Node3D {
+//     GDCLASS(Parent, Node3D);
+// protected:
+//     static void _bind_methods();
+// public:
+//     Parent();
+//     ~Parent();
+//     virtual Parent* update(Parent* p);
+// };
+
+// class Child : public Parent {
+// public:
+//     Child();
+//     ~Child();
+//     Parent* update(Parent* p) override;
+// };
 
 }
 
