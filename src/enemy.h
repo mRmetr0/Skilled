@@ -91,62 +91,71 @@ public:
 
 class EnemyState : public Object {
     GDCLASS(EnemyState, Object);
-    protected:
-        static void _bind_methods(){}
+protected:
+    static void _bind_methods(){}
 
-    public:
-        EnemyState(){}
-        ~EnemyState(){}
-        virtual EnemyState* update(Enemy& enemy, double delta);    
-        virtual void fixed_update(Enemy& enemy, double delta);
-        
-        // virtual EnemyState* number(EnemyState* h, double d);
+public:
+    EnemyState(){}
+    ~EnemyState(){}
+    virtual EnemyState* update(Enemy& enemy, double delta);    
+    virtual void fixed_update(Enemy& enemy, double delta);
+    
+    // virtual EnemyState* number(EnemyState* h, double d);
+};
+class StormingState : public EnemyState {
+public:
+    StormingState(){}
+    ~StormingState(){}
+    EnemyState* update (Enemy& enemy, double delta) override;
+    void fixed_update(Enemy& enemy, double delta) override;
 };
 
+class AttackingState : public EnemyState {
+public:
+    AttackingState(){}
+    ~AttackingState(){}
+    EnemyState* update (Enemy& enemy, double delta) override;
+    void fixed_update(Enemy& enemy, double delta) override;
+};
+class WanderingState : public EnemyState {
+public:
+    WanderingState(){}
+    ~WanderingState(){}
+    EnemyState* update (Enemy& enemy, double delta) override;
+    void fixed_update(Enemy& enemy, double delta) override;
+};
 class HuntingState : public EnemyState {
-    public:
-        HuntingState();
-        ~HuntingState();
-        EnemyState* update (Enemy& enemy, double delta) override;
-        void fixed_update(Enemy& enemy, double delta) override;
+public:
+    HuntingState(){}
+    ~HuntingState(){}
+    EnemyState* update (Enemy& enemy, double delta) override;
+    void fixed_update(Enemy& enemy, double delta) override;
 
-        // EnemyState* number(EnemyState* h, double d) override;
+    // EnemyState* number(EnemyState* h, double d) override;
 };
-// class StormingState : public EnemyState {
-//     public:
-//         StormingState();
-//         ~StormingState();
-//         EnemyState* update (Enemy& enemy, double delta);
-// };
-// class WanderingState : public EnemyState {
-//     public:
-//         WanderingState();
-//         ~WanderingState();
-//         EnemyState* update (Enemy& enemy, double delta);
-// };
-// class AttackingState : public EnemyState {
-//     public:
-//         AttackingState();
-//         ~AttackingState();
-//         EnemyState* update (Enemy& enemy, double delta) override;
-// };
 
-// class Parent : public Node3D {
-//     GDCLASS(Parent, Node3D);
-// protected:
-//     static void _bind_methods();
-// public:
-//     Parent();
-//     ~Parent();
-//     virtual Parent* update(Parent* p);
-// };
+class Parent : public Object {
+    GDCLASS(Parent, Object);
+protected:
+    static void _bind_methods(){}
+public:
+    Parent(){}
+    ~Parent(){}
+    virtual Parent* update(Parent* p);
+};
+class Son : public Parent {
+public:
+    Son(){}
+    ~Son(){}
+    Parent* update(Parent* p) override;
+};
 
-// class Child : public Parent {
-// public:
-//     Child();
-//     ~Child();
-//     Parent* update(Parent* p) override;
-// };
+class Child : public Parent {
+public:
+    Child(){}
+    ~Child(){}
+    Parent* update(Parent* p) override;
+};
 
 }
 

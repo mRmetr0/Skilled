@@ -289,7 +289,7 @@ double Enemy::get_attack_frequency() const {
 #pragma endregion getters_setters
 
 #pragma region EnemyState
-
+//BASE CLASS METHODS:
 EnemyState* EnemyState::update (Enemy& enemy, double delta) {
     return nullptr;
 }
@@ -297,35 +297,54 @@ EnemyState* EnemyState::update (Enemy& enemy, double delta) {
 void EnemyState::fixed_update(Enemy& enemy, double delta){
     return;
 }
+//STORMING STATE
+EnemyState* StormingState::update (Enemy& enemy, double delta) {
+    return nullptr;
+}
 
-// // EnemyState* WanderingState::update(Enemy& enemy, double delta) {
-// //     if (enemy.check_path.size() < 3) {
-// //         return memnew(HuntingState);
-// //         //enemy.switch_state(enemy.HUNTING);
-// //     } else if (enemy.check_path.size() > 10) {
-// //         return memnew(StormingState);
-// //         //enemy.switch_state(enemy.STORMING);
-// //     }
-// //     //TODO: WALK TO RANDOM POSITIONS
-// //     if (!enemy.can_update(delta)) return nullptr;
-// //         enemy.check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
-// //     return nullptr;
-// // }
+void StormingState::fixed_update(Enemy& enemy, double delta){
+    return;
+}
+//ATTACKING STATE:
+EnemyState* AttackingState::update (Enemy& enemy, double delta) {
+    return nullptr;
+}
 
-// EnemyState* HuntingState::update (Enemy& enemy, double delta) {
-//     // if (!enemy.can_update(delta)) return nullptr;
-//     // enemy.check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
-//     // if (enemy.get_position().distance_to(enemy.player->get_position()) <= enemy.attack_range){
-//     //     // EnemyState* e = memnew(EnemyState);
-//     //     // return e;
-//     // } else {
-//     //     enemy.astar_hunt();
-//     // }
-//     return nullptr;
-// }
-// void HuntingState::fixed_update(Enemy& enemy, double delta){
-//     return;
-// }
+void AttackingState::fixed_update(Enemy& enemy, double delta){
+    return;
+}
+//WANDERING STATE:
+EnemyState* WanderingState::update(Enemy& enemy, double delta) {
+//     if (enemy.check_path.size() < 3) {
+//         return memnew(HuntingState);
+//         //enemy.switch_state(enemy.HUNTING);
+//     } else if (enemy.check_path.size() > 10) {
+//         return memnew(StormingState);
+//         //enemy.switch_state(enemy.STORMING);
+//     }
+//     //TODO: WALK TO RANDOM POSITIONS
+//     if (!enemy.can_update(delta)) return nullptr;
+//         enemy.check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
+    return nullptr;
+}
+void WanderingState::fixed_update(Enemy& enemy, double delta){
+    return;
+}
+//HUNTING STATE:
+EnemyState* HuntingState::update (Enemy& enemy, double delta) {
+    if (!enemy.can_update(delta)) return nullptr;
+    enemy.check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
+    if (enemy.get_position().distance_to(enemy.player->get_position()) <= enemy.attack_range){
+        EnemyState* e = memnew(AttackingState);
+        return e;
+    } else {
+        enemy.astar_hunt();
+    }
+    return nullptr;
+}
+void HuntingState::fixed_update(Enemy& enemy, double delta){
+    return;
+}
 // EnemyState* HuntingState::number(EnemyState* h, double d){
 //     // EnemyState* e = (EnemyState*)memalloc(sizeof(EnemyState));
 //     // memnew_placement(&e, EnemyState);
@@ -337,11 +356,15 @@ void EnemyState::fixed_update(Enemy& enemy, double delta){
 
 #pragma endregion EnemyState
 
-// Parent* Parent::update(Parent* p){
-//     return nullptr;
-// }
-
-// Parent* Child::update(Parent* p){
-//     // return memnew(Child);
-//     return nullptr;
-// }
+Parent* Parent::update(Parent* p){
+    return nullptr;
+}
+Parent* Child::update(Parent* p){
+    //return memnew(Child);
+    return nullptr;
+}
+Parent* Son::update(Parent* p){
+    // Parent* c = memnew(Child);
+    // Parent* s = memnew(Son);
+    return nullptr;
+}
