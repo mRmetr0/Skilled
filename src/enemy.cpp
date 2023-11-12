@@ -28,23 +28,19 @@ void Enemy::_bind_methods() {
 
 
     ClassDB::bind_method(D_METHOD("_take_damage"), &Enemy::_take_damage);
-ClassDB::bind_method(D_METHOD("_handle_overlap"), &Enemy::_handle_overlap);
     
 
     ADD_SIGNAL(MethodInfo("log", PropertyInfo(Variant::OBJECT, "node"), PropertyInfo(Variant::STRING, "message")));
 }
 
 Enemy::Enemy(){
-time_passed = 0.0;
     speed = 1.0;
     health = 5;
-    target = Vector2(0,0);
     attack_range = 150.0;
     update_frequency = 1.0;
     attack_frequency = 1.5;
-attack_timer = 0.0;
+    attack_timer = 0.0;
     update_timer = update_frequency;
-    can_attack = false;
 
     if (Engine::get_singleton()->is_editor_hint())
         set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
@@ -58,7 +54,6 @@ void Enemy::_ready() {
     tile_map = Object::cast_to<TileMap>(get_node_or_null(NodePath("/root/Main/TileMap")));
 
     state = memnew (StormingState);
-//enum_state = STORMING;
     health_max = health;
 }
 
@@ -73,55 +68,6 @@ void Enemy::_process(double delta){
 
 void Enemy::_physics_process(double delta){
     state->fixed_update(*this, delta);
-// astar_move(delta);
-}
-
-void Enemy::astar_storm(){
-    crate = tile_map->call("_get_wall_raw", get_position());
-    if (crate == Vector2i(-1,-1)) return;
-    PackedVector2Array new_path = tile_map->call("_get_path_adjacent_raw", get_position(), tile_map->map_to_local(crate));
-    if (new_path.size() > 0) 
-    {
-        path = new_path;
-        progress = 0;
-    }
-}
-
-void Enemy::astar_hunt(){
-    PackedVector2Array new_path = tile_map->call("_get_path_raw", get_position(), player->get_position());
-    if (new_path.size() > 0) 
-    {
-        path = new_path;
-        progress = 0;
-        crate = Vector2i(-1,-1);
-    }
-}
-
-void Enemy::astar_move(double delta){
-    // if (can_attack){
-    //     if (crate != Vector2(-1,-1) && get_position().distance_to(tile_map->map_to_local(crate)) <= attack_range){
-    //         tile_map->call("_damage_tile_raw", tile_map->map_to_local(crate));
-    //         crate = Vector2i(-1,-1);
-    //     } 
-    //     // else if (player != nullptr && get_position().distance_to(player->get_position()) <= attack_range) {
-    //     //     player->_take_damage(1);
-    //     //     player == nullptr;
-    //     // }
-    //     can_attack = false;
-    // }
-
-    if (path.size() == 0 || progress >= path.size()) return;
-
-    target = tile_map->map_to_local(path[progress]);
-
-    Vector2 velocity = get_position().direction_to(target)* speed;
-
-    //If at node, changes the target. Gets stopped next loop if required
-    if (get_position().distance_to(target) < 10) {
-        progress++;
-    }
-
-    set_position(get_position() + velocity * delta);
 }
 
 void Enemy::_take_damage(int p_damage){
@@ -131,49 +77,6 @@ void Enemy::_take_damage(int p_damage){
         return;
     }
 	hp_bar->call("_health_update", health);
-}
-
-void Enemy::switch_state(State p_state){
-    enum_state = p_state;
-    update_timer = 0.0;
-    can_attack = false;
-    attack_timer = 0.0;
-
-    if (path.size() > 0)
-        path = tile_map->call("_get_path_raw", get_position(), get_position());
-}
-
-bool Enemy::can_update(double delta){
-
-    // if (!can_attack){
-    //     attack_timer += delta;
-    //     if (attack_timer >= attack_frequency){
-    //         can_attack = true;
-    //         attack_timer = 0.0;
-    //     }
-    // }
-
-    update_timer += delta;
-    if (update_timer < update_frequency) return false;
-    update_timer = 0.0;
-
-    player = Object::cast_to<Player>(player_manager->call("_get_closest_character", get_position()));
-
-    if (player == nullptr) {
-        emit_signal("log", this, "Player NULL");
-        path = tile_map->call("_get_path_raw", get_position(), get_position());
-        return false;
-    }
-
-    return true;
-}
-
-void Enemy::_handle_overlap(Variant p_var){
-    // Player* player = Object::cast_to<Player> (p_var);
-    // if (player != nullptr) {
-    //     player->_take_damage(1);
-    //     player == nullptr;
-    // }
 }
 
 #pragma region getters_setters
@@ -220,12 +123,32 @@ double Enemy::get_attack_frequency() const {
 
 #pragma region EnemyState
 //BASE CLASS METHODS:
+bool EnemyState::can_update(Enemy& enemy, double delta){
+    update_timer += delta;
+    if (update_timer < enemy.update_frequency) return false;
+    update_timer = 0.0;
+
+    enemy.player = Object::cast_to<Player>(enemy.player_manager->call("_get_closest_character", enemy.get_position()));
+
+    if (enemy.player == nullptr) {
+        emit_signal("log", this, "Player NULL");
+        return false;
+    }
+    return true;
+}
+
 EnemyState* EnemyState::update (Enemy& enemy, double delta) {
     return nullptr;
 }
 
 void EnemyState::fixed_update(Enemy& enemy, double delta){
-    enemy.astar_move(delta);
+    if (path.size() == 0 || progress >= path.size()) return;
+
+    Vector2 target = enemy.tile_map->map_to_local(path[progress]);
+    Vector2 velocity = enemy.get_position().direction_to(target)* enemy.speed;
+
+    if (enemy.get_position().distance_to(target) < 10) progress++;
+    enemy.set_position(enemy.get_position() + velocity * delta);
 }
 //STORMING STATE
 void StormingState::set_storm(Enemy& enemy) {
@@ -234,8 +157,8 @@ void StormingState::set_storm(Enemy& enemy) {
     PackedVector2Array new_path = enemy.tile_map->call("_get_path_adjacent_raw", enemy.get_position(), enemy.tile_map->map_to_local(crate));
     if (new_path.size() > 0) 
     {
-        enemy.path = new_path;
-        enemy.progress = 0;
+        path = new_path;
+        progress = 0;
     }
 }
 EnemyState* StormingState::update (Enemy& enemy, double delta) {        
@@ -247,14 +170,13 @@ EnemyState* StormingState::update (Enemy& enemy, double delta) {
         }
     }
 
-    if (!enemy.can_update(delta)) return nullptr;
-    enemy.check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
-    if (enemy.check_path.size() > 7) {
-        enemy.emit_signal("log", this, "STORMING");
+    if (!can_update(enemy, delta)) return nullptr;
+    check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
+    if (check_path.size() > 7) {
         set_storm(enemy);
     } else {
         return memnew(HuntingState);
-            }
+    }
     return nullptr;
 }
 void StormingState::fixed_update(Enemy& enemy, double delta){
@@ -274,30 +196,37 @@ void AttackingState::fixed_update(Enemy& enemy, double delta){
 }
 //WANDERING STATE:
 EnemyState* WanderingState::update(Enemy& enemy, double delta) {
-    if (enemy.check_path.size() < 3) {
+    if (check_path.size() < 3) {
         return memnew(HuntingState);
-    //enemy.switch_state(enemy.HUNTING);
-    } else if (enemy.check_path.size() > 10) {
+    } else if (check_path.size() > 10) {
         return memnew(StormingState);
-//enemy.switch_state(enemy.STORMING);
     }
 //TODO: WALK TO RANDOM POSITIONS
-    if (!enemy.can_update(delta)) return nullptr;
-        enemy.check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
+    if (!can_update(enemy, delta)) return nullptr;
+        check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
     return nullptr;
 }
 void WanderingState::fixed_update(Enemy& enemy, double delta){
     EnemyState::fixed_update(enemy, delta);
 }
 //HUNTING STATE:
+void HuntingState::set_hunt(Enemy& enemy){
+    PackedVector2Array new_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
+    if (new_path.size() > 0) 
+    {
+        path = new_path;
+        progress = 0;
+    }
+}
+
 EnemyState* HuntingState::update (Enemy& enemy, double delta) {
-    if (!enemy.can_update(delta)) return nullptr;
-enemy.check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
+    if (!can_update(enemy, delta)) return nullptr;
+    check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
     if (enemy.get_position().distance_to(enemy.player->get_position()) <= enemy.attack_range){
         EnemyState* e = memnew(AttackingState);
-return e;
+        return e;
     } else {
-        enemy.astar_hunt();
+        set_hunt(enemy);
     }
     return nullptr;
 }
