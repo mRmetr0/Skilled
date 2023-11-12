@@ -57,18 +57,18 @@ void Enemy::_ready() {
     hp_bar = Object::cast_to<ProgressBar>(get_node_or_null(NodePath("ProgressBar")));
     tile_map = Object::cast_to<TileMap>(get_node_or_null(NodePath("/root/Main/TileMap")));
 
-    //state = memnew (StormingState);
+    state = memnew (StormingState);
     //enum_state = STORMING;
     health_max = health;
 }
 
 void Enemy::_process(double delta){
 
-    // EnemyState* _state = state->update(*this, delta);
-    // if (_state != nullptr){
-    //     memdelete(state);
-    //     state = _state;
-    // }
+    EnemyState* _state = state->update(*this, delta);
+    if (_state != nullptr){
+        memdelete(state);
+        state = _state;
+    }
 
     /**
     switch(enum_state){
@@ -143,7 +143,8 @@ void Enemy::_process(double delta){
 }
 
 void Enemy::_physics_process(double delta){
-    astar_move(delta);
+    state->fixed_update(*this, delta);
+    // astar_move(delta);
 }
 
 void Enemy::astar_storm(){
@@ -299,15 +300,25 @@ void EnemyState::fixed_update(Enemy& enemy, double delta){
 }
 //STORMING STATE
 EnemyState* StormingState::update (Enemy& enemy, double delta) {
+    if (!enemy.can_update(delta)) return nullptr;
+    enemy.check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
+    if (enemy.check_path.size() > 7) {
+        enemy.emit_signal("log", this, "STORMING");
+        enemy.astar_storm();
+    } else {
+        return memnew(HuntingState);
+        //enemy.switch_state(enemy.HUNTING);
+    }
     return nullptr;
 }
 
 void StormingState::fixed_update(Enemy& enemy, double delta){
-    return;
+    enemy.astar_move(delta);
 }
 //ATTACKING STATE:
 EnemyState* AttackingState::update (Enemy& enemy, double delta) {
-    return nullptr;
+    enemy.player->_take_damage(1);
+    return memnew(WanderingState);
 }
 
 void AttackingState::fixed_update(Enemy& enemy, double delta){
@@ -315,20 +326,20 @@ void AttackingState::fixed_update(Enemy& enemy, double delta){
 }
 //WANDERING STATE:
 EnemyState* WanderingState::update(Enemy& enemy, double delta) {
-//     if (enemy.check_path.size() < 3) {
-//         return memnew(HuntingState);
-//         //enemy.switch_state(enemy.HUNTING);
-//     } else if (enemy.check_path.size() > 10) {
-//         return memnew(StormingState);
-//         //enemy.switch_state(enemy.STORMING);
-//     }
-//     //TODO: WALK TO RANDOM POSITIONS
-//     if (!enemy.can_update(delta)) return nullptr;
-//         enemy.check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
+    if (enemy.check_path.size() < 3) {
+        return memnew(HuntingState);
+        //enemy.switch_state(enemy.HUNTING);
+    } else if (enemy.check_path.size() > 10) {
+        return memnew(StormingState);
+        //enemy.switch_state(enemy.STORMING);
+    }
+    //TODO: WALK TO RANDOM POSITIONS
+    if (!enemy.can_update(delta)) return nullptr;
+        enemy.check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
     return nullptr;
 }
 void WanderingState::fixed_update(Enemy& enemy, double delta){
-    return;
+    enemy.astar_move(delta);
 }
 //HUNTING STATE:
 EnemyState* HuntingState::update (Enemy& enemy, double delta) {
@@ -343,7 +354,7 @@ EnemyState* HuntingState::update (Enemy& enemy, double delta) {
     return nullptr;
 }
 void HuntingState::fixed_update(Enemy& enemy, double delta){
-    return;
+    enemy.astar_move(deltax);
 }
 // EnemyState* HuntingState::number(EnemyState* h, double d){
 //     // EnemyState* e = (EnemyState*)memalloc(sizeof(EnemyState));

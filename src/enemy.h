@@ -11,7 +11,7 @@
 
 namespace godot {
 
-//class EnemyState;
+class EnemyState;
 
 class Enemy : public Area2D {
     GDCLASS(Enemy, Area2D)
@@ -36,7 +36,6 @@ private:
 
     int health_max;
 
-    void astar_move(double delta);
 
 protected:
     static void _bind_methods();
@@ -55,7 +54,7 @@ public:
     PackedVector2Array check_path;
     TileMap* tile_map;
     Player* player;
-    // EnemyState* state;
+    EnemyState* state;
 
     int health;
     double attack_range;
@@ -72,6 +71,7 @@ public:
     bool can_update(double delta);
 
     //Might delete later
+    void astar_move(double delta);
     void astar_storm();
     void astar_hunt();
     void switch_state(State p_state);
