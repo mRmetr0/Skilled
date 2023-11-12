@@ -23,9 +23,9 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
         return;
     }
 
-    ClassDB::register_class<Entity>();
-    ClassDB::register_class<Worm>();
-    ClassDB::register_class<EPlayer>();
+    // ClassDB::register_class<Entity>();
+    // ClassDB::register_class<Worm>();
+    // ClassDB::register_class<EPlayer>();
     
 
     ClassDB::register_class<GDExample>();
@@ -34,9 +34,11 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<Enemy>();
     ClassDB::register_class<Weapon>();
 
-    // ClassDB::register_class<EnemyState>();
+    ClassDB::register_class<EnemyState>();
     // ClassDB::register_class<AttackingState>();
     // ClassDB::register_class<HuntingState>();
+    // ClassDB::register_class<StormingState>();
+    // ClassDB::register_class<WanderingState>();
 
     // ClassDB::register_class<Parent>();
     // ClassDB::register_class<Child>();

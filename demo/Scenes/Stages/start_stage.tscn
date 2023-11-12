@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://fvwjbh6is34m"]
+[gd_scene load_steps=14 format=3 uid="uid://fvwjbh6is34m"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_b3ukq"]
 [ext_resource type="Texture2D" uid="uid://33n26awgrx4b" path="res://Assets/Ground_tiles.png" id="2_uvnd5"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://Scripts/AStar2D.gd" id="5_d5uex"]
 [ext_resource type="Script" path="res://Scripts/player_manager.gd" id="6_plat0"]
 [ext_resource type="PackedScene" uid="uid://buejqygxug2pm" path="res://Scenes/Objects/Characters/Pistol.tscn" id="7_f5kf0"]
+[ext_resource type="PackedScene" uid="uid://btb11i7bubn5y" path="res://Scenes/Objects/enemy.tscn" id="9_eynan"]
 [ext_resource type="Script" path="res://Scripts/enemy_manager.gd" id="9_hvbs8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ssc6w"]
@@ -80,3 +81,8 @@ script = ExtResource("9_hvbs8")
 spawn_rate = 3.0
 horde_amount = 1
 spawn_amount_max = 2
+
+[node name="Enemy" parent="." instance=ExtResource("9_eynan")]
+position = Vector2(51, 947)
+
+[connection signal="log" from="Enemy" to="." method="_log"]

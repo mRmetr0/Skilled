@@ -19,6 +19,17 @@ class Enemy : public Area2D {
 private:
     Node* player_manager;
     ProgressBar* hp_bar;
+
+    int health_max;
+
+
+
+
+protected:
+    static void _bind_methods();
+
+public:
+    //FOR TESTING IN PUBLIC
     PackedVector2Array path;
     Vector2 target;
     Vector2i crate;
@@ -33,14 +44,8 @@ private:
 
     int progress;
     bool can_attack;
+    //FOR TESTING IN PUBLIC
 
-    int health_max;
-
-
-protected:
-    static void _bind_methods();
-
-public:
     enum State {
         STALKING,
         ATTACKING,
@@ -99,10 +104,14 @@ public:
     ~EnemyState(){}
     virtual EnemyState* update(Enemy& enemy, double delta);    
     virtual void fixed_update(Enemy& enemy, double delta);
-    
-    // virtual EnemyState* number(EnemyState* h, double d);
 };
 class StormingState : public EnemyState {
+private:
+    Vector2i crate = Vector2i(-1,-1);
+    double attack_timer = 0.0;
+    bool can_attack = false;
+
+    void set_storm(Enemy& enemy);
 public:
     StormingState(){}
     ~StormingState(){}
@@ -130,33 +139,7 @@ public:
     ~HuntingState(){}
     EnemyState* update (Enemy& enemy, double delta) override;
     void fixed_update(Enemy& enemy, double delta) override;
-
-    // EnemyState* number(EnemyState* h, double d) override;
 };
-
-class Parent : public Object {
-    GDCLASS(Parent, Object);
-protected:
-    static void _bind_methods(){}
-public:
-    Parent(){}
-    ~Parent(){}
-    virtual Parent* update(Parent* p);
-};
-class Son : public Parent {
-public:
-    Son(){}
-    ~Son(){}
-    Parent* update(Parent* p) override;
-};
-
-class Child : public Parent {
-public:
-    Child(){}
-    ~Child(){}
-    Parent* update(Parent* p) override;
-};
-
 }
 
 #endif

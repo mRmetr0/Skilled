@@ -141,7 +141,6 @@ func _save_player_data():
 
 
 func _set_player_data():
-	print(player_health.size())
 	if player_health.size() == 0:
 		print("SAVING")
 		_save_player_data()

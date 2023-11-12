@@ -8,7 +8,6 @@
 [node name="Enemy" type="Enemy" groups=["shootables"]]
 health = 10
 speed = 150.0
-update_frequency = 2.0
 attack_frequency = 1.0
 attack_range = 125.0
 
@@ -23,5 +22,3 @@ metadata/_edit_lock_ = true
 scale = Vector2(5, 5)
 shape = SubResource("RectangleShape2D_d6vbd")
 metadata/_edit_lock_ = true
-
-[connection signal="area_entered" from="." to="." method="_handle_overlap"]
