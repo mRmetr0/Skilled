@@ -354,7 +354,7 @@ EnemyState* HuntingState::update (Enemy& enemy, double delta) {
     return nullptr;
 }
 void HuntingState::fixed_update(Enemy& enemy, double delta){
-    enemy.astar_move(deltax);
+    enemy.astar_move(delta);
 }
 // EnemyState* HuntingState::number(EnemyState* h, double d){
 //     // EnemyState* e = (EnemyState*)memalloc(sizeof(EnemyState));
