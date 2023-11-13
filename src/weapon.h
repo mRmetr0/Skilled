@@ -48,6 +48,7 @@ public:
     void shoot(Vector2 position, double angle);
     void reload();
 
+    //Getters, setters:
     void set_rate_of_fire(const double p_rof);
     double get_rate_of_fire() const;
     void set_fire_range(const double p_range);

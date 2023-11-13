@@ -6,12 +6,8 @@ var stages_till_end
 var levels = []
 var base_path = "res://Scenes/Stages/"
 
-var player_health = []
-var player_name = []
-
-var total_levels = -1
-var new_character = null
-var available_characters
+var player_health 
+var player_name
 
 func _ready():
 	_start_game()
@@ -19,8 +15,6 @@ func _ready():
 func _start_game():
 	stages = _load_stages()
 	stages_till_end = stages.size()-1
-	#stages_till_end = 0
-	available_characters = _get_all_characters()
 
 func _get_stage(divert_from = null):
 	var selection = []
@@ -76,7 +70,6 @@ func _load_levels():
 	levels.shuffle()
 	if final_level != null:
 		levels.append(final_level)
-	total_levels = levels.size()
 
 func _load_next_level():
 	if levels.size() == 0:
@@ -85,15 +78,6 @@ func _load_next_level():
 
 	var scene = levels[0]
 	levels.erase(scene)
-	total_levels -= 1
-
-	var enough_levels = total_levels >= 0
-	var rand = randi_range(0, total_levels) == 0
-	if enough_levels && rand:
-		var n = randi_range(0, available_characters.size()-1)
-		new_character = available_characters[n]
-		available_characters.erase(new_character)
-		total_levels = -1
 		
 	get_tree().change_scene_to_file(scene)
 
@@ -113,50 +97,20 @@ func _get_border(stage):
 			border = file
 	dir.list_dir_end()
 	return load(str(path + border))
-	
-func _get_all_characters():
-	var files = []
-	var path = "res://Scenes/Objects/Characters/"
-	var dir = DirAccess.open(path)
-	dir.list_dir_begin()
-	while true:
-		var file = dir.get_next()
-		if file == "":
-			break
-		elif not file.begins_with("."):
-			files.append(file.get_basename())
-	return files
-	
+		
 ## PLAYER DATA TRANSFER
-func _save_player_data():
-	var player_manager = get_node("/root/Main/PlayerManager")
-	player_health.clear()
-	player_name.clear()
-	for index in player_manager.get_children().size():
-		var player = player_manager.get_child(index)
-		if player.name.begins_with("@") || player.name.begins_with("Bullet"):
-			continue
-		player_health.append(player.health)
-		player_name.append(player.name)
+func _save_player_data(player = null):
+	if player == null:
+		var player_manager = get_node("/root/Main/PlayerManager")
+		player = player_manager.get_child(0)
+	player_health = player.health
+	player_name = player.name
 
-
-func _set_player_data():
+func _set_player_data(player):
 	if player_health.size() == 0:
 		print("SAVING")
-		_save_player_data()
+		_save_player_data(player)
 		return
-	
-	if player_health.size() != player_name.size():
-		print("DATA DOENS LIGN UP, SOMETHING WENT WRONG")
-		return
-	var player_manager = get_node("/root/Main/PlayerManager")
-	for n in player_manager.get_children():
-		player_manager.remove_child(n)
-		n.queue_free()
-	for n in player_name.size():
-		var player_scene = load(str("res://Scenes/Objects/Characters/" + player_name[n] + ".tscn"))
-		var player = player_scene.instantiate()
-		player_manager.add_child(player)
-		player.health = player_health[n]
-		player.get_node("ProgressBar")._health_update(player.health)
-		player.position = Vector2i(800 + (n*100), 500)
+
+	player.health = player_health
+	player.get_node("ProgressBar")._health_update(player.health)

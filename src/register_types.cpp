@@ -9,24 +9,19 @@
 
 #include "entity.h"
 #include "worm.h"
-#include "e_player.h"
 
 #include "player.h"
 #include "gdexample.h"
 #include "enemy.h"
 #include "weapon.h"
+// #include "weapon_state.h"
 
 using namespace godot;
 
 void initialize_example_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
         return;
-    }
-
-    // ClassDB::register_class<Entity>();
-    // ClassDB::register_class<Worm>();
-    // ClassDB::register_class<EPlayer>();
-    
+    }    
 
     ClassDB::register_class<GDExample>();
     
@@ -35,13 +30,7 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<Weapon>();
 
     ClassDB::register_class<EnemyState>();
-    // ClassDB::register_class<AttackingState>();
-    // ClassDB::register_class<HuntingState>();
-    // ClassDB::register_class<StormingState>();
-    // ClassDB::register_class<WanderingState>();
-
-    // ClassDB::register_class<Parent>();
-    // ClassDB::register_class<Child>();
+    // ClassDB::register_class<WeaponState>();
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {

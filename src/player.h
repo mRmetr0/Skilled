@@ -8,6 +8,7 @@
 #include <godot_cpp/classes/tile_map.hpp>
 
 #include "weapon.h"
+#include "weapon_state.h"
 
 namespace godot {
 

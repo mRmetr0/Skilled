@@ -77,7 +77,6 @@ metadata/_edit_lock_ = true
 script = ExtResource("6_50bp7")
 
 [node name="Player1" type="Player" parent="PlayerManager"]
-health = 10
 slow_speed = 200.0
 update_frequency = 3.0
 process_mode = 0

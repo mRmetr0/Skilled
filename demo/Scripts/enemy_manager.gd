@@ -18,7 +18,7 @@ func _process(delta):
 	if horde_amount <= 0 && get_children().size() == 0:
 		done = true
 		await get_tree().create_timer(3.0).timeout
-		GameManager._save_player_data()
+		GameManager._save_player_data(null)
 		GameManager._load_next_level()
 		return
 			

@@ -29,7 +29,6 @@ void Player::_bind_methods() {
     ClassDB::add_property("Player", PropertyInfo(Variant::FLOAT, "update_frequency"), "set_frequency", "get_frequency");
 
     ClassDB::bind_method(D_METHOD("_take_damage"), &Player::_take_damage);
-    ClassDB::bind_method(D_METHOD("_set_active", "p_active"), &Player::_set_active);
     ClassDB::bind_method(D_METHOD("_set_target", "p_target"), &Player::_set_target);
     
     ADD_SIGNAL(MethodInfo("log", PropertyInfo(Variant::OBJECT, "node"), PropertyInfo(Variant::STRING, "message")));
@@ -67,26 +66,7 @@ void Player::_ready(){
 }
 
 void Player::_process(double delta){
-    if (is_player) { //Player controls
-        astar_set();
-    } else {    //AI controls
-        //TODO: player shoot at enemy
-        time_passed += delta;
-        if (time_passed < update_frequency) return;
-        if (enemy_manager == nullptr) return;
-        time_passed = 0.0;
-        
-        Vector2 aim = enemy_manager->call("_get_closest_enemy", get_position());
-
-        if (aim == Vector2(0,0)) return;
-        
-        if (get_position().distance_to(aim) <= weapon->get_fire_range() || weapon->get_fire_range() == -1)
-            weapon->shoot(get_position(), (aim - get_position()).angle());
-
-        //TODO: player move and act accordingly (repair wall, run away, reposition)
-        //might give a "hold the fort" thingy; when not controlled, will not move too far from original position unless unsafe, 
-        //it might then run to another character/safety
-    }
+    astar_set();
 
     //Player slows down when hit
     if (hit_stun > 0){  
@@ -100,17 +80,14 @@ void Player::_process(double delta){
 void Player::_physics_process(double delta){
     astar_move(delta);
 
-    if (is_player) {   //Player controls
-        if (input->is_action_just_pressed("RClick")){
-            if (weapon != nullptr)
-                weapon->shoot(get_position(), (get_global_mouse_position() - get_position()).angle());
-        } else if (input->is_action_just_pressed("reload")){
-            if (weapon != nullptr)
-                weapon->reload();
-        }
-    } else {    //AI controls
-
+    if (input->is_action_just_pressed("RClick")){
+        if (weapon != nullptr)
+            weapon->shoot(get_position(), (get_global_mouse_position() - get_position()).angle());
+    } else if (input->is_action_just_pressed("reload")){
+        if (weapon != nullptr)
+            weapon->reload();
     }
+
 }
 void Player::astar_set(){
     if (input->is_action_just_pressed("LClick")){
@@ -154,7 +131,6 @@ void Player::_take_damage(int p_damage){
     health -= p_damage;
     hit_stun = 2.0;
     if (health <= 0) {
-        get_parent()->call("_remove_character", this);
         queue_free();
         return;
     }
@@ -167,11 +143,6 @@ bool Player::is_ground(){
     if (tile_map->get_cell_atlas_coords(0, tile_map->local_to_map(tile_map->get_global_mouse_position())).x == 0)
         return true;
     return false;
-}
-
-void Player::_set_active(bool p_active){
-    is_player = p_active;
-    hp_bar->call("_set_active", p_active);
 }
 
 void Player::_set_target(Vector2 p_target){

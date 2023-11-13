@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://cwj56onkottxv"]
+
+[ext_resource type="Texture2D" uid="uid://b6sjuklqkbqdt" path="res://Assets/Person.png" id="1_2aggy"]
+[ext_resource type="PackedScene" uid="uid://gqbslx8m3sa3" path="res://Scenes/Objects/healthbar.tscn" id="2_7ynhf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pc772"]
+
+[node name="Hero" type="Player"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 1, 1)
+texture = ExtResource("1_2aggy")
+metadata/_edit_lock_ = true
+
+[node name="ProgressBar" parent="." instance=ExtResource("2_7ynhf")]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(5, 5)
+shape = SubResource("RectangleShape2D_pc772")
+metadata/_edit_lock_ = true
