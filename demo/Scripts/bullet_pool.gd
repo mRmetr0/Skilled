@@ -13,7 +13,7 @@ func _ready():
 		add_child(b)
 		_return_bullet(b)
 
-func _get_bullet():
+func _get_bullet(): 
 	index = wrapi(index + 1, 0, pool_size)
 	return pool[index]
 	

@@ -5,7 +5,8 @@
 #include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/input.hpp>
 
-using namespace godot;
+namespace godot {
+
 
 class WeaponState : public Object {
     GDCLASS(WeaponState, Object)
@@ -14,39 +15,68 @@ protected:
     Input* input;
 
     //reloading
-    double reload_duration = 3.0;
-    double reload_time = 0.0;
-    bool reloading;
+    double reload_duration;
+    double reload_time;
+    bool reloading = false;
 
     //firing 
+    int inaccuracy;
     double rate_of_fire;
     double fire_time;
-    int crit_rate = 5;
-    bool in_recoil = false;
+    int crit_rate;
+    bool in_recoil;
 
     //shotgun
-    double spread = 0; 
-    int shot_amount = 0;    
+    double spread; 
+    int shot_amount; 
 
     //bullet
-    int bullet_damage = 1;
-    int bullet_pierce = 0;
-    int bullet_amount = 0;
-    int magazine_size = 13;
+    int bullet_damage;
+    int bullet_pierce;
+    int bullet_amount;
+    int magazine_size;
     
     static void _bind_methods(){}
 public:
-    virtual void start(Node& node, int p_start_clip);
-    virtual void update(Node2D& node, double delta);
+    WeaponState(){}
+    ~WeaponState(){}
+    virtual void start(Node& node, int p_start_clip = 0);
+    virtual WeaponState* update(Node2D& node, double delta);
     virtual void shoot(Vector2 position, double angle);
-    virtual void reload();
+    Vector2i _get_bullets();
 };
 
-// class PistolState : public WeaponState {
-// public: 
-//     void update(Node2D& node,double delta) override {WeaponState::update(node, delta);}
-//     void shoot() override;
-//     void reload() override;
-// };
+class PistolState : public WeaponState {
+public: 
+    PistolState(){}
+    ~PistolState(){}
+    void start(Node& node, int p_start_clip = 0) override;
+    WeaponState* update(Node2D& node,double delta) override;
+    void shoot(Vector2 position, double angle) override;
+    void reload();
+};
 
+class AutoState : public WeaponState {
+private:
+    bool empty = false;
+public: 
+    AutoState(){}
+    ~AutoState(){}
+    void start(Node& node, int p_start_clip = 0) override;
+    WeaponState* update(Node2D& node,double delta) override;
+    void shoot(Vector2 position, double angle) override;
+};
+
+class SpreadState : public WeaponState {
+private:
+    bool empty = false;
+public: 
+    SpreadState(){}
+    ~SpreadState(){}
+    void start(Node& node, int p_start_clip = 0) override;
+    WeaponState* update(Node2D& node,double delta) override;
+    void shoot(Vector2 position, double angle) override;
+};
+
+}
 #endif

@@ -30,6 +30,7 @@ void Player::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("_take_damage"), &Player::_take_damage);
     ClassDB::bind_method(D_METHOD("_set_target", "p_target"), &Player::_set_target);
+    ClassDB::bind_method(D_METHOD("_get_bullets"), &Player::_get_bullets);
     
     ADD_SIGNAL(MethodInfo("log", PropertyInfo(Variant::OBJECT, "node"), PropertyInfo(Variant::STRING, "message")));
 }
@@ -61,12 +62,21 @@ void Player::_ready(){
     input = Input::get_singleton();
     tile_map = Object::cast_to<TileMap>(get_node_or_null(NodePath("/root/Main/TileMap")));
     hp_bar = Object::cast_to<ProgressBar>(get_node_or_null(NodePath("ProgressBar")));
-    weapon = Object::cast_to<Weapon>(get_node_or_null(NodePath("Weapon")));
     enemy_manager = Object::cast_to<Node>(get_node_or_null(NodePath("/root/Main/EnemyManager")));
+
+    weapon_state = memnew(AutoState);
+    weapon_state->start(*this);
 }
 
 void Player::_process(double delta){
     astar_set();
+
+    WeaponState* new_weapon = weapon_state->update(*this, delta);
+    if (new_weapon != nullptr){
+        memdelete(weapon_state);
+        new_weapon->start(*this);
+        weapon_state = new_weapon;
+    }
 
     //Player slows down when hit
     if (hit_stun > 0){  
@@ -79,15 +89,6 @@ void Player::_process(double delta){
 
 void Player::_physics_process(double delta){
     astar_move(delta);
-
-    if (input->is_action_just_pressed("RClick")){
-        if (weapon != nullptr)
-            weapon->shoot(get_position(), (get_global_mouse_position() - get_position()).angle());
-    } else if (input->is_action_just_pressed("reload")){
-        if (weapon != nullptr)
-            weapon->reload();
-    }
-
 }
 void Player::astar_set(){
     if (input->is_action_just_pressed("LClick")){
@@ -131,7 +132,7 @@ void Player::_take_damage(int p_damage){
     health -= p_damage;
     hit_stun = 2.0;
     if (health <= 0) {
-        queue_free();
+        get_parent()->call("_game_over");
         return;
     }
 	hp_bar->call("_health_update", health);
@@ -158,6 +159,10 @@ void Player::_set_target(Vector2 p_target){
         path = new_path;
         progress = 0;
     }
+}
+
+Vector2i Player::_get_bullets(){
+    return weapon_state->_get_bullets();
 }
 
 #pragma region getters_setters

@@ -7,7 +7,7 @@
 #include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/tile_map.hpp>
 
-#include "weapon.h"
+#include "weapon_state.h"
 #include "weapon_state.h"
 
 namespace godot {
@@ -20,11 +20,12 @@ private:
     TileMap* tile_map;
     ProgressBar* hp_bar;
     Input* input;
-    Weapon* weapon;
     PackedVector2Array path;
     Vector2 enemy;
     Vector2 target;
     Vector2i crate;
+
+    WeaponState* weapon_state;
 
     double time_passed;
     double update_frequency;
@@ -54,9 +55,12 @@ public:
     void _ready();
     void _process(double delta);
     void _physics_process(double delta);
+
     void _take_damage(int p_damage);
     void _set_active(bool p_active);
     void _set_target(Vector2 p_target);
+    void _set_weapon(WeaponState weapon);
+    Vector2i _get_bullets();
 
     //getters & setters
     void set_health(const int p_health);

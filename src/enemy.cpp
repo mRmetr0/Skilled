@@ -58,7 +58,6 @@ void Enemy::_ready() {
 }
 
 void Enemy::_process(double delta){
-
     EnemyState* _state = state->update(*this, delta);
     if (_state != nullptr){
         memdelete(state);
@@ -73,6 +72,7 @@ void Enemy::_physics_process(double delta){
 void Enemy::_take_damage(int p_damage){
     health -= p_damage;
     if (health <= 0) {
+        // if (state != nullptr) memdelete(state);
         queue_free();
         return;
     }

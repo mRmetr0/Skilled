@@ -14,7 +14,7 @@
 #include "gdexample.h"
 #include "enemy.h"
 #include "weapon.h"
-// #include "weapon_state.h"
+#include "weapon_state.h"
 
 using namespace godot;
 
@@ -30,7 +30,7 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<Weapon>();
 
     ClassDB::register_class<EnemyState>();
-    // ClassDB::register_class<WeaponState>();
+    ClassDB::register_class<WeaponState>();
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {

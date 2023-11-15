@@ -6,8 +6,7 @@ var stages_till_end
 var levels = []
 var base_path = "res://Scenes/Stages/"
 
-var player_health 
-var player_name
+var player_health = 0
 
 func _ready():
 	_start_game()
@@ -102,12 +101,12 @@ func _get_border(stage):
 func _save_player_data(player = null):
 	if player == null:
 		var player_manager = get_node("/root/Main/PlayerManager")
-		player = player_manager.get_child(0)
+		player = player_manager._get_closest_character(Vector2(0,0))
 	player_health = player.health
-	player_name = player.name
+	print(player_health)
 
 func _set_player_data(player):
-	if player_health.size() == 0:
+	if player_health <= 0:
 		print("SAVING")
 		_save_player_data(player)
 		return
