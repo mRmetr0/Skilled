@@ -16,7 +16,7 @@ func _ready():
 	player.position = Vector2i(1000, 500)
 	GameManager._set_player_data(player)
 	
-func _get_closest_character(position):
+func _get_player():
 	if (player == null):
 		print("NO PLAYER???")
 	return player;

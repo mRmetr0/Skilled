@@ -128,7 +128,7 @@ bool EnemyState::can_update(Enemy& enemy, double delta){
     if (update_timer < enemy.update_frequency) return false;
     update_timer = 0.0;
 
-    enemy.player = Object::cast_to<Player>(enemy.player_manager->call("_get_closest_character", enemy.get_position()));
+    enemy.player = Object::cast_to<Player>(enemy.player_manager->call("_get_player"));
 
     if (enemy.player == nullptr) {
         emit_signal("log", this, "Player NULL");

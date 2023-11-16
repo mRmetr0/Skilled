@@ -32,6 +32,7 @@ void Player::_bind_methods() {
     ClassDB::bind_method(D_METHOD("_set_target", "p_target"), &Player::_set_target);
     ClassDB::bind_method(D_METHOD("_get_bullets"), &Player::_get_bullets);
     ClassDB::bind_method(D_METHOD("_get_weapon_id"), &Player::_get_weapon_id);
+    ClassDB::bind_method(D_METHOD("_set_weapon", "p_id", "p_ammo"), &Player::_set_weapon);
     
     ADD_SIGNAL(MethodInfo("log", PropertyInfo(Variant::OBJECT, "node"), PropertyInfo(Variant::STRING, "message")));
 }
@@ -65,7 +66,7 @@ void Player::_ready(){
     hp_bar = Object::cast_to<ProgressBar>(get_node_or_null(NodePath("ProgressBar")));
     enemy_manager = Object::cast_to<Node>(get_node_or_null(NodePath("/root/Main/EnemyManager")));
 
-    weapon_state = memnew(AutoState);
+    weapon_state = memnew(PistolState);
     weapon_state->start(*this);
 }
 
@@ -168,6 +169,26 @@ Vector2i Player::_get_bullets(){
 
 int Player::_get_weapon_id(){
     return weapon_state->id;
+}
+
+void Player::_set_weapon(int p_id, int p_ammo = 0){
+    WeaponState* new_state;
+    switch (p_id) {
+    case 2:
+        memdelete(weapon_state);
+        new_state = memnew(AutoState);
+        new_state->start(*this, p_ammo);
+        weapon_state = new_state;
+        break;
+    case 3:
+        memdelete(weapon_state);
+        new_state = memnew(SpreadState);
+        new_state->start(*this, p_ammo);
+        weapon_state = new_state;
+    default:
+        return;
+        break;
+    }
 }
 
 #pragma region getters_setters

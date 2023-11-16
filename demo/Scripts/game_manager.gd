@@ -7,6 +7,8 @@ var levels = []
 var base_path = "res://Scenes/Stages/"
 
 var player_health = 0
+var player_weapon_id : int = 1
+var player_weapon_ammo : int = -1
 
 func _ready():
 	_start_game()
@@ -101,9 +103,14 @@ func _get_border(stage):
 func _save_player_data(player = null):
 	if player == null:
 		var player_manager = get_node("/root/Main/PlayerManager")
-		player = player_manager._get_closest_character(Vector2(0,0))
+		player = player_manager._get_player()
 	player_health = player.health
-
+	player_weapon_id = player._get_weapon_id()
+	if (player_weapon_id == 1):
+		player_weapon_ammo = 0;
+	else:
+		player_weapon_ammo = player._get_bullets().x;
+		
 func _set_player_data(player):
 	if player_health <= 0:
 		_save_player_data(player)
@@ -111,3 +118,4 @@ func _set_player_data(player):
 
 	player.health = player_health
 	player.get_node("ProgressBar")._health_update(player.health)
+	player._set_weapon(player_weapon_id, player_weapon_ammo);

@@ -31,7 +31,7 @@ func _on_exit_screen():
 
 func _die():
 	if BulletPool.pool.has(self):
-		BulletPool._return_bullet(self)
+		BulletPool._return_bullet(self, true)
 	else:
 		print("NOT PART OF POOL, DELETING")
 		queue_free()

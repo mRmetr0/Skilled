@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://fvwjbh6is34m"]
+[gd_scene load_steps=15 format=3 uid="uid://fvwjbh6is34m"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_b3ukq"]
 [ext_resource type="Texture2D" uid="uid://33n26awgrx4b" path="res://Assets/Ground_tiles.png" id="2_uvnd5"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://d3cmfkcuefhha" path="res://Assets/Metal_Crate_File.png" id="4_1egxm"]
 [ext_resource type="Script" path="res://Scripts/AStar2D.gd" id="5_d5uex"]
 [ext_resource type="Script" path="res://Scripts/player_manager.gd" id="6_plat0"]
+[ext_resource type="Texture2D" uid="uid://cg5ywy1mnyfr" path="res://Assets/Weapons/Rifle.png" id="8_f1hva"]
 [ext_resource type="Script" path="res://Scripts/enemy_manager.gd" id="9_hvbs8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ssc6w"]
@@ -50,6 +51,21 @@ sources/5 = SubResource("TileSetAtlasSource_5q1vh")
 sources/2 = SubResource("TileSetAtlasSource_ewyyf")
 sources/0 = SubResource("TileSetAtlasSource_ssc6w")
 
+[sub_resource type="GDScript" id="GDScript_jndyj"]
+resource_name = "pickup"
+script/source = "extends Area2D
+
+@export var id = 2
+
+func _on_area_enter(collider):
+	if (collider.name.begins_with(\"Hero\")):
+		collider._set_weapon(id, 0)
+		queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wko27"]
+size = Vector2(100, 100)
+
 [node name="Main" type="Node"]
 script = ExtResource("1_b3ukq")
 
@@ -76,3 +92,17 @@ script = ExtResource("9_hvbs8")
 spawn_rate = 3.0
 horde_amount = 1
 spawn_amount_max = 2
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(1350, 748)
+script = SubResource("GDScript_jndyj")
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D"]
+texture = ExtResource("8_f1hva")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_wko27")
+metadata/_edit_lock_ = true
+
+[connection signal="area_entered" from="Area2D" to="Area2D" method="_on_area_enter"]
