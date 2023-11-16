@@ -60,7 +60,9 @@ public:
     void _set_active(bool p_active);
     void _set_target(Vector2 p_target);
     void _set_weapon(WeaponState weapon);
+    
     Vector2i _get_bullets();
+    int _get_weapon_id();
 
     //getters & setters
     void set_health(const int p_health);

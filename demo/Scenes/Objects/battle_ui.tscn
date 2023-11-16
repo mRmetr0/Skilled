@@ -1,25 +1,55 @@
-[gd_scene load_steps=2 format=3 uid="uid://chld1a4qptln3"]
+[gd_scene load_steps=3 format=3 uid="uid://chld1a4qptln3"]
+
+[ext_resource type="Texture2D" uid="uid://ntn37i0fqq6g" path="res://Assets/Weapons/Pistol.png" id="1_f7rls"]
 
 [sub_resource type="GDScript" id="GDScript_4g63o"]
 resource_name = "battle_ui_script"
 script/source = "extends Control
 
 @onready var bullet_display = get_node(\"bullet_display\")
+@onready var weapon_sprite = get_node(\"weapon_sprite\")
 @onready var player = get_node(\"/root/Main/PlayerManager/Hero\")
+
+var weapons = []
+var current_weapon = 0
+
+func _ready():
+	weapons = _get_weapon_sprites()
 
 func _process(delta):
 	_update_bullet_display()
+	_update_weapon_display()
 
 func _update_bullet_display():
-	if (player != null):
-		var data = player._get_bullets()
-		if (data == Vector2i(-1,-1)):
-			bullet_display.text = \"Reloading...\"	
-			return;
-		var format = \"%s / %s\" 
-		var actual = format % [data.x, data.y]
-		bullet_display.text = actual
+	if (player == null):
+		return 
+	var data = player._get_bullets()
+	if (data == Vector2i(-1,-1)):
+		bullet_display.text = \"Reloading...\"	
+		return;
+	var format = \"%s / %s\" 
+	var actual = format % [data.x, data.y]
+	bullet_display.text = actual	
 	
+func _update_weapon_display():
+	if (player == null): 
+		return
+	var data = player._get_weapon_id() - 1;
+	if (data < 0 ):
+		print(\"ID OUT OF RANGE\")
+		return
+	if (current_weapon == 0 || current_weapon != data):
+		weapon_sprite.texture = weapons[data]
+
+func _get_weapon_sprites():
+	var path = str(\"res://Assets/Weapons/\")
+	var images = []
+	images.append(load(str(path + \"Pistol.png\")));
+	images.append(load(str(path + \"Rifle.png\")));
+	images.append(load(str(path + \"Shotgun.png\")));
+	print(images.size())
+	return images
+
 "
 
 [node name="battle_ui" type="Control"]
@@ -31,14 +61,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = SubResource("GDScript_4g63o")
 
+[node name="weapon_sprite" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.784314)
+position = Vector2(80, 930)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_f7rls")
+
 [node name="bullet_display" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
+offset_left = 140.0
 offset_top = -113.0
-offset_right = 235.0
+offset_right = 355.0
 offset_bottom = -20.0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 65

@@ -26,6 +26,8 @@ Vector2i WeaponState::_get_bullets() {
 
 #pragma region pistol
 void PistolState::start(Node& node, int p_start_clip){
+    id = 1;
+
     //reloading
     reload_duration = 1.0;
     reload_time = 0.0;
@@ -93,6 +95,8 @@ void PistolState::reload(){
 
 #pragma region auto_rifle
 void AutoState::start(Node& node, int p_start_clip){
+    id = 2;
+
     //reloading
     reload_duration;
     reload_time;
@@ -158,6 +162,8 @@ void AutoState::shoot(Vector2 position, double angle){
 #pragma region spread_gun
 
 void SpreadState::start(Node& node, int p_start_clip){
+    id = 3;
+
     //reloading
     reload_duration;
     reload_time;

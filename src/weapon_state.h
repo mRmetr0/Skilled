@@ -38,6 +38,8 @@ protected:
     
     static void _bind_methods(){}
 public:
+    int id = 0;
+    
     WeaponState(){}
     ~WeaponState(){}
     virtual void start(Node& node, int p_start_clip = 0);

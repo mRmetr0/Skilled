@@ -103,11 +103,9 @@ func _save_player_data(player = null):
 		var player_manager = get_node("/root/Main/PlayerManager")
 		player = player_manager._get_closest_character(Vector2(0,0))
 	player_health = player.health
-	print(player_health)
 
 func _set_player_data(player):
 	if player_health <= 0:
-		print("SAVING")
 		_save_player_data(player)
 		return
 
