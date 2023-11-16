@@ -16,7 +16,7 @@ var current_weapon = 0
 func _ready():
 	weapons = _get_weapon_sprites()
 
-func _process(delta):
+func _process(_delta):
 	_update_bullet_display()
 	_update_weapon_display()
 

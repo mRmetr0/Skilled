@@ -24,7 +24,7 @@ func _on_start_pressed():
 	get_tree().change_scene_to_file("res://Scenes/Menus/party_select.tscn")
 
 func _on_options_pressed():
-	pass
+	get_tree().change_scene_to_file("res://Scenes/Stages/tutorial_stage.tscn")
 
 func _on_quit_pressed():
 	get_tree().quit()

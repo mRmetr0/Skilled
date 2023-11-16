@@ -1,0 +1,189 @@
+[gd_scene load_steps=19 format=3 uid="uid://cpk7le60cdkqs"]
+
+[ext_resource type="Texture2D" uid="uid://33n26awgrx4b" path="res://Assets/Ground_tiles.png" id="2_ov4rq"]
+[ext_resource type="Texture2D" uid="uid://cy4rwikpm8yg4" path="res://Assets/Wooden_Crate.png" id="3_r33d1"]
+[ext_resource type="Texture2D" uid="uid://d3cmfkcuefhha" path="res://Assets/Metal_Crate_File.png" id="4_rmdcn"]
+[ext_resource type="Script" path="res://Scripts/AStar2D.gd" id="5_jo2ta"]
+[ext_resource type="Script" path="res://Scripts/player_manager.gd" id="6_1c4gv"]
+[ext_resource type="Script" path="res://Scripts/enemy_manager.gd" id="7_20d87"]
+[ext_resource type="Texture2D" uid="uid://b44h2asug24ln" path="res://Assets/Tutorial/Mouse1.png" id="7_ep3qo"]
+[ext_resource type="Texture2D" uid="uid://dvglyktvrbuk4" path="res://Assets/Tutorial/Mouse2.png" id="8_3dgnf"]
+[ext_resource type="Texture2D" uid="uid://ce0ogm1q1kbxb" path="res://Assets/Tutorial/Lose_condition_1.png" id="9_coiyb"]
+[ext_resource type="Texture2D" uid="uid://b6sjuklqkbqdt" path="res://Assets/Person.png" id="10_n0mtq"]
+[ext_resource type="PackedScene" uid="uid://gqbslx8m3sa3" path="res://Scenes/Objects/healthbar.tscn" id="11_j2q5t"]
+
+[sub_resource type="GDScript" id="GDScript_d55bq"]
+resource_name = "tutorial_manager"
+script/source = "extends Node
+
+@onready var M1Sprite = get_node(\"/root/Main/Mouse1\")
+@onready var M2Sprite = get_node(\"/root/Main/Mouse2\")
+@onready var LCondSprite = get_node(\"/root/Main/LoseCondition1\")
+@onready var MoveToPos = get_node(\"/root/Main/MoveToPos\")
+@onready var enemy_manager = get_node(\"EnemyManager\")
+@onready var fake_enemy = get_node(\"FakeEnemy\")
+
+var progress = -1
+var player
+
+var counter = 0
+var timer = 5
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	enemy_manager.set_process(false)
+	fake_enemy.hide()
+	
+func _process(_delta):
+	match(progress):
+		-1:
+			player = get_node(\"PlayerManager\")._get_player()
+			print(\"PLAYER\",player)
+			_set_progress(0)
+		0:
+			if (player.position.distance_to(MoveToPos.position) < 150):
+				_set_progress(1)
+		1:
+			if (fake_enemy.health <= 0):
+				_set_progress(2)
+		2:
+			counter += _delta
+			if (counter >= timer):
+				get_tree().change_scene_to_file(\"res://Scenes/Menus/start_menu.tscn\")
+				
+
+func _set_progress(p_progress : int):
+	progress = p_progress
+	M1Sprite.hide()
+	M2Sprite.hide()
+	LCondSprite.hide()
+	match(progress):
+		0:
+			M1Sprite.show()
+		1:
+			M2Sprite.show()
+			fake_enemy.show()
+		2: 
+			fake_enemy.hide()
+			LCondSprite.show()
+"
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ssc6w"]
+texture = ExtResource("2_ov4rq")
+texture_region_size = Vector2i(100, 100)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ewyyf"]
+texture = ExtResource("3_r33d1")
+texture_region_size = Vector2i(100, 100)
+0:0/next_alternative_id = 5
+0:0/0 = 0
+1:0/next_alternative_id = 2
+1:0/0 = 0
+2:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5q1vh"]
+resource_name = "MMetal wall"
+texture = ExtResource("4_rmdcn")
+texture_region_size = Vector2i(100, 100)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_3so1l"]
+tile_size = Vector2i(100, 100)
+sources/5 = SubResource("TileSetAtlasSource_5q1vh")
+sources/2 = SubResource("TileSetAtlasSource_ewyyf")
+sources/0 = SubResource("TileSetAtlasSource_ssc6w")
+
+[sub_resource type="GDScript" id="GDScript_nnwnf"]
+resource_name = "fake_enemy"
+script/source = "extends Area2D
+
+@onready var hp_bar = get_node(\"ProgressBar\")
+
+var health = 5
+
+func _take_damage(damage):
+	health -= damage
+	hp_bar._health_update(health)
+
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q8b5c"]
+size = Vector2(100, 100)
+
+[node name="Main" type="Node"]
+script = SubResource("GDScript_d55bq")
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_3so1l")
+format = 2
+layer_0/name = "Ground"
+layer_0/tile_data = PackedInt32Array(0, 0, 3, 1, 0, 3, 2, 0, 3, 3, 0, 3, 4, 0, 3, 5, 0, 3, 6, 0, 3, 7, 0, 3, 8, 0, 3, 9, 0, 3, 10, 0, 3, 11, 0, 3, 12, 0, 3, 13, 0, 3, 14, 0, 3, 15, 0, 3, 16, 0, 3, 17, 0, 3, 18, 0, 3, 65554, 0, 3, 65553, 0, 3, 65552, 0, 3, 65551, 0, 3, 65550, 0, 3, 65549, 0, 3, 65548, 0, 3, 65547, 0, 3, 65546, 0, 3, 65545, 0, 3, 65544, 0, 3, 65543, 0, 3, 65542, 0, 3, 65541, 0, 3, 65540, 0, 3, 65539, 0, 3, 65538, 0, 3, 65537, 0, 3, 65536, 0, 3, 131072, 0, 3, 196608, 0, 3, 262144, 0, 3, 327680, 0, 3, 393216, 0, 3, 458752, 0, 3, 524288, 0, 3, 589824, 0, 3, 655360, 0, 3, 131073, 0, 3, 196609, 0, 3, 262145, 0, 3, 327681, 0, 3, 393217, 0, 3, 458753, 0, 3, 524289, 0, 3, 589825, 0, 3, 655361, 0, 3, 131074, 0, 3, 196610, 0, 3, 262146, 0, 3, 327682, 0, 3, 393218, 0, 3, 458754, 0, 3, 524290, 0, 3, 589826, 0, 3, 655362, 0, 3, 131075, 0, 3, 196611, 0, 3, 262147, 0, 3, 327683, 0, 3, 393219, 0, 3, 458755, 0, 3, 524291, 0, 3, 589827, 0, 3, 655363, 0, 3, 131076, 0, 3, 196612, 0, 3, 262148, 0, 3, 327684, 0, 3, 393220, 0, 3, 458756, 0, 3, 524292, 0, 3, 589828, 0, 3, 655364, 0, 3, 131077, 0, 3, 196613, 0, 3, 262149, 0, 3, 327685, 0, 3, 393221, 0, 3, 458757, 0, 3, 524293, 0, 3, 589829, 0, 3, 655365, 0, 3, 131078, 0, 3, 196614, 0, 3, 262150, 0, 3, 327686, 0, 3, 393222, 0, 3, 458758, 0, 3, 524294, 0, 3, 589830, 0, 3, 655366, 0, 3, 131079, 0, 3, 196615, 0, 3, 262151, 0, 3, 327687, 0, 3, 393223, 0, 3, 458759, 0, 3, 524295, 0, 3, 589831, 0, 3, 655367, 0, 3, 131080, 0, 3, 196616, 0, 3, 262152, 0, 3, 327688, 0, 3, 393224, 0, 3, 458760, 0, 3, 524296, 0, 3, 589832, 0, 3, 655368, 0, 3, 131081, 0, 3, 196617, 0, 3, 262153, 0, 3, 327689, 0, 3, 393225, 0, 3, 458761, 0, 3, 524297, 0, 3, 589833, 0, 3, 655369, 0, 3, 131082, 0, 3, 196618, 0, 3, 262154, 0, 3, 327690, 0, 3, 393226, 0, 3, 458762, 0, 3, 524298, 0, 3, 589834, 0, 3, 655370, 0, 3, 131083, 0, 3, 196619, 0, 3, 262155, 0, 3, 327691, 0, 3, 393227, 0, 3, 458763, 0, 3, 524299, 0, 3, 589835, 0, 3, 655371, 0, 3, 131084, 0, 3, 196620, 0, 3, 262156, 0, 3, 327692, 0, 3, 393228, 0, 3, 458764, 0, 3, 524300, 0, 3, 589836, 0, 3, 655372, 0, 3, 131085, 0, 3, 196621, 0, 3, 262157, 0, 3, 327693, 0, 3, 393229, 0, 3, 458765, 0, 3, 524301, 0, 3, 589837, 0, 3, 655373, 0, 3, 131086, 0, 3, 196622, 0, 3, 262158, 0, 3, 327694, 0, 3, 393230, 0, 3, 458766, 0, 3, 524302, 0, 3, 589838, 0, 3, 655374, 0, 3, 131087, 0, 3, 196623, 0, 3, 262159, 0, 3, 327695, 0, 3, 393231, 0, 3, 458767, 0, 3, 524303, 0, 3, 589839, 0, 3, 655375, 0, 3, 131088, 0, 3, 196624, 0, 3, 262160, 0, 3, 327696, 0, 3, 393232, 0, 3, 458768, 0, 3, 524304, 0, 3, 589840, 0, 3, 655376, 0, 3, 131089, 0, 3, 196625, 0, 3, 262161, 0, 3, 327697, 0, 3, 393233, 0, 3, 458769, 0, 3, 524305, 0, 3, 589841, 0, 3, 655377, 0, 3, 131090, 0, 3, 196626, 0, 3, 262162, 0, 3, 327698, 0, 3, 393234, 0, 3, 458770, 0, 3, 524306, 0, 3, 589842, 0, 3, 655378, 0, 3, 131091, 0, 3, 196627, 0, 3, 262163, 0, 3, 327699, 0, 3, 393235, 0, 3, 458771, 0, 3, 524307, 0, 3, 589843, 0, 3, 655379, 0, 3, 19, 0, 3, 65555, 0, 3, 720896, 0, 3, 786432, 0, 3, 851968, 0, 3, 917504, 0, 3, 983040, 0, 3, 720897, 0, 3, 786433, 0, 3, 851969, 0, 3, 917505, 0, 3, 983041, 0, 3, 720898, 0, 3, 786434, 0, 3, 851970, 0, 3, 917506, 0, 3, 983042, 0, 3, 720899, 0, 3, 786435, 0, 3, 851971, 0, 3, 917507, 0, 3, 983043, 0, 3, 720900, 0, 3, 786436, 0, 3, 851972, 0, 3, 917508, 0, 3, 983044, 0, 3, 720901, 0, 3, 786437, 0, 3, 851973, 0, 3, 917509, 0, 3, 983045, 0, 3, 720902, 0, 3, 786438, 0, 3, 851974, 0, 3, 917510, 0, 3, 983046, 0, 3, 720903, 0, 3, 786439, 0, 3, 851975, 0, 3, 917511, 0, 3, 983047, 0, 3, 720904, 0, 3, 786440, 0, 3, 851976, 0, 3, 917512, 0, 3, 983048, 0, 3, 720905, 0, 3, 786441, 0, 3, 851977, 0, 3, 917513, 0, 3, 983049, 0, 3, 720906, 0, 3, 786442, 0, 3, 851978, 0, 3, 917514, 0, 3, 983050, 0, 3, 720907, 0, 3, 786443, 0, 3, 851979, 0, 3, 917515, 0, 3, 983051, 0, 3, 720908, 0, 3, 786444, 0, 3, 851980, 0, 3, 917516, 0, 3, 983052, 0, 3, 720909, 0, 3, 786445, 0, 3, 851981, 0, 3, 917517, 0, 3, 983053, 0, 3, 720910, 0, 3, 786446, 0, 3, 851982, 0, 3, 917518, 0, 3, 983054, 0, 3, 720911, 0, 3, 786447, 0, 3, 851983, 0, 3, 917519, 0, 3, 983055, 0, 3, 720912, 0, 3, 786448, 0, 3, 851984, 0, 3, 917520, 0, 3, 983056, 0, 3, 720913, 0, 3, 786449, 0, 3, 851985, 0, 3, 917521, 0, 3, 983057, 0, 3, 720914, 0, 3, 786450, 0, 3, 851986, 0, 3, 917522, 0, 3, 983058, 0, 3, 720915, 0, 3, 786451, 0, 3, 851987, 0, 3, 917523, 0, 3, 983059, 0, 3, 20, 0, 3, 65556, 0, 3, 131092, 0, 3, 196628, 0, 3, 262164, 0, 3, 327700, 0, 3, 393236, 0, 3, 458772, 0, 3, 524308, 0, 3, 589844, 0, 3, 655380, 0, 3, 720916, 0, 3, 786452, 0, 3, 851988, 0, 3, 917524, 0, 3, 983060, 0, 3, 21, 0, 3, 65557, 0, 3, 131093, 0, 3, 196629, 0, 3, 262165, 0, 3, 327701, 0, 3, 393237, 0, 3, 458773, 0, 3, 524309, 0, 3, 589845, 0, 3, 655381, 0, 3, 720917, 0, 3, 786453, 0, 3, 851989, 0, 3, 917525, 0, 3, 983061, 0, 3, 22, 0, 3, 65558, 0, 3, 131094, 0, 3, 196630, 0, 3, 262166, 0, 3, 327702, 0, 3, 393238, 0, 3, 458774, 0, 3, 524310, 0, 3, 589846, 0, 3, 655382, 0, 3, 720918, 0, 3, 786454, 0, 3, 851990, 0, 3, 917526, 0, 3, 983062, 0, 3, 23, 0, 3, 65559, 0, 3, 131095, 0, 3, 196631, 0, 3, 262167, 0, 3, 327703, 0, 3, 393239, 0, 3, 458775, 0, 3, 524311, 0, 3, 589847, 0, 3, 655383, 0, 3, 720919, 0, 3, 786455, 0, 3, 851991, 0, 3, 917527, 0, 3, 983063, 0, 3, 24, 0, 3, 65560, 0, 3, 131096, 0, 3, 196632, 0, 3, 262168, 0, 3, 327704, 0, 3, 393240, 0, 3, 458776, 0, 3, 524312, 0, 3, 589848, 0, 3, 655384, 0, 3, 720920, 0, 3, 786456, 0, 3, 851992, 0, 3, 917528, 0, 3, 983064, 0, 3, 25, 0, 3, 65561, 0, 3, 131097, 0, 3, 196633, 0, 3, 262169, 0, 3, 327705, 0, 3, 393241, 0, 3, 458777, 0, 3, 524313, 0, 3, 589849, 0, 3, 655385, 0, 3, 720921, 0, 3, 786457, 0, 3, 851993, 0, 3, 917529, 0, 3, 983065, 0, 3)
+layer_1/name = "Walls"
+layer_1/enabled = true
+layer_1/modulate = Color(1, 1, 1, 1)
+layer_1/y_sort_enabled = false
+layer_1/y_sort_origin = 0
+layer_1/z_index = 0
+layer_1/tile_data = PackedInt32Array()
+script = ExtResource("5_jo2ta")
+metadata/_edit_lock_ = true
+
+[node name="PlayerManager" type="Node" parent="."]
+script = ExtResource("6_1c4gv")
+
+[node name="EnemyManager" type="Node" parent="."]
+script = ExtResource("7_20d87")
+spawn_rate = 3.0
+horde_amount = 1
+spawn_amount_max = 2
+
+[node name="Mouse1" type="Sprite2D" parent="."]
+position = Vector2(1627, 368)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("7_ep3qo")
+
+[node name="MoveToPos" type="Node2D" parent="."]
+position = Vector2(1661, 576)
+scale = Vector2(1.5, 1.5)
+
+[node name="Mouse2" type="Sprite2D" parent="."]
+position = Vector2(359, 351)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("8_3dgnf")
+
+[node name="LoseCondition1" type="Sprite2D" parent="."]
+position = Vector2(1001, 289)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("9_coiyb")
+
+[node name="FakeEnemy" type="Area2D" parent="." groups=["shootables"]]
+position = Vector2(362, 541)
+script = SubResource("GDScript_nnwnf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FakeEnemy"]
+shape = SubResource("RectangleShape2D_q8b5c")
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="FakeEnemy"]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("10_n0mtq")
+metadata/_edit_lock_ = true
+
+[node name="ProgressBar" parent="FakeEnemy" instance=ExtResource("11_j2q5t")]

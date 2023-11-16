@@ -16,7 +16,6 @@ class Player : public Area2D {
     GDCLASS(Player, Area2D)
 
 private:
-    Node* enemy_manager;
     TileMap* tile_map;
     ProgressBar* hp_bar;
     Input* input;

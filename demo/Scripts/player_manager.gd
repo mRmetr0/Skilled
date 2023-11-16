@@ -19,6 +19,7 @@ func _ready():
 func _get_player():
 	if (player == null):
 		print("NO PLAYER???")
-	return player;
+	return player
+
 func _game_over():
 	get_tree().change_scene_to_file("res://Scenes/Menus/end_menu.tscn")

@@ -64,7 +64,6 @@ void Player::_ready(){
     input = Input::get_singleton();
     tile_map = Object::cast_to<TileMap>(get_node_or_null(NodePath("/root/Main/TileMap")));
     hp_bar = Object::cast_to<ProgressBar>(get_node_or_null(NodePath("ProgressBar")));
-    enemy_manager = Object::cast_to<Node>(get_node_or_null(NodePath("/root/Main/EnemyManager")));
 
     weapon_state = memnew(PistolState);
     weapon_state->start(*this);
