@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dgrx2dmuf6ge8"]
+[gd_scene load_steps=13 format=3 uid="uid://dgrx2dmuf6ge8"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_knsut"]
 [ext_resource type="Texture2D" uid="uid://33n26awgrx4b" path="res://Assets/Ground_tiles.png" id="2_im5rn"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://d3cmfkcuefhha" path="res://Assets/Metal_Crate_File.png" id="4_fovvo"]
 [ext_resource type="Script" path="res://Scripts/player_manager.gd" id="5_qyam5"]
 [ext_resource type="Script" path="res://Scripts/enemy_manager.gd" id="8_bqyai"]
+[ext_resource type="PackedScene" uid="uid://btb11i7bubn5y" path="res://Scenes/Objects/enemy.tscn" id="8_kmkff"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ssc6w"]
 texture = ExtResource("2_im5rn")
@@ -75,3 +76,7 @@ script = ExtResource("5_qyam5")
 script = ExtResource("8_bqyai")
 spawn_rate = 1e+11
 horde_amount = 1
+
+[node name="Enemy" parent="EnemyManager" instance=ExtResource("8_kmkff")]
+speed = 0.0
+position = Vector2(1395, 459)

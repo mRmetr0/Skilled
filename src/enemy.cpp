@@ -41,12 +41,16 @@ Enemy::Enemy(){
     attack_frequency = 1.5;
     attack_timer = 0.0;
     update_timer = update_frequency;
+    state = nullptr;
 
     if (Engine::get_singleton()->is_editor_hint())
         set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
 }
 
-Enemy::~Enemy() {}
+Enemy::~Enemy() {
+    if (state != nullptr)
+        memdelete(state);
+}
 
 void Enemy::_ready() {
     player_manager = Object::cast_to<Node>(get_node_or_null(NodePath("/root/Main/PlayerManager")));

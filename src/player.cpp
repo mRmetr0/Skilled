@@ -59,7 +59,6 @@ Player::Player(){
 Player::~Player() {
     if (weapon_state != nullptr)
         memdelete(weapon_state);
-    UtilityFunctions::print("Player Removed");
 }
 
 void Player::_ready(){
