@@ -10,8 +10,8 @@
 
 namespace godot {
 
-class WeaponState : public Object {
-    GDCLASS(WeaponState, Object)
+class WeaponState : public RefCounted {
+    GDCLASS(WeaponState, RefCounted)
 protected:
     Node* bullet_pool;
     Input* input;

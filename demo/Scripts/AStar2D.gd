@@ -92,7 +92,6 @@ func _damage_tile_raw(tile):
 		astar.set_point_disabled(id(n_tile), false)
 		wall_cells.erase(n_tile)
 	elif (value.x > 1):
-		print()
 		set_cell(0, n_tile, tile_id, Vector2i(value.x-1, value.y))
 
 func _heal_tile_raw(tile):
@@ -116,6 +115,5 @@ func _get_path_adjacent(start, end):
 
 func _get_path(start, end):
 	path.clear()
-	#print ("Start", start, "End", end)
 	path = astar.get_point_path(id(start),id(end))
 	path.remove_at(0)
