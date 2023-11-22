@@ -1,13 +1,14 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <godot_cpp/variant/utility_functions.hpp>
+
 #include <godot_cpp/classes/area2d.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/progress_bar.hpp>
 #include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/tile_map.hpp>
 
-#include "weapon_state.h"
 #include "weapon_state.h"
 
 namespace godot {

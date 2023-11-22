@@ -1,12 +1,14 @@
 #ifndef WEAPONSTATE_H
 #define WEAPONSTATE_H
 
+#include <godot_cpp/variant/utility_functions.hpp>
+
 #include <godot_cpp/classes/node2d.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/input.hpp>
+#include <godot_cpp/classes/ref_counted.hpp>
 
 namespace godot {
-
 
 class WeaponState : public Object {
     GDCLASS(WeaponState, Object)
@@ -78,6 +80,27 @@ public:
     void start(Node& node, int p_start_clip = 0) override;
     WeaponState* update(Node2D& node,double delta) override;
     void shoot(Vector2 position, double angle) override;
+};
+
+class Gamer : public RefCounted {
+    GDCLASS(Gamer, RefCounted)    
+protected:
+    static void _bind_methods(){}
+public:
+    Gamer(){}
+    ~Gamer(){}
+};
+
+class Person : public Object {
+    GDCLASS(Person, Object)
+protected:
+    static void _bind_methods(){}
+public:
+
+    Person(){
+        Ref<Gamer> gamer(memnew(Gamer));
+    }
+    ~Person(){}
 };
 
 }

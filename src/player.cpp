@@ -33,8 +33,6 @@ void Player::_bind_methods() {
     ClassDB::bind_method(D_METHOD("_get_bullets"), &Player::_get_bullets);
     ClassDB::bind_method(D_METHOD("_get_weapon_id"), &Player::_get_weapon_id);
     ClassDB::bind_method(D_METHOD("_set_weapon", "p_id", "p_ammo"), &Player::_set_weapon);
-    
-    ADD_SIGNAL(MethodInfo("log", PropertyInfo(Variant::OBJECT, "node"), PropertyInfo(Variant::STRING, "message")));
 }
 
 Player::Player(){
@@ -148,7 +146,6 @@ bool Player::is_ground(){
 }
 
 void Player::_set_target(Vector2 p_target){
-    emit_signal("log", this, "SETTING TARGET");
     
     PackedVector2Array new_path;
 
