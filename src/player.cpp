@@ -56,7 +56,11 @@ Player::Player(){
         set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
 }
 
-Player::~Player() {}
+Player::~Player() {
+    if (weapon_state != nullptr)
+        memdelete(weapon_state);
+    UtilityFunctions::print("Player Removed");
+}
 
 void Player::_ready(){
     target = get_position();
@@ -65,17 +69,6 @@ void Player::_ready(){
     tile_map = Object::cast_to<TileMap>(get_node_or_null(NodePath("/root/Main/TileMap")));
     hp_bar = Object::cast_to<ProgressBar>(get_node_or_null(NodePath("ProgressBar")));
     hp_bar->call("_set_health", health_max, health);
-
-    if (weapon_state == nullptr)
-        UtilityFunctions::print("State null");
-    else
-        UtilityFunctions::print("State not null");
-
-
-    // if (weapon_state != nullptr){
-    //     memdelete (weapon_state);
-    //     UtilityFunctions::print("Starting state not null");
-    // }
 
     weapon_state = memnew(PistolState);
     weapon_state->start(*this);

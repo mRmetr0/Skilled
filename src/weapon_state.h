@@ -82,26 +82,5 @@ public:
     void shoot(Vector2 position, double angle) override;
 };
 
-class Gamer : public RefCounted {
-    GDCLASS(Gamer, RefCounted)    
-protected:
-    static void _bind_methods(){}
-public:
-    Gamer(){}
-    ~Gamer(){}
-};
-
-class Person : public Object {
-    GDCLASS(Person, Object)
-protected:
-    static void _bind_methods(){}
-public:
-
-    Person(){
-        Ref<Gamer> gamer(memnew(Gamer));
-    }
-    ~Person(){}
-};
-
 }
 #endif
