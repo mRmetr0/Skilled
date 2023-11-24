@@ -16,6 +16,9 @@ func _ready():
 	player.position = Vector2i(1000, 500)
 	#GameManager._set_player_data(player)
 	
+	for hazard in GameManager.selected_hazards:
+		GameManager._apply_hazard(hazard)
+	
 func _get_player():
 	if (player == null):
 		print("NO PLAYER???")

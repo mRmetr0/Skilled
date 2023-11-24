@@ -23,6 +23,7 @@ texture = ExtResource("2_lkg1m")
 
 [node name="ReloadBar" type="ProgressBar" parent="."]
 visible = false
+z_index = 2
 layout_mode = 0
 offset_top = -27.38
 offset_right = 121.0

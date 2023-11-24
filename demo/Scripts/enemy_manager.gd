@@ -19,7 +19,7 @@ func _process(delta):
 		done = true
 		await get_tree().create_timer(3.0).timeout
 		GameManager._save_player_data(null)
-		GameManager._load_next_level()
+		GameManager._on_game_end()
 		return
 			
 	time_passed += delta

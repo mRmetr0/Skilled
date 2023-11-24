@@ -4,12 +4,24 @@
 resource_name = "Managing_script"
 script/source = "extends Control
 
+@onready var briefing_text = get_node(\"Briefing\")
+@onready var hazards_text = get_node(\"Hazards\")
+
+var hazards
+	
+func _ready():
+	hazards = GameManager._set_hazards([GameManager.hazards.DARK, GameManager.hazards.STRONGER_ENEMIES])
+	if (hazards.size() == 0):
+		hazards_text.text += \"NONE\"
+	else:
+		for hazard in hazards:
+			hazards_text.text += GameManager.hazards.keys()[hazard] + \"\\n\"
 
 func _on_go_press():
-	
+	GameManager._load_next_level()
 "
 
-[node name="Main" type="Control"]
+[node name="ManageMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -49,6 +61,20 @@ text = "OBJECTIVE: SURVIVE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Hazards" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 87.0
+offset_top = -465.0
+offset_right = 1037.0
+grow_vertical = 0
+pivot_offset = Vector2(102.5, 0)
+theme_override_font_sizes/font_size = 65
+text = "HAZARDS: 
+"
+
 [node name="Start" type="Button" parent="."]
 custom_minimum_size = Vector2(450, 75)
 layout_mode = 1
@@ -65,3 +91,5 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 50
 text = "GO"
+
+[connection signal="pressed" from="Start" to="." method="_on_go_press"]

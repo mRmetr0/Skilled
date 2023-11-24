@@ -3,8 +3,6 @@ extends Control
 var stage_a = null
 var stage_b = null
 
-var selected_character = null
-
 func _ready():
 	if get_tree().get_current_scene().get_name() == "StageSelect":
 		if GameManager.stages_till_end > 0:
@@ -33,9 +31,7 @@ func _on_quit_pressed():
 func _on_continue_pressed():
 	get_tree().change_scene_to_file("res://Scenes/Stages/start_stage.tscn")
 
-func _on_character_pressed(character = "lol"):
-	selected_character = character
-	get_node("selected_name").text = character
+#TODO: loadout select on gamestart
 	
 ## LOSE SCREEN
 func _on_return_pressed():

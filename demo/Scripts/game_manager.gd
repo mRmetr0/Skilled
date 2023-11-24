@@ -4,11 +4,20 @@ var stages = []
 var current_stage = ""
 var stages_till_end
 var levels = []
+var briefing_level = ""
 var base_path = "res://Scenes/Stages/"
 
 var player_health = 0
 var player_weapon_id : int = 1
 var player_weapon_ammo : int = -1
+
+enum hazards {
+	DARK,
+	STRONGER_ENEMIES,
+	SLOW_TERRAIN
+}
+var selected_hazards = []
+var hazard_odds = 100;
 
 func _ready():
 	_start_game()
@@ -33,7 +42,7 @@ func _set_stage(selected_stage):
 	current_stage = selected_stage
 	stages.erase(selected_stage)
 	_load_levels()
-	_load_next_level()
+	get_tree().change_scene_to_file("res://Scenes/Menus/manage_menu.tscn")
 
 func _load_stages():
 	var files = []
@@ -71,6 +80,13 @@ func _load_levels():
 	levels.shuffle()
 	if final_level != null:
 		levels.append(final_level)
+
+func _on_game_end():
+	if levels.size() == 0:
+		get_tree().change_scene_to_file("res://Scenes/Menus/stage_select.tscn")
+		return
+	briefing_level = levels[0]
+	get_tree().change_scene_to_file("res://Scenes/Menus/manage_menu.tscn")
 
 func _load_next_level():
 	if levels.size() == 0:
@@ -119,3 +135,28 @@ func _set_player_data(player):
 	player.health = player_health
 	player.get_node("ProgressBar")._health_update(player.health)
 	player._set_weapon(player_weapon_id, player_weapon_ammo);
+
+#Hazard related
+func _set_hazards(set_hazards):
+	var hazards_to_set = []
+	for hazard in set_hazards:
+		if (randi() % 100 <= hazard_odds):
+			hazards_to_set.append(hazard)
+	selected_hazards = hazards_to_set
+	return hazards_to_set
+		
+
+func _apply_hazard(hazard):
+	match(hazard):
+		hazards.DARK:
+			var darkness_scene = load(str("res://Scenes/Objects/darkness.tscn"))
+			var darkness = darkness_scene.instantiate()
+			var player = get_node("/root/Main/PlayerManager/Hero")
+			player.add_child(darkness)
+			print ("setting darkness")
+		hazards.STRONGER_ENEMIES:
+			return
+		hazards.SLOW_TERRAIN:
+			return
+		
+		
