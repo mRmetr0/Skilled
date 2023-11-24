@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bq7wafau6plbt"]
+[gd_scene load_steps=12 format=3 uid="uid://bq7wafau6plbt"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_0kdwi"]
 [ext_resource type="Texture2D" uid="uid://33n26awgrx4b" path="res://Assets/Ground_tiles.png" id="2_m0hey"]
@@ -6,8 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://d3cmfkcuefhha" path="res://Assets/Metal_Crate_File.png" id="4_jm7k0"]
 [ext_resource type="Script" path="res://Scripts/AStar2D.gd" id="5_o4iu3"]
 [ext_resource type="Script" path="res://Scripts/player_manager.gd" id="6_md10b"]
-[ext_resource type="Texture2D" uid="uid://b6sjuklqkbqdt" path="res://Assets/Person.png" id="7_6n2it"]
-[ext_resource type="PackedScene" uid="uid://gqbslx8m3sa3" path="res://Scenes/Objects/healthbar.tscn" id="8_pekp4"]
 [ext_resource type="Script" path="res://Scripts/enemy_manager.gd" id="9_7y16v"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6t3je"]
@@ -53,8 +51,6 @@ sources/5 = SubResource("TileSetAtlasSource_5q1vh")
 sources/2 = SubResource("TileSetAtlasSource_ewyyf")
 sources/0 = SubResource("TileSetAtlasSource_6t3je")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_e34r8"]
-
 [node name="Main" type="Node"]
 script = ExtResource("1_0kdwi")
 
@@ -76,106 +72,7 @@ metadata/_edit_lock_ = true
 [node name="PlayerManager" type="Node" parent="."]
 script = ExtResource("6_md10b")
 
-[node name="Player1" type="Player" parent="PlayerManager"]
-health = 10
-slow_speed = 200.0
-update_frequency = 3.0
-process_mode = 0
-editor_description = "Uses pistol"
-position = Vector2(1150, 645)
-priority = 2
-
-[node name="Sprite2D" type="Sprite2D" parent="PlayerManager/Player1"]
-modulate = Color(0, 0, 1, 1)
-texture = ExtResource("7_6n2it")
-metadata/_edit_lock_ = true
-
-[node name="ProgressBar" parent="PlayerManager/Player1" instance=ExtResource("8_pekp4")]
-metadata/_edit_lock_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerManager/Player1"]
-scale = Vector2(5, 5)
-shape = SubResource("RectangleShape2D_e34r8")
-metadata/_edit_lock_ = true
-
-[node name="Weapon" type="Weapon" parent="PlayerManager/Player1"]
-reload_duration = 2.0
-magazine_size = 11
-fire_range = 1000.0
-editor_description = "Pistol"
-metadata/_edit_lock_ = true
-
-[node name="Player2" type="Player" parent="PlayerManager"]
-normal_speed = 350.0
-slow_speed = 200.0
-update_frequency = 1.0
-process_mode = 0
-editor_description = "Uses sniper"
-position = Vector2(851, 651)
-priority = 2
-
-[node name="Sprite2D" type="Sprite2D" parent="PlayerManager/Player2"]
-modulate = Color(0, 1, 1, 1)
-texture = ExtResource("7_6n2it")
-metadata/_edit_lock_ = true
-
-[node name="ProgressBar" parent="PlayerManager/Player2" instance=ExtResource("8_pekp4")]
-metadata/_edit_lock_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerManager/Player2"]
-scale = Vector2(5, 5)
-shape = SubResource("RectangleShape2D_e34r8")
-metadata/_edit_lock_ = true
-
-[node name="Weapon" type="Weapon" parent="PlayerManager/Player2"]
-magazine_size = 1
-bullet_damage = 5
-bullet_pierce = 2
-editor_description = "Sniper"
-metadata/_edit_lock_ = true
-
-[node name="Player3" type="Player" parent="PlayerManager"]
-normal_speed = 500.0
-slow_speed = 150.0
-update_frequency = 4.0
-process_mode = 0
-editor_description = "uses shoptgun"
-position = Vector2(854, 349)
-priority = 2
-
-[node name="Sprite2D" type="Sprite2D" parent="PlayerManager/Player3"]
-modulate = Color(1, 1, 0, 1)
-texture = ExtResource("7_6n2it")
-metadata/_edit_lock_ = true
-
-[node name="ProgressBar" parent="PlayerManager/Player3" instance=ExtResource("8_pekp4")]
-metadata/_edit_lock_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerManager/Player3"]
-scale = Vector2(5, 5)
-shape = SubResource("RectangleShape2D_e34r8")
-metadata/_edit_lock_ = true
-
-[node name="Weapon" type="Weapon" parent="PlayerManager/Player3"]
-reload_duration = 3.0
-magazine_size = 4
-spread = 0.2
-shot_amout = 3
-fire_range = 600.0
-editor_description = "Shotgun"
-metadata/_edit_lock_ = true
-
 [node name="EnemyManager" type="Node" parent="."]
 script = ExtResource("9_7y16v")
 horde_amount = 7
 spawn_amount_max = 3
-
-[connection signal="log" from="PlayerManager/Player1" to="." method="_log"]
-[connection signal="log" from="PlayerManager/Player1/Weapon" to="." method="_log"]
-[connection signal="reload" from="PlayerManager/Player1/Weapon" to="PlayerManager/Player1/ProgressBar" method="_set_reload"]
-[connection signal="log" from="PlayerManager/Player2" to="." method="_log"]
-[connection signal="log" from="PlayerManager/Player2/Weapon" to="." method="_log"]
-[connection signal="reload" from="PlayerManager/Player2/Weapon" to="PlayerManager/Player2/ProgressBar" method="_set_reload"]
-[connection signal="log" from="PlayerManager/Player3" to="." method="_log"]
-[connection signal="log" from="PlayerManager/Player3/Weapon" to="." method="_log"]
-[connection signal="reload" from="PlayerManager/Player3/Weapon" to="PlayerManager/Player3/ProgressBar" method="_set_reload"]

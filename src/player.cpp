@@ -187,6 +187,7 @@ void Player::_set_weapon(int p_id, int p_ammo = 0){
         new_state = memnew(SpreadState);
         new_state->start(*this, p_ammo);
         weapon_state = new_state;
+        break;
     default:
         return;
         break;

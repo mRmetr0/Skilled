@@ -38,7 +38,6 @@ func _process(_delta):
 	match(progress):
 		-1:
 			player = get_node(\"PlayerManager\")._get_player()
-			print(\"PLAYER\",player)
 			_set_progress(0)
 		0:
 			if (player.position.distance_to(MoveToPos.position) < 150):

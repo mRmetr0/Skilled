@@ -22,6 +22,7 @@ scale = Vector2(0.98, 0.210938)
 texture = ExtResource("2_lkg1m")
 
 [node name="ReloadBar" type="ProgressBar" parent="."]
+visible = false
 layout_mode = 0
 offset_top = -27.38
 offset_right = 121.0
