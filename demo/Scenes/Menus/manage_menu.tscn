@@ -1,0 +1,67 @@
+[gd_scene load_steps=2 format=3 uid="uid://clbrbi770vmmx"]
+
+[sub_resource type="GDScript" id="GDScript_dy8xu"]
+resource_name = "Managing_script"
+script/source = "extends Control
+
+
+func _on_go_press():
+	
+"
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_dy8xu")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -574.0
+offset_right = 574.0
+offset_bottom = 254.0
+grow_horizontal = 2
+pivot_offset = Vector2(102.5, 0)
+theme_override_font_sizes/font_size = 90
+text = "NEXT LEVEL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Briefing" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -574.0
+offset_top = 200.0
+offset_right = 574.0
+offset_bottom = 454.0
+grow_horizontal = 2
+pivot_offset = Vector2(102.5, 0)
+theme_override_font_sizes/font_size = 80
+text = "OBJECTIVE: SURVIVE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Start" type="Button" parent="."]
+custom_minimum_size = Vector2(450, 75)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -500.0
+offset_top = -150.0
+offset_right = -50.0
+offset_bottom = -50.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 50
+text = "GO"

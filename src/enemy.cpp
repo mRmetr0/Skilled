@@ -81,6 +81,8 @@ void Enemy::_take_damage(int p_damage){
         return;
     }
 	hp_bar->call("_health_update", health);
+    memdelete(state);
+    state = memnew(DamagedState);
 }
 
 #pragma region getters_setters
@@ -237,5 +239,18 @@ EnemyState* HuntingState::update (Enemy& enemy, double delta) {
 void HuntingState::fixed_update(Enemy& enemy, double delta){
     EnemyState::fixed_update(enemy, delta);
 }
+
+//DAMAGED STATE:
+EnemyState* DamagedState::update(Enemy& enemy, double delta){
+    update_timer += delta;
+    if (update_timer < hit_stun) return nullptr;
+
+    check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
+    if (check_path.size() < 13)
+        return memnew(HuntingState);
+    else 
+        return memnew(StormingState);
+}
+void DamagedState::fixed_update(Enemy& enemy, double delta){}
 
 #pragma endregion EnemyState

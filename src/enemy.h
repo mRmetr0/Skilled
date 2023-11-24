@@ -121,6 +121,16 @@ public:
     EnemyState* update (Enemy& enemy, double delta) override;
     void fixed_update(Enemy& enemy, double delta) override;
 };
+
+class DamagedState : public EnemyState {
+private:
+    double hit_stun = 0.1;
+public:
+    DamagedState(){}
+    ~DamagedState(){}
+    EnemyState* update(Enemy& enemy, double delta) override;
+    void fixed_update(Enemy& enemy, double delta) override;
+};
 }
 
 #endif
