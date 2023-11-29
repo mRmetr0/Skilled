@@ -4,7 +4,6 @@ var stages = []
 var current_stage = ""
 var stages_till_end
 var levels = []
-var briefing_level = ""
 var base_path = "res://Scenes/Stages/"
 
 var player_health = 0
@@ -13,11 +12,11 @@ var player_weapon_ammo : int = -1
 
 enum hazards {
 	DARK,
-	STRONGER_ENEMIES,
+	LARGER_HOARDES,
 	SLOW_TERRAIN
 }
 var selected_hazards = []
-var hazard_odds = 100;
+var hazard_odds = 33;
 
 func _ready():
 	_start_game()
@@ -25,6 +24,7 @@ func _ready():
 func _start_game():
 	stages = _load_stages()
 	stages_till_end = stages.size()-1
+	levels.clear()
 
 func _get_stage(divert_from = null):
 	var selection = []
@@ -85,7 +85,6 @@ func _on_game_end():
 	if levels.size() == 0:
 		get_tree().change_scene_to_file("res://Scenes/Menus/stage_select.tscn")
 		return
-	briefing_level = levels[0]
 	get_tree().change_scene_to_file("res://Scenes/Menus/manage_menu.tscn")
 
 func _load_next_level():
@@ -145,7 +144,6 @@ func _set_hazards(set_hazards):
 	selected_hazards = hazards_to_set
 	return hazards_to_set
 		
-
 func _apply_hazard(hazard):
 	match(hazard):
 		hazards.DARK:
@@ -153,10 +151,11 @@ func _apply_hazard(hazard):
 			var darkness = darkness_scene.instantiate()
 			var player = get_node("/root/Main/PlayerManager/Hero")
 			player.add_child(darkness)
-			print ("setting darkness")
-		hazards.STRONGER_ENEMIES:
-			return
 		hazards.SLOW_TERRAIN:
-			return
-		
-		
+			var player = get_node("/root/Main/PlayerManager/Hero")
+			player.normal_speed -= 100
+			player.slow_speed -= 50
+		hazards.LARGER_HOARDES:
+			var enemy_manager = get_node("/root/Main/EnemyManager")
+			enemy_manager.horde_amount += 5
+			enemy_manager.spawn_amount_max += 2

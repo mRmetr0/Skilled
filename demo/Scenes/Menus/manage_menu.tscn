@@ -10,7 +10,19 @@ script/source = "extends Control
 var hazards
 	
 func _ready():
-	hazards = GameManager._set_hazards([GameManager.hazards.DARK, GameManager.hazards.STRONGER_ENEMIES])
+	#Briefing:
+	var next_stage = GameManager.levels[0]
+	var data = next_stage[next_stage.length()-6]
+	var objective = \"\"
+	match data:
+		\"1\":
+			objective += \"SURVIVE THE HORDES\"
+		\"2\":
+			objective += \"PROTECT THE LABORER\"
+	briefing_text.text += objective
+	
+	#hazard setup:
+	hazards = GameManager._set_hazards([GameManager.hazards.DARK, GameManager.hazards.LARGER_HOARDES, GameManager.hazards.SLOW_TERRAIN])
 	if (hazards.size() == 0):
 		hazards_text.text += \"NONE\"
 	else:
@@ -57,7 +69,9 @@ offset_bottom = 454.0
 grow_horizontal = 2
 pivot_offset = Vector2(102.5, 0)
 theme_override_font_sizes/font_size = 80
-text = "OBJECTIVE: SURVIVE"
+text = "OBJECTIVE: 
+SURVIVE
+"
 horizontal_alignment = 1
 vertical_alignment = 1
 

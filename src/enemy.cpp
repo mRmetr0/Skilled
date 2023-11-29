@@ -26,11 +26,7 @@ void Enemy::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_attack_range", "p_range"), &Enemy::set_attack_range);
     ClassDB::add_property("Enemy", PropertyInfo(Variant::FLOAT, "attack_range"), "set_attack_range", "get_attack_range");
 
-
     ClassDB::bind_method(D_METHOD("_take_damage"), &Enemy::_take_damage);
-    
-
-    ADD_SIGNAL(MethodInfo("log", PropertyInfo(Variant::OBJECT, "node"), PropertyInfo(Variant::STRING, "message")));
 }
 
 Enemy::Enemy(){

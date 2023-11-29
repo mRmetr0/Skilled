@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cpk7le60cdkqs"]
+[gd_scene load_steps=20 format=3 uid="uid://cpk7le60cdkqs"]
 
 [ext_resource type="Texture2D" uid="uid://33n26awgrx4b" path="res://Assets/Ground_tiles.png" id="2_ov4rq"]
 [ext_resource type="Texture2D" uid="uid://cy4rwikpm8yg4" path="res://Assets/Wooden_Crate.png" id="3_r33d1"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dvglyktvrbuk4" path="res://Assets/Tutorial/Mouse2.png" id="8_3dgnf"]
 [ext_resource type="Texture2D" uid="uid://ce0ogm1q1kbxb" path="res://Assets/Tutorial/Lose_condition_1.png" id="9_coiyb"]
 [ext_resource type="Texture2D" uid="uid://b6sjuklqkbqdt" path="res://Assets/Person.png" id="10_n0mtq"]
+[ext_resource type="Texture2D" uid="uid://4bqpgmrfg1jq" path="res://Assets/Tutorial/Lose_condition_2.png" id="10_nxhcw"]
 [ext_resource type="PackedScene" uid="uid://gqbslx8m3sa3" path="res://Scenes/Objects/healthbar.tscn" id="11_j2q5t"]
 
 [sub_resource type="GDScript" id="GDScript_d55bq"]
@@ -21,7 +22,9 @@ script/source = "extends Node
 @onready var LCondSprite = get_node(\"/root/Main/LoseCondition1\")
 @onready var MoveToPos = get_node(\"/root/Main/MoveToPos\")
 @onready var enemy_manager = get_node(\"EnemyManager\")
+
 @onready var fake_enemy = get_node(\"FakeEnemy\")
+var original_pos : Vector2
 
 var progress = -1
 var player
@@ -32,7 +35,8 @@ var timer = 5
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	enemy_manager.set_process(false)
-	fake_enemy.hide()
+	original_pos = fake_enemy.position
+	fake_enemy.position = Vector2(-200, -200)
 	
 func _process(_delta):
 	match(progress):
@@ -61,9 +65,9 @@ func _set_progress(p_progress : int):
 			M1Sprite.show()
 		1:
 			M2Sprite.show()
-			fake_enemy.show()
+			fake_enemy.position = original_pos
 		2: 
-			fake_enemy.hide()
+			fake_enemy.position = Vector2(-200, -200)
 			LCondSprite.show()
 "
 
@@ -171,6 +175,19 @@ texture = ExtResource("8_3dgnf")
 position = Vector2(1001, 289)
 scale = Vector2(2.5, 2.5)
 texture = ExtResource("9_coiyb")
+
+[node name="LoseCondition2" type="Sprite2D" parent="LoseCondition1"]
+position = Vector2(2.80002, 178.4)
+texture = ExtResource("10_nxhcw")
+
+[node name="Label" type="Label" parent="LoseCondition1/LoseCondition2"]
+offset_left = -402.4
+offset_top = -294.0
+offset_right = 756.6
+offset_bottom = -154.0
+scale = Vector2(0.3, 0.3)
+theme_override_font_sizes/font_size = 100
+text = "Returng to menu soon..."
 
 [node name="FakeEnemy" type="Area2D" parent="." groups=["shootables"]]
 position = Vector2(362, 541)

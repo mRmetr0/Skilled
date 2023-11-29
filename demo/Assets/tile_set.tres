@@ -1,0 +1,67 @@
+[gd_resource type="TileSet" load_steps=9 format=3 uid="uid://cexljc66ce55p"]
+
+[ext_resource type="Texture2D" uid="uid://33n26awgrx4b" path="res://Assets/Ground_tiles.png" id="1_cuhli"]
+[ext_resource type="Texture2D" uid="uid://c548rlcfbkp6e" path="res://Assets/Bomb_sheet.png" id="2_dj2vo"]
+[ext_resource type="Texture2D" uid="uid://cy4rwikpm8yg4" path="res://Assets/Wooden_Crate.png" id="3_s8wll"]
+[ext_resource type="Texture2D" uid="uid://d3cmfkcuefhha" path="res://Assets/Metal_Crate_File.png" id="4_d7dff"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ssc6w"]
+resource_name = "ground"
+texture = ExtResource("1_cuhli")
+texture_region_size = Vector2i(100, 100)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6x43e"]
+resource_name = "bomb"
+texture = ExtResource("2_dj2vo")
+texture_region_size = Vector2i(100, 100)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ewyyf"]
+resource_name = "wood"
+texture = ExtResource("3_s8wll")
+texture_region_size = Vector2i(100, 100)
+0:0/next_alternative_id = 5
+0:0/0 = 0
+1:0/next_alternative_id = 2
+1:0/0 = 0
+2:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5q1vh"]
+resource_name = "metal"
+texture = ExtResource("4_d7dff")
+texture_region_size = Vector2i(100, 100)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+
+[resource]
+tile_size = Vector2i(100, 100)
+sources/5 = SubResource("TileSetAtlasSource_5q1vh")
+sources/2 = SubResource("TileSetAtlasSource_ewyyf")
+sources/0 = SubResource("TileSetAtlasSource_ssc6w")
+sources/10 = SubResource("TileSetAtlasSource_6x43e")

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ws8x4f0dmmv0"]
 
-[ext_resource type="Texture2D" uid="uid://mo1e8jqvniru" path="res://Assets/Darkness_sprite.png" id="1_n8cqd"]
+[ext_resource type="Texture2D" uid="uid://3frj57jpi27i" path="res://Assets/Darkness_2.png" id="1_0p7yj"]
 
 [sub_resource type="GDScript" id="GDScript_musok"]
 resource_name = "Follow_script"
@@ -8,7 +8,7 @@ script/source = "extends Sprite2D
 
 @onready var player = get_node(\"/root/Main/PlayerManager/Hero\")
 
-func _process(delta):
+func _process(_delta):
 	position = player.position
 	look_at(get_global_mouse_position())
 "
@@ -16,6 +16,6 @@ func _process(delta):
 [node name="Darkness" type="Sprite2D"]
 top_level = true
 z_index = 5
-scale = Vector2(3, 3)
-texture = ExtResource("1_n8cqd")
+scale = Vector2(2.3, 2.3)
+texture = ExtResource("1_0p7yj")
 script = SubResource("GDScript_musok")
