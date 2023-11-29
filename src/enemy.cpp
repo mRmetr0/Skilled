@@ -240,6 +240,8 @@ void HuntingState::fixed_update(Enemy& enemy, double delta){
 EnemyState* DamagedState::update(Enemy& enemy, double delta){
     update_timer += delta;
     if (update_timer < hit_stun) return nullptr;
+    
+    enemy.player = Object::cast_to<Player>(enemy.player_manager->call("_get_player"));
 
     check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
     if (check_path.size() < 13)

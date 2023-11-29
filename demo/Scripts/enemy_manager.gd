@@ -28,16 +28,14 @@ var loot_moved = 0
 var done = false
 
 func _ready ():
-	var directions = [Up, Down, Left, Right]
 	if Up:
-		spawn_directions.append(Vector2(0, 1))
-	if Down:
 		spawn_directions.append(Vector2(0, -1))
+	if Down:
+		spawn_directions.append(Vector2(0, 1))
 	if Left:
 		spawn_directions.append(Vector2(-1, 0))
 	if Right:
 		spawn_directions.append(Vector2(1, 0))
-	print("DIRS", spawn_directions.size())
 
 func _process(delta):
 	if done:
@@ -77,7 +75,6 @@ func _spawn_enemy():
 		new_pos.y =  rng.randf_range(0, screen.y)
 			
 	init.position = new_pos
-	print("pos", init.position)
 
 func _get_closest_enemy(position):
 	var enemies = get_children()

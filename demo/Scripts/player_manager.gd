@@ -14,7 +14,7 @@ func _ready():
 	add_child(player)
 	add_child(battle_ui)
 	player.position = Vector2i(1000, 500)
-	#GameManager._set_player_data(player)
+#	GameManager._set_player_data(player)
 	
 	for hazard in GameManager.selected_hazards:
 		GameManager._apply_hazard(hazard)

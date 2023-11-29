@@ -15,7 +15,6 @@ func _ready():
 	_add_points()
 	_connect_points()
 	
-	
 func _add_points():
 	for cell in used_cells:
 		astar.add_point(id(cell), cell, 1.0)
@@ -24,7 +23,10 @@ func _add_points():
 				astar.set_point_disabled(id(cell), true)
 				if (get_cell_source_id(0, cell) == 10): #register bomb cell
 					core_cell = cell
-				wall_cells.append(cell);
+					if (GameManager.core_health > 0):
+						set_cell(0, cell, get_cell_source_id(0, cell), Vector2i(GameManager.core_health, 0))
+				if (get_cell_source_id(0, cell) < 20):
+					wall_cells.append(cell);
 		else:	##randomize ground tile
 			var cell_id = get_cell_source_id(0, cell)
 			var coords = get_cell_atlas_coords(0, cell)
@@ -91,7 +93,7 @@ func _damage_tile_raw(tile):
 	if tile_id == 0:
 		return		
 	if (value.x == 1):
-		if (get_cell_source_id(0, n_tile) == 10):
+		if (tile_id == 10):
 			get_tree().change_scene_to_file("res://Scenes/Menus/end_menu.tscn")
 		set_cell(0, n_tile, tile_id, Vector2i(0, value.y))
 		astar.set_point_disabled(id(n_tile), false)
@@ -103,7 +105,7 @@ func _heal_tile_raw(tile):
 	var n_tile = tile
 	var value = get_cell_atlas_coords(0, n_tile)
 	var tile_id = get_cell_source_id(0, n_tile)
-	if (get_cell_source_id(0, n_tile) == 10):
+	if (get_cell_source_id(0, n_tile) == 10 || get_cell_source_id(0, n_tile) >= 20):
 		return
 	if value.x > 0 && value.x < tile_id:
 		set_cell(0, n_tile, tile_id, Vector2i(value.x + 1, value.y))

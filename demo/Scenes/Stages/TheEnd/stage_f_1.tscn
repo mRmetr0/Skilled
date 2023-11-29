@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bq7wafau6plbt"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_0kdwi"]
-[ext_resource type="TileSet" uid="uid://cexljc66ce55p" path="res://Assets/tile_set.tres" id="2_8ydrk"]
+[ext_resource type="TileSet" uid="uid://cexljc66ce55p" path="res://Assets/Tiles/tile_set.tres" id="2_8ydrk"]
 [ext_resource type="Script" path="res://Scripts/AStar2D.gd" id="5_o4iu3"]
 [ext_resource type="Script" path="res://Scripts/player_manager.gd" id="6_md10b"]
 [ext_resource type="Script" path="res://Scripts/enemy_manager.gd" id="9_7y16v"]
