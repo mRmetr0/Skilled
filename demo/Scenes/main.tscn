@@ -74,7 +74,6 @@ script = ExtResource("5_qyam5")
 
 [node name="EnemyManager" type="Node" parent="."]
 script = ExtResource("8_bqyai")
-spawn_rate = 1e+11
 horde_amount = 1
 
 [node name="Enemy" parent="EnemyManager" instance=ExtResource("8_kmkff")]

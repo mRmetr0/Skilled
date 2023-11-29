@@ -7,7 +7,7 @@ resource_name = "battle_ui_script"
 script/source = "extends Control
 
 @onready var bullet_display = get_node(\"bullet_display\")
-@onready var weapon_sprite = get_node(\"weapon_sprite\")
+@onready var weapon_sprite = get_node(\"bullet_display/weapon_sprite\")
 @onready var player = get_node(\"/root/Main/PlayerManager/Hero\")
 
 var weapons = []
@@ -62,12 +62,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = SubResource("GDScript_4g63o")
 
-[node name="weapon_sprite" type="Sprite2D" parent="."]
-modulate = Color(1, 1, 1, 0.784314)
-position = Vector2(80, 930)
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("1_f7rls")
-
 [node name="bullet_display" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 2
@@ -80,3 +74,9 @@ offset_bottom = -20.0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 65
 text = "Bullets"
+
+[node name="weapon_sprite" type="Sprite2D" parent="bullet_display"]
+modulate = Color(1, 1, 1, 0.784314)
+position = Vector2(-60, 43)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_f7rls")

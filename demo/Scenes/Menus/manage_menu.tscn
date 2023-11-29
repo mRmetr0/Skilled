@@ -70,7 +70,7 @@ grow_horizontal = 2
 pivot_offset = Vector2(102.5, 0)
 theme_override_font_sizes/font_size = 80
 text = "OBJECTIVE: 
-SURVIVE
+PROTECT THE BOMB
 "
 horizontal_alignment = 1
 vertical_alignment = 1

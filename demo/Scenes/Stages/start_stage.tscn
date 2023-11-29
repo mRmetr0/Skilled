@@ -29,6 +29,6 @@ script = ExtResource("6_plat0")
 
 [node name="EnemyManager" type="Node" parent="."]
 script = ExtResource("9_hvbs8")
-spawn_rate = 3.0
-horde_amount = 1
-spawn_amount_max = 2
+spawn_rate = 2.0
+horde_amount = 50
+spawn_amount_max = 10
