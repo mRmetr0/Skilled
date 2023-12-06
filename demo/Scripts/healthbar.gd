@@ -18,7 +18,6 @@ func _process(delta):
 		reload_bar.value = (time_passed / time) * 100
 	else:
 		_set_reload(-1.0)
-		
 
 func _health_update(p_value: int):
 	value = p_value;
