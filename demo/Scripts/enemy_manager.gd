@@ -86,7 +86,7 @@ func _get_closest_enemy(position):
 		if closest == null || dist < (closest.position - position):
 			closest = entity;
 	return closest.position	
-	
+
 func _check_win_condition():
 	match objective:
 		objectives.SURVIVE:

@@ -13,7 +13,7 @@ func _ready():
 	player = player_scene.instantiate()
 	add_child(player)
 	add_child(battle_ui)
-	player.position = Vector2i(1000, 500)
+	player.position = Vector2i(1050, 550)
 	GameManager._set_player_data(player)
 	
 	if get_tree().get_current_scene().get_name() != "start_stage.tscn":
