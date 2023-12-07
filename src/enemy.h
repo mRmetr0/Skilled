@@ -49,6 +49,7 @@ public:
     void _physics_process(double delta);
 
     void _take_damage(int p_damage);
+    void _animate(int p_anim, int p_flip_dir);
 
     void set_health(const int p_health);
     int get_health() const;
@@ -124,7 +125,8 @@ public:
 
 class DamagedState : public EnemyState {
 private:
-    double hit_stun = 0.1;
+    bool animated = false;
+    double hit_stun = 0.3;
 public:
     DamagedState(){}
     ~DamagedState(){}

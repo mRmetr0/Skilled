@@ -123,7 +123,11 @@ void Player::astar_move(double delta){
         crate = Vector2i(-1,-1);
         return;
     }
-    if (path.size() == 0 || progress >= path.size()) return;
+    if (path.size() == 0 || progress >= path.size()) {
+        emit_signal("animate", 0);
+        return;
+    }
+    emit_signal("animate", 1);
 
     target = tile_map->map_to_local(path[progress]);
 

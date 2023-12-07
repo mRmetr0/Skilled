@@ -27,6 +27,8 @@ void Enemy::_bind_methods() {
     ClassDB::add_property("Enemy", PropertyInfo(Variant::FLOAT, "attack_range"), "set_attack_range", "get_attack_range");
 
     ClassDB::bind_method(D_METHOD("_take_damage"), &Enemy::_take_damage);
+    ADD_SIGNAL(MethodInfo("animate", PropertyInfo(Variant::INT, "type")));
+    ADD_SIGNAL(MethodInfo("flip", PropertyInfo(Variant::BOOL, "right")));
 }
 
 Enemy::Enemy(){
@@ -79,6 +81,12 @@ void Enemy::_take_damage(int p_damage){
 	hp_bar->call("_health_update", health);
     memdelete(state);
     state = memnew(DamagedState);
+}
+
+void Enemy::_animate(int p_anim, int p_flip_dir){
+    emit_signal("animate", p_anim);
+    if (p_flip_dir == 0) return;
+    emit_signal("flip", p_flip_dir < 0);
 }
 
 #pragma region getters_setters
@@ -144,10 +152,14 @@ EnemyState* EnemyState::update (Enemy& enemy, double delta) {
 }
 
 void EnemyState::fixed_update(Enemy& enemy, double delta){
-    if (path.size() == 0 || progress >= path.size()) return;
+    if (path.size() == 0 || progress >= path.size()) {
+        enemy._animate(0, 0);
+        return;
+    }
 
     Vector2 target = enemy.tile_map->map_to_local(path[progress]);
     Vector2 velocity = enemy.get_position().direction_to(target)* enemy.speed;
+    enemy._animate(1, velocity.x);
 
     if (enemy.get_position().distance_to(target) < 10) progress++;
     enemy.set_position(enemy.get_position() + velocity * delta);
@@ -238,6 +250,11 @@ void HuntingState::fixed_update(Enemy& enemy, double delta){
 
 //DAMAGED STATE:
 EnemyState* DamagedState::update(Enemy& enemy, double delta){
+    if (!animated){
+        enemy._animate(2, 0);
+        animated = true;
+    }
+
     update_timer += delta;
     if (update_timer < hit_stun) return nullptr;
     
