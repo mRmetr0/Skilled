@@ -26,7 +26,7 @@ enum objectives {
 	PROTECT
 }
 @export var objective = objectives.SURVIVE
-@export var loot_moved_to_win = -1
+@export var loot_moved_to_win = 5
 var loot_moved = 0
 var done = false
 
@@ -79,8 +79,8 @@ func _spawn_enemy():
 	#Spawn locations 2.0
 	var m = rng.randi_range(0, spawn_directions.size()-1)
 	var new_pos = spawn_directions[m]
-	new_pos.x *= screen.x/1.82
-	new_pos.y *= screen.y/1.82
+	new_pos.x *= screen.x/1.85
+	new_pos.y *= screen.y/1.85
 	if new_pos.x == 0:
 		new_pos.x =  rng.randf_range(0, screen.x)
 		new_pos.y += screen.y/2
@@ -113,3 +113,10 @@ func _end_level():
 	await get_tree().create_timer(3.0).timeout
 	GameManager._save_player_data(null)
 	GameManager._on_game_end()
+	
+func _set_resource(at_end):
+	if (at_end):
+		loot_moved += 1
+		get_node("root/Main/TileMap")._change_resources_states(at_end, int(4 * (loot_moved / loot_moved_to_win)))
+	else:
+		get_node("root/Main/TileMap")._change_resources_states(!at_end, 4 - int(4 * (loot_moved / loot_moved_to_win)))

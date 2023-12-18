@@ -13,9 +13,16 @@ void Labourer::_bind_methods(){
 }
 
 Labourer::Labourer(){
+    state = MOVING;
     progress = 0;
+    to_start = false;
+    
     health = 5;
     health_max = 5;
+    move_speed = 300;
+    
+    time_passed = 0.0;
+    packing_time = 5.0;
 }
 
 Labourer::~Labourer(){}
@@ -27,27 +34,55 @@ void Labourer::_ready(){
     hp_bar = Object::cast_to<ProgressBar>(get_node_or_null(NodePath("ProgressBar")));
     if (hp_bar != nullptr)
         hp_bar->call("_set_health", health_max, health);
+    if (tile_map != nullptr){
+        to_start = true;
+        astar_set();
+    }
+
 }
 
-void Labourer::_physics_process(double delta){}
-
-void Labourer::_take_damage(int p_damage){
-    health -= p_damage;
-    if (health <= 0) {
-        get_parent()->call("_game_over");
-        return;
+void Labourer::_physics_process(double delta){
+    switch (state) {
+        case PACKING:
+            packing_update(delta);
+            break;
+        case MOVING:
+            astar_move(delta);
+            break;
+        default:
+            break;
     }
-	hp_bar->call("_health_update", health);
+}
+
+void Labourer::packing_update(double delta){
+    time_passed += delta;
+    if (time_passed < packing_time) return;
+    time_passed = 0.0;
+    get_parent()->call("_set_resource", resource);
+    // astar_set();
+    state = MOVING;
+}
+
+void Labourer::astar_set(){
+    to_start = !to_start;
+    Vector2 next_target = tile_map->call("_get_resource", to_start);
+    PackedVector2Array new_path;
+    new_path = tile_map->call("_get_path_adjacent_raw", get_position(), tile_map->map_to_local(next_target));
+
+    if (new_path.size() <= 0) return;
+    path = new_path;
+    progress = 0;
 }
 
 void Labourer::astar_move(double delta){
     if (path.size() == 0 || progress >= path.size()) {
         emit_signal("animate", 0);
+        state = PACKING;
         return;
     }
     emit_signal("animate", 1);
 
-    target = tile_map->map_to_local(path[progress]);
+    Vector2 target = tile_map->map_to_local(path[progress]);
 
     Vector2 velocity = get_position().direction_to(target)* move_speed;
 
@@ -57,6 +92,14 @@ void Labourer::astar_move(double delta){
     set_position(get_position() + velocity * delta);
 }
 
+void Labourer::_take_damage(int p_damage){
+    health -= p_damage;
+    if (health <= 0) {
+        get_parent()->call("_game_over");
+        return;
+    }
+	hp_bar->call("_health_update", health);
+}
 #pragma region getters_setters
 
 void Labourer::set_health(const int p_health) {

@@ -12,17 +12,30 @@ class Labourer : public Area2D{
     GDCLASS(Labourer, Area2D)
 
 private:
+    enum States{
+        PACKING,
+        MOVING
+    };
+
+    States state;
+
     TileMap* tile_map;
     ProgressBar* hp_bar;
     PackedVector2Array path;
-    Vector2 target;
+    Vector2i resource;
+    bool to_start;
 
     int health;
     int health_max;
     double move_speed;
 
+    double time_passed;
+    double packing_time;
+
     int progress;
+    void astar_set();
     void astar_move(double delta);
+    void packing_update(double delta);
 
 protected:
     static void _bind_methods();

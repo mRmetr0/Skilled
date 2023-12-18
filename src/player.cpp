@@ -202,7 +202,6 @@ void Player::_set_weapon(int p_id, int p_ammo = 0){
         weapon_state = new_state;
         break;
     default:
-        return;
         break;
     }
 }

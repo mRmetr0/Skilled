@@ -1,10 +1,11 @@
-[gd_resource type="TileSet" load_steps=11 format=3 uid="uid://cexljc66ce55p"]
+[gd_resource type="TileSet" load_steps=13 format=3 uid="uid://cexljc66ce55p"]
 
 [ext_resource type="Texture2D" uid="uid://33n26awgrx4b" path="res://Assets/Tiles/Ground_tiles.png" id="1_sos4j"]
 [ext_resource type="Texture2D" uid="uid://c548rlcfbkp6e" path="res://Assets/Tiles/Bomb_sheet.png" id="2_3f64e"]
 [ext_resource type="Texture2D" uid="uid://cy4rwikpm8yg4" path="res://Assets/Tiles/Wooden_Crate.png" id="3_6jvbg"]
 [ext_resource type="Texture2D" uid="uid://c87tiak1qv74m" path="res://Assets/Tiles/invuln_tiles.png" id="4_8snh1"]
 [ext_resource type="Texture2D" uid="uid://d3cmfkcuefhha" path="res://Assets/Tiles/Metal_Crate_File.png" id="4_kfrxy"]
+[ext_resource type="Texture2D" uid="uid://dpcvdrrk26lns" path="res://Assets/Tiles/Resources_Tiles.png" id="5_6vfwj"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ssc6w"]
 resource_name = "ground"
@@ -57,6 +58,15 @@ texture_region_size = Vector2i(100, 100)
 1:0/0 = 0
 2:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cesd0"]
+resource_name = "Resources"
+texture = ExtResource("5_6vfwj")
+texture_region_size = Vector2i(100, 100)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5q1vh"]
 resource_name = "metal"
 texture = ExtResource("4_kfrxy")
@@ -75,3 +85,4 @@ sources/2 = SubResource("TileSetAtlasSource_ewyyf")
 sources/0 = SubResource("TileSetAtlasSource_ssc6w")
 sources/10 = SubResource("TileSetAtlasSource_6x43e")
 sources/20 = SubResource("TileSetAtlasSource_eu21g")
+sources/21 = SubResource("TileSetAtlasSource_cesd0")

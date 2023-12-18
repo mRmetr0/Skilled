@@ -7,6 +7,8 @@ class_name AStar_Path
 
 var wall_cells : Array
 var core_cell
+var resource_start
+var resource_end
 
 var path : PackedVector2Array
 
@@ -23,8 +25,13 @@ func _add_points():
 				astar.set_point_disabled(id(cell), true)
 				if (get_cell_source_id(0, cell) == 10): #register bomb cell
 					core_cell = cell
-					if (GameManager.core_health > 0):
+					if (GameManager.core_health > 0):	#register resources for labourer
 						set_cell(0, cell, get_cell_source_id(0, cell), Vector2i(GameManager.core_health, 0))
+				if (get_cell_source_id(0, cell) == 21):
+					if get_cell_atlas_coords(0, cell).x == 0:
+						resource_start = cell;
+					else:
+						resource_end = cell
 				if (get_cell_source_id(0, cell) < 20):
 					wall_cells.append(cell);
 		else:	##randomize ground tile
@@ -109,6 +116,21 @@ func _heal_tile_raw(tile):
 		return
 	if value.x > 0 && value.x < tile_id:
 		set_cell(0, n_tile, tile_id, Vector2i(value.x + 1, value.y))
+		
+func _change_resources_states(change_end, value):
+	var tile
+	if (!change_end):
+		tile = resource_start
+	else:
+		tile = resource_end
+	set_cell(0, tile, get_cell_source_id(0, tile), Vector2i(0, value))
+	
+func _get_resource(get_start):
+	if (get_start):
+		return resource_start
+	else:
+		return resource_end
+		
 
 ## STUFF FOR GDSCRIP TESTING ##
 
