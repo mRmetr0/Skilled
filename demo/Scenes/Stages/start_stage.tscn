@@ -31,6 +31,6 @@ script = ExtResource("6_plat0")
 script = ExtResource("9_hvbs8")
 spawn_rate = 2.0
 horde_amount = 1
-Up = false
 Down = false
+Left = false
 Right = false

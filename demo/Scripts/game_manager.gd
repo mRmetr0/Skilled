@@ -28,7 +28,7 @@ func _start_game():
 	levels.clear()
 	
 	player_health = 0
-	player_weapon_id = 1
+	player_weapon_id = -1
 	player_weapon_ammo = 1
 	core_health = 10
 	
@@ -94,6 +94,7 @@ func _load_levels():
 		levels.append(final_level)
 
 func _on_game_end():
+	BulletPool._clear_all_bullets()
 	if levels.size() == 0:
 		get_tree().change_scene_to_file("res://Scenes/Menus/stage_select.tscn")
 		return

@@ -16,6 +16,7 @@ func _process(_delta):
 [node name="Darkness" type="Sprite2D"]
 top_level = true
 z_index = 5
+texture_filter = 1
 scale = Vector2(2.3, 2.3)
 texture = ExtResource("1_0p7yj")
 script = SubResource("GDScript_musok")

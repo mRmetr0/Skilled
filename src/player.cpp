@@ -69,7 +69,8 @@ void Player::_ready(){
     input = Input::get_singleton();
     tile_map = Object::cast_to<TileMap>(get_node_or_null(NodePath("/root/Main/TileMap")));
     hp_bar = Object::cast_to<ProgressBar>(get_node_or_null(NodePath("ProgressBar")));
-    hp_bar->call("_set_health", health_max, health);
+    if (hp_bar != nullptr)
+        hp_bar->call("_set_health", health_max, health);
 
     weapon_state = memnew(PistolState);
     weapon_state->start(*this);
@@ -182,6 +183,12 @@ int Player::_get_weapon_id(){
 void Player::_set_weapon(int p_id, int p_ammo = 0){
     WeaponState* new_state;
     switch (p_id) {
+    case 1:
+        memdelete(weapon_state);
+        new_state = memnew(PistolState);
+        new_state->start(*this, p_ammo);
+        weapon_state = new_state;
+        break;
     case 2:
         memdelete(weapon_state);
         new_state = memnew(AutoState);

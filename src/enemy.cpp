@@ -74,8 +74,7 @@ void Enemy::_physics_process(double delta){
 void Enemy::_take_damage(int p_damage){
     health -= p_damage;
     if (health <= 0) {
-        // if (state != nullptr) memdelete(state);
-        queue_free();
+        get_parent()->call("_remove_enemy", this);
         return;
     }
 	hp_bar->call("_health_update", health);

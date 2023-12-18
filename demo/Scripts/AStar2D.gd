@@ -47,9 +47,9 @@ func _connect_points():
 
 
 func _get_path_raw(start, end):
-	var n_start = local_to_map(start)
+	var n_start_id = astar.get_closest_point(local_to_map(start))
 	var n_end = local_to_map(end)
-	var n_path = astar.get_point_path(id (n_start), id(n_end))
+	var n_path = astar.get_point_path(n_start_id, id(n_end))
 	n_path.remove_at(0)
 	return n_path	
 	

@@ -1,6 +1,9 @@
 extends Node
 
-@onready var enemy = preload("res://Scenes/Objects/enemy.tscn")
+@onready var enemy = preload("res://Scenes/Objects/Characters/enemy.tscn")
+
+@onready var weapon_drop = preload("res://Scenes/Objects/Weapons/weapon_pickup.tscn")
+
 @onready var rng = RandomNumberGenerator.new()
 @onready var time_passed = 0.0
 @onready var screen = get_window().size
@@ -9,6 +12,7 @@ extends Node
 @export var spawn_rate = 5.0
 @export var horde_amount: int = 10
 @export var spawn_amount_max : int = 1
+@export var drop_rate = 5
 @export_category("SpawnLocations")
 @export var Up = true
 @export var Down = true
@@ -24,8 +28,18 @@ enum objectives {
 @export var objective = objectives.SURVIVE
 @export var loot_moved_to_win = -1
 var loot_moved = 0
-
 var done = false
+
+func _get_closest_enemy(position):
+	var enemies = get_children()
+	if enemies.size() == 0:
+		return null;
+	var closest = null
+	for entity in enemies:
+		var dist = abs (entity.position - position)
+		if closest == null || dist < (closest.position - position):
+			closest = entity;
+	return closest.position	
 
 func _ready ():
 	if Up:
@@ -65,8 +79,8 @@ func _spawn_enemy():
 	#Spawn locations 2.0
 	var m = rng.randi_range(0, spawn_directions.size()-1)
 	var new_pos = spawn_directions[m]
-	new_pos.x *= screen.x/2
-	new_pos.y *= screen.y/2
+	new_pos.x *= screen.x/1.82
+	new_pos.y *= screen.y/1.82
 	if new_pos.x == 0:
 		new_pos.x =  rng.randf_range(0, screen.x)
 		new_pos.y += screen.y/2
@@ -76,16 +90,14 @@ func _spawn_enemy():
 			
 	init.position = new_pos
 
-func _get_closest_enemy(position):
-	var enemies = get_children()
-	if enemies.size() == 0:
-		return null;
-	var closest = null
-	for entity in enemies:
-		var dist = abs (entity.position - position)
-		if closest == null || dist < (closest.position - position):
-			closest = entity;
-	return closest.position	
+func _remove_enemy(enemy):
+	var drop = randf_range(0, 100) <= drop_rate
+	print(drop)
+	if (drop):
+		var weapon = weapon_drop.instantiate()
+		get_parent().call_deferred("add_child", weapon)
+		weapon.position = enemy.position
+	enemy.queue_free()
 
 func _check_win_condition():
 	match objective:

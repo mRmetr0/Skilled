@@ -1,0 +1,76 @@
+#include "labourer.h"
+
+using namespace godot;
+
+void Labourer::_bind_methods(){
+    ClassDB::bind_method(D_METHOD("get_health"), &Labourer::get_health);
+    ClassDB::bind_method(D_METHOD("set_health", "p_health"), &Labourer::set_health);
+    ClassDB::add_property("Labourer", PropertyInfo(Variant::INT, "health"), "set_health", "get_health");
+
+    ClassDB::bind_method(D_METHOD("get_speed"), &Labourer::get_speed);
+    ClassDB::bind_method(D_METHOD("set_speed", "p_speed"), &Labourer::set_speed);
+    ClassDB::add_property("Labourer", PropertyInfo(Variant::FLOAT, "speed"), "set_speed", "get_speed");
+}
+
+Labourer::Labourer(){
+    progress = 0;
+    health = 5;
+    health_max = 5;
+}
+
+Labourer::~Labourer(){}
+
+void Labourer::_ready(){
+    health_max = health;
+
+    tile_map = Object::cast_to<TileMap>(get_node_or_null(NodePath("/root/Main/TileMap")));
+    hp_bar = Object::cast_to<ProgressBar>(get_node_or_null(NodePath("ProgressBar")));
+    if (hp_bar != nullptr)
+        hp_bar->call("_set_health", health_max, health);
+}
+
+void Labourer::_physics_process(double delta){}
+
+void Labourer::_take_damage(int p_damage){
+    health -= p_damage;
+    if (health <= 0) {
+        get_parent()->call("_game_over");
+        return;
+    }
+	hp_bar->call("_health_update", health);
+}
+
+void Labourer::astar_move(double delta){
+    if (path.size() == 0 || progress >= path.size()) {
+        emit_signal("animate", 0);
+        return;
+    }
+    emit_signal("animate", 1);
+
+    target = tile_map->map_to_local(path[progress]);
+
+    Vector2 velocity = get_position().direction_to(target)* move_speed;
+
+    //If at node, changes the target. Gets stopped next loop if required
+    if (get_position().distance_to(target) < 10) progress++;
+
+    set_position(get_position() + velocity * delta);
+}
+
+#pragma region getters_setters
+
+void Labourer::set_health(const int p_health) {
+    health = CLAMP(p_health, 0, health_max);
+}
+int Labourer::get_health() const {
+    return health;
+}
+
+void Labourer::set_speed(const double p_speed){
+    move_speed = p_speed;
+}
+double Labourer::get_speed()const{
+    return move_speed;
+}
+
+#pragma endregion getters_setters

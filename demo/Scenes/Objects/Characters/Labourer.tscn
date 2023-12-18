@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cm2lgi1nq4fky"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rj2kw"]
+
+[node name="Labourer" type="Labourer"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(5, 5)
+shape = SubResource("RectangleShape2D_rj2kw")

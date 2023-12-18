@@ -7,7 +7,7 @@ func _ready():
 	for child in characters:
 		child.queue_free()
 		remove_child(child)
-	var player_scene = load(str("res://Scenes/Objects/Hero.tscn"))
+	var player_scene = load(str("res://Scenes/Objects/Characters/Hero.tscn"))
 	var battle_ui_scene = load(str("res://Scenes/Objects/battle_ui.tscn"))
 	var battle_ui = battle_ui_scene.instantiate();
 	player = player_scene.instantiate()
