@@ -19,7 +19,9 @@ func _ready():
 
 ## MAIN MENU
 func _on_start_pressed():
-	get_tree().change_scene_to_file("res://Scenes/Menus/party_select.tscn")
+	# TODO: MAKE START SCREEN FOR DIFFERENT PLAYSTYLES/DIFFICULTIES
+#	get_tree().change_scene_to_file("res://Scenes/Menus/party_select.tscn")
+	get_tree().change_scene_to_file("res://Scenes/Stages/main_stage.tscn")
 
 func _on_options_pressed():
 	get_tree().change_scene_to_file("res://Scenes/Stages/tutorial_stage.tscn")

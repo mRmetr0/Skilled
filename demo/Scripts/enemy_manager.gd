@@ -79,8 +79,8 @@ func _spawn_enemy():
 	#Spawn locations 2.0
 	var m = rng.randi_range(0, spawn_directions.size()-1)
 	var new_pos = spawn_directions[m]
-	new_pos.x *= screen.x/1.85
-	new_pos.y *= screen.y/1.85
+	new_pos.x *= screen.x/2
+	new_pos.y *= screen.y/2
 	if new_pos.x == 0:
 		new_pos.x =  rng.randf_range(0, screen.x)
 		new_pos.y += screen.y/2
@@ -103,16 +103,15 @@ func _check_win_condition():
 	match objective:
 		objectives.SURVIVE:
 			if horde_amount <= 0 && get_children().size() == 0:
-				_end_level()
+				_end_wave()
 		objectives.PROTECT:
 			if (loot_moved >= loot_moved_to_win):
-				_end_level()
+				_end_wave()
 
-func _end_level():
+func _end_wave():
 	done = true
 	await get_tree().create_timer(3.0).timeout
-	GameManager._save_player_data(null)
-	GameManager._on_game_end()
+	GameManager._on_wave_end()
 	
 func _set_resource(at_end):
 	if (at_end):

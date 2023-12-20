@@ -22,8 +22,9 @@ BulletPool="*res://Scripts/bullet_pool.gd"
 
 [display]
 
-window/size/viewport_width=2000
-window/size/viewport_height=1000
+window/size/viewport_width=2600
+window/size/viewport_height=1600
+window/size/mode=3
 
 [input]
 

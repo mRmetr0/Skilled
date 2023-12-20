@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dhb0kuf5us6cp"]
 
 [ext_resource type="Script" path="res://Scripts/buttons.gd" id="1_cjuig"]
-[ext_resource type="Texture2D" uid="uid://g85ytj3s2dt5" path="res://border_1.png" id="2_kt6vo"]
-[ext_resource type="Texture2D" uid="uid://bp02gm7wfnvhc" path="res://Scenes/Stages/TheEnd/the_end_border.png" id="3_15fby"]
-[ext_resource type="Texture2D" uid="uid://s7fbefyr062n" path="res://border_3.png" id="3_e5h00"]
+[ext_resource type="Texture2D" uid="uid://g85ytj3s2dt5" path="res://Assets/border_1.png" id="2_kt6vo"]
+[ext_resource type="Texture2D" path="res://Scenes/Stages/TheEnd/the_end_border.png" id="3_15fby"]
+[ext_resource type="Texture2D" uid="uid://s7fbefyr062n" path="res://Assets/border_3.png" id="3_e5h00"]
 
 [node name="StageSelect" type="Control"]
 layout_mode = 3
