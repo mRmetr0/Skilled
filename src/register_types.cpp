@@ -7,22 +7,28 @@
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 
-#include "player.h"
 #include "gdexample.h"
+#include "player.h"
+#include "labourer.h"
 #include "enemy.h"
-#include "weapon.h"
+#include "weapon_state.h"
 
 using namespace godot;
 
 void initialize_example_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
         return;
-    }
+    }    
 
     ClassDB::register_class<GDExample>();
+
+    
     ClassDB::register_class<Player>();
+    ClassDB::register_class<Labourer>();
     ClassDB::register_class<Enemy>();
-    ClassDB::register_class<Weapon>();
+
+    ClassDB::register_class<EnemyState>();
+    ClassDB::register_class<WeaponState>();
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {

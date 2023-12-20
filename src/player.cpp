@@ -29,10 +29,12 @@ void Player::_bind_methods() {
     ClassDB::add_property("Player", PropertyInfo(Variant::FLOAT, "update_frequency"), "set_frequency", "get_frequency");
 
     ClassDB::bind_method(D_METHOD("_take_damage"), &Player::_take_damage);
-    ClassDB::bind_method(D_METHOD("_set_active", "p_active"), &Player::_set_active);
     ClassDB::bind_method(D_METHOD("_set_target", "p_target"), &Player::_set_target);
-    
-    ADD_SIGNAL(MethodInfo("log", PropertyInfo(Variant::OBJECT, "node"), PropertyInfo(Variant::STRING, "message")));
+    ClassDB::bind_method(D_METHOD("_get_bullets"), &Player::_get_bullets);
+    ClassDB::bind_method(D_METHOD("_get_weapon_id"), &Player::_get_weapon_id);
+    ClassDB::bind_method(D_METHOD("_set_weapon", "p_id", "p_ammo"), &Player::_set_weapon);
+
+    ADD_SIGNAL(MethodInfo("animate", PropertyInfo(Variant::INT, "type")));
 }
 
 Player::Player(){
@@ -48,13 +50,18 @@ Player::Player(){
     crate = Vector2i(0,0);
 
     health = 5;
+    health_max = 5;
     is_player = false;
+    weapon_state = nullptr;
 
     if (Engine::get_singleton()->is_editor_hint())
         set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
 }
 
-Player::~Player() {}
+Player::~Player() {
+    if (weapon_state != nullptr)
+        memdelete(weapon_state);
+}
 
 void Player::_ready(){
     target = get_position();
@@ -62,30 +69,21 @@ void Player::_ready(){
     input = Input::get_singleton();
     tile_map = Object::cast_to<TileMap>(get_node_or_null(NodePath("/root/Main/TileMap")));
     hp_bar = Object::cast_to<ProgressBar>(get_node_or_null(NodePath("ProgressBar")));
-    weapon = Object::cast_to<Weapon>(get_node_or_null(NodePath("Weapon")));
-    enemy_manager = Object::cast_to<Node>(get_node_or_null(NodePath("/root/Main/EnemyManager")));
+    if (hp_bar != nullptr)
+        hp_bar->call("_set_health", health_max, health);
+
+    weapon_state = memnew(PistolState);
+    weapon_state->start(*this);
 }
 
 void Player::_process(double delta){
-    if (is_player) { //Player controls
-        astar_set();
-    } else {    //AI controls
-        //TODO: player shoot at enemy
-        time_passed += delta;
-        if (time_passed < update_frequency) return;
-        if (enemy_manager == nullptr) return;
-        time_passed = 0.0;
-        
-        Vector2 aim = enemy_manager->call("_get_closest_enemy", get_position());
+    astar_set();
 
-        if (aim == Vector2(0,0)) return;
-        
-        if (get_position().distance_to(aim) <= weapon->get_fire_range() || weapon->get_fire_range() == -1)
-            weapon->shoot(get_position(), (aim - get_position()).angle());
-
-        //TODO: player move and act accordingly (repair wall, run away, reposition)
-        //might give a "hold the fort" thingy; when not controlled, will not move too far from original position unless unsafe, 
-        //it might then run to another character/safety
+    WeaponState* new_weapon = weapon_state->update(*this, delta);
+    if (new_weapon != nullptr){
+        memdelete(weapon_state);
+        new_weapon->start(*this);
+        weapon_state = new_weapon;
     }
 
     //Player slows down when hit
@@ -99,18 +97,6 @@ void Player::_process(double delta){
 
 void Player::_physics_process(double delta){
     astar_move(delta);
-
-    if (is_player) {   //Player controls
-        if (input->is_action_just_pressed("RClick")){
-            if (weapon != nullptr)
-                weapon->shoot(get_position(), (get_global_mouse_position() - get_position()).angle());
-        } else if (input->is_action_just_pressed("reload")){
-            if (weapon != nullptr)
-                weapon->reload();
-        }
-    } else {    //AI controls
-
-    }
 }
 void Player::astar_set(){
     if (input->is_action_just_pressed("LClick")){
@@ -138,7 +124,11 @@ void Player::astar_move(double delta){
         crate = Vector2i(-1,-1);
         return;
     }
-    if (path.size() == 0 || progress >= path.size()) return;
+    if (path.size() == 0 || progress >= path.size()) {
+        emit_signal("animate", 0);
+        return;
+    }
+    emit_signal("animate", 1);
 
     target = tile_map->map_to_local(path[progress]);
 
@@ -154,8 +144,7 @@ void Player::_take_damage(int p_damage){
     health -= p_damage;
     hit_stun = 2.0;
     if (health <= 0) {
-        get_parent()->call("_remove_character", this);
-        queue_free();
+        get_parent()->call("_game_over");
         return;
     }
 	hp_bar->call("_health_update", health);
@@ -169,13 +158,7 @@ bool Player::is_ground(){
     return false;
 }
 
-void Player::_set_active(bool p_active){
-    is_player = p_active;
-    hp_bar->call("_set_active", p_active);
-}
-
 void Player::_set_target(Vector2 p_target){
-    emit_signal("log", this, "SETTING TARGET");
     
     PackedVector2Array new_path;
 
@@ -189,6 +172,40 @@ void Player::_set_target(Vector2 p_target){
     }
 }
 
+Vector2i Player::_get_bullets(){
+    return weapon_state->_get_bullets();
+}
+
+int Player::_get_weapon_id(){
+    return weapon_state->id;
+}
+
+void Player::_set_weapon(int p_id, int p_ammo = 0){
+    WeaponState* new_state;
+    switch (p_id) {
+    case 1:
+        memdelete(weapon_state);
+        new_state = memnew(PistolState);
+        new_state->start(*this, p_ammo);
+        weapon_state = new_state;
+        break;
+    case 2:
+        memdelete(weapon_state);
+        new_state = memnew(AutoState);
+        new_state->start(*this, p_ammo);
+        weapon_state = new_state;
+        break;
+    case 3:
+        memdelete(weapon_state);
+        new_state = memnew(SpreadState);
+        new_state->start(*this, p_ammo);
+        weapon_state = new_state;
+        break;
+    default:
+        break;
+    }
+}
+
 #pragma region getters_setters
 void Player::set_frequency(const double p_frequency){
     update_frequency = p_frequency;
@@ -199,7 +216,7 @@ double Player::get_frequency() const {
 }
 
 void Player::set_health(const int p_health) {
-    health = p_health;
+    health = CLAMP(p_health, 0, health_max);
 }
 int Player::get_health() const {
     return health;

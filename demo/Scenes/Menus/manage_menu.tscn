@@ -1,0 +1,109 @@
+[gd_scene load_steps=2 format=3 uid="uid://clbrbi770vmmx"]
+
+[sub_resource type="GDScript" id="GDScript_dy8xu"]
+resource_name = "Managing_script"
+script/source = "extends Control
+
+@onready var briefing_text = get_node(\"Briefing\")
+@onready var hazards_text = get_node(\"Hazards\")
+
+var hazards
+	
+func _ready():
+	#Briefing:
+	var next_stage = GameManager.levels[0]
+	var data = next_stage[next_stage.length()-6]
+	var objective = \"\"
+	match data:
+		\"1\":
+			objective += \"SURVIVE THE HORDES\"
+		\"2\":
+			objective += \"PROTECT THE LABORER\"
+	briefing_text.text += objective
+	
+	#hazard setup:
+	hazards = GameManager._set_hazards([GameManager.hazards.DARK, GameManager.hazards.LARGER_HOARDES, GameManager.hazards.SLOW_TERRAIN])
+	if (hazards.size() == 0):
+		hazards_text.text += \"NONE\"
+	else:
+		for hazard in hazards:
+			hazards_text.text += GameManager.hazards.keys()[hazard] + \"\\n\"
+
+func _on_go_press():
+	GameManager._load_next_level()
+"
+
+[node name="ManageMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_dy8xu")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -574.0
+offset_right = 574.0
+offset_bottom = 254.0
+grow_horizontal = 2
+pivot_offset = Vector2(102.5, 0)
+theme_override_font_sizes/font_size = 90
+text = "NEXT LEVEL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Briefing" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -574.0
+offset_top = 200.0
+offset_right = 574.0
+offset_bottom = 454.0
+grow_horizontal = 2
+pivot_offset = Vector2(102.5, 0)
+theme_override_font_sizes/font_size = 80
+text = "OBJECTIVE: 
+PROTECT THE BOMB
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hazards" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 87.0
+offset_top = -465.0
+offset_right = 1037.0
+grow_vertical = 0
+pivot_offset = Vector2(102.5, 0)
+theme_override_font_sizes/font_size = 65
+text = "HAZARDS: 
+"
+
+[node name="Start" type="Button" parent="."]
+custom_minimum_size = Vector2(450, 75)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -500.0
+offset_top = -150.0
+offset_right = -50.0
+offset_bottom = -50.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 50
+text = "GO"
+
+[connection signal="pressed" from="Start" to="." method="_on_go_press"]

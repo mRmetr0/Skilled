@@ -10,7 +10,7 @@ class Weapon : public Node2D {
     GDCLASS(Weapon, Node2D)
 
 private:
-    Ref<PackedScene> bullet;
+    Node* bullet_pool;
 
     //AI 
     double fire_range;
@@ -48,6 +48,7 @@ public:
     void shoot(Vector2 position, double angle);
     void reload();
 
+    //Getters, setters:
     void set_rate_of_fire(const double p_rof);
     double get_rate_of_fire() const;
     void set_fire_range(const double p_range);

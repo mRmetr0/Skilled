@@ -3,8 +3,6 @@ extends Control
 var stage_a = null
 var stage_b = null
 
-var selected_character = null
-
 func _ready():
 	if get_tree().get_current_scene().get_name() == "StageSelect":
 		if GameManager.stages_till_end > 0:
@@ -18,47 +16,22 @@ func _ready():
 		else:
 			get_node("StageA").queue_free()
 			get_node("StageB").queue_free()
-	
-	elif get_tree().get_current_scene().get_name() == "PartySelect":
-		var containter = get_node("HBoxContainer")
-		for i in containter.get_children().size():
-			var button = containter.get_child(i)
-			
-			if i >= GameManager.available_characters.size():
-				button.icon = null
-				continue
-				
-			button.set_name(GameManager.available_characters[i])
-			button.pressed.connect(_on_character_pressed.bind(button.name))
-			
 
 ## MAIN MENU
 func _on_start_pressed():
 	get_tree().change_scene_to_file("res://Scenes/Menus/party_select.tscn")
 
 func _on_options_pressed():
-	pass
+	get_tree().change_scene_to_file("res://Scenes/Stages/tutorial_stage.tscn")
 
 func _on_quit_pressed():
 	get_tree().quit()
 
 ## PARTY SELECT
 func _on_continue_pressed():
-	if selected_character == null:
-		print("please select a character first")
-		get_node("selected_name").text = "please select a character first"
-	else:
-		GameManager.player_name.append(selected_character)
-		GameManager.player_health.append(5)
-		
-		var i = GameManager.available_characters.find(selected_character)
-		GameManager.available_characters.remove_at(i)
-		
-		get_tree().change_scene_to_file("res://Scenes/Stages/start_stage.tscn")
+	get_tree().change_scene_to_file("res://Scenes/Stages/start_stage.tscn")
 
-func _on_character_pressed(character = "lol"):
-	selected_character = character
-	get_node("selected_name").text = character
+#TODO: loadout select on gamestart
 	
 ## LOSE SCREEN
 func _on_return_pressed():
