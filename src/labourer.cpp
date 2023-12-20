@@ -15,7 +15,6 @@ void Labourer::_bind_methods(){
 Labourer::Labourer(){
     state = MOVING;
     progress = 0;
-    to_start = false;
     
     health = 5;
     health_max = 5;
@@ -35,8 +34,10 @@ void Labourer::_ready(){
     if (hp_bar != nullptr)
         hp_bar->call("_set_health", health_max, health);
     if (tile_map != nullptr){
-        to_start = true;
-        astar_set();
+        resource_start = tile_map->call("_get_resource", true);
+        resource_end = tile_map->call("_get_resource", false);
+        // resource_start = resource_end = Vector2i(0,0);
+        astar_set(false);
     }
 
 }
@@ -59,17 +60,17 @@ void Labourer::packing_update(double delta){
     if (time_passed < packing_time) return;
     time_passed = 0.0;
     get_parent()->call("_set_resource", resource);
-    // astar_set();
+    // astar_set(false);
     state = MOVING;
 }
 
-void Labourer::astar_set(){
-    to_start = !to_start;
-    Vector2 next_target = tile_map->call("_get_resource", to_start);
+void Labourer::astar_set(bool to_start){
+    Vector2 next_target = to_start ? resource_start : resource_end;
     PackedVector2Array new_path;
     new_path = tile_map->call("_get_path_adjacent_raw", get_position(), tile_map->map_to_local(next_target));
 
     if (new_path.size() <= 0) return;
+    UtilityFunctions::print(new_path);
     path = new_path;
     progress = 0;
 }

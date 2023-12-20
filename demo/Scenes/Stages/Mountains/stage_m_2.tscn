@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://drjirakp35nes"]
+[gd_scene load_steps=6 format=3 uid="uid://drjirakp35nes"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_mnumy"]
 [ext_resource type="TileSet" uid="uid://cexljc66ce55p" path="res://Assets/tile_set.tres" id="2_ckl1n"]
 [ext_resource type="Script" path="res://Scripts/AStar2D.gd" id="5_4i4vy"]
-[ext_resource type="PackedScene" uid="uid://cm2lgi1nq4fky" path="res://Scenes/Objects/Characters/Labourer.tscn" id="5_mwq1o"]
 [ext_resource type="Script" path="res://Scripts/player_manager.gd" id="6_m675f"]
 [ext_resource type="Script" path="res://Scripts/enemy_manager.gd" id="9_gxgu5"]
 
@@ -27,10 +26,6 @@ metadata/_edit_lock_ = true
 
 [node name="PlayerManager" type="Node" parent="."]
 script = ExtResource("6_m675f")
-
-[node name="Labourer" parent="PlayerManager" instance=ExtResource("5_mwq1o")]
-speed = 200.0
-position = Vector2(951, 849)
 
 [node name="EnemyManager" type="Node" parent="."]
 script = ExtResource("9_gxgu5")

@@ -1,6 +1,7 @@
 #ifndef LABOURER_H
 #define LABOURER_H
 
+#include <godot_cpp/variant/utility_functions.hpp>
 
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/area2d.hpp>
@@ -23,7 +24,9 @@ private:
     ProgressBar* hp_bar;
     PackedVector2Array path;
     Vector2i resource;
-    bool to_start;
+    Vector2i resource_start;
+    Vector2i resource_end;
+
 
     int health;
     int health_max;
@@ -33,7 +36,7 @@ private:
     double packing_time;
 
     int progress;
-    void astar_set();
+    void astar_set(bool to_start);
     void astar_move(double delta);
     void packing_update(double delta);
 
