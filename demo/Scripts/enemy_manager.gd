@@ -50,10 +50,13 @@ func _ready ():
 		spawn_directions.append(Vector2(-1, 0))
 	if Right:
 		spawn_directions.append(Vector2(1, 0))
-
+	
+	
 func _process(delta):
 	if done:
 		return
+		
+	screen = get_window().size * (1/get_node("/root/Main/Camera2D")._get_zoom())
 		
 	_check_win_condition()
 			
@@ -112,6 +115,7 @@ func _end_wave():
 	done = true
 	await get_tree().create_timer(3.0).timeout
 	GameManager._on_wave_end()
+#	screen = get_node("/root/Main/Camera2D")._get_size();
 	
 func _set_resource(at_end):
 	if (at_end):

@@ -22,8 +22,13 @@ func _ready():
 func _next_zoom():
 	print(\"ZOOMING\")
 	zoom_progress += 1
+	if zoom_progress > zoom_levels.size():
+		return 
 	zoom.x = zoom_levels[zoom_progress]
 	zoom.y = zoom_levels[zoom_progress]
+	
+func _get_zoom():
+	return zoom_levels[zoom_progress]
 "
 
 [node name="Main" type="Node"]
@@ -59,6 +64,6 @@ Right = false
 offset = Vector2(1300, 800)
 zoom = Vector2(1.1, 1.1)
 script = SubResource("GDScript_6rwqb")
-zoom_levels = [3.0, 2.0, 2.5, 1.1]
+zoom_levels = [1.1]
 
 [node name="UILayer" type="CanvasLayer" parent="Camera2D"]

@@ -7,11 +7,14 @@ resource_name = "battle_ui_script"
 script/source = "extends Control
 
 @onready var bullet_display = get_node(\"bullet_display\")
+@onready var wave_display = get_node(\"wave_display\")
 @onready var weapon_sprite = get_node(\"bullet_display/weapon_sprite\")
 @onready var player = get_node(\"/root/Main/PlayerManager/Hero\")
 
 var weapons = []
 var current_weapon = 0
+
+var wave_amount = 1;
 
 func _ready():
 	weapons = _get_weapon_sprites()
@@ -50,6 +53,9 @@ func _get_weapon_sprites():
 	print(images.size())
 	return images
 
+func _update_wave():
+	wave_amount += 1 
+	wave_display.text = str(\"Wave: \" + wave_amount)
 "
 
 [node name="battle_ui" type="Control"]
@@ -80,3 +86,12 @@ modulate = Color(1, 1, 1, 0.784314)
 position = Vector2(-60, 43)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("1_f7rls")
+
+[node name="wave_display" type="Label" parent="."]
+layout_mode = 1
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 235.0
+offset_bottom = 113.0
+theme_override_font_sizes/font_size = 65
+text = "Wave:"

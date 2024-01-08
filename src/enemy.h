@@ -39,6 +39,7 @@ public:
     double attack_timer;
 
     int health;
+    int points;
     double attack_range;
     
     Enemy();
@@ -57,6 +58,8 @@ public:
     double get_speed() const;
     void set_frequency(const double p_speed);
     double get_frequency() const;
+    void set_points(const int p_points);
+    int get_points() const;
 
     void set_attack_range(const double p_range);
     double get_attack_range() const;

@@ -18,6 +18,10 @@ void Enemy::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_frequency", "p_frequency"), &Enemy::set_frequency);
     ClassDB::add_property("Enemy", PropertyInfo(Variant::FLOAT, "update_frequency"), "set_frequency", "get_frequency");
 
+    ClassDB::bind_method(D_METHOD("get_points"), &Enemy::get_points);
+    ClassDB::bind_method(D_METHOD("set_points", "p_points"), &Enemy::set_points);
+    ClassDB::add_property("Enemy", PropertyInfo(Variant::INT, "points"), "set_points", "get_points");
+
     ClassDB::bind_method(D_METHOD("get_attack_frequency"), &Enemy::get_attack_frequency);
     ClassDB::bind_method(D_METHOD("set_attack_frequency", "p_frequency"), &Enemy::set_attack_frequency);
     ClassDB::add_property("Enemy", PropertyInfo(Variant::FLOAT, "attack_frequency"), "set_attack_frequency", "get_attack_frequency");
@@ -40,6 +44,7 @@ Enemy::Enemy(){
     attack_timer = 0.0;
     update_timer = update_frequency;
     state = nullptr;
+    points = 1;
 
     if (Engine::get_singleton()->is_editor_hint())
         set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
@@ -93,7 +98,6 @@ void Enemy::_animate(int p_anim, int p_flip_dir){
 void Enemy::set_health(const int p_health) {
     health = p_health;
 }
-
 int Enemy::get_health() const {
     return health;
 }
@@ -101,7 +105,6 @@ int Enemy::get_health() const {
 void Enemy::set_speed(const double p_speed){
     speed = p_speed;
 }
-
 double Enemy::get_speed() const {
     return speed;
 }
@@ -109,9 +112,15 @@ double Enemy::get_speed() const {
 void Enemy::set_frequency(const double p_frequency){
     update_frequency = p_frequency;
 }
-
 double Enemy::get_frequency() const {
     return update_frequency;
+}
+
+void Enemy::set_points(const int p_points) {
+    points = p_points;
+}
+int Enemy::get_points() const {
+    return points;
 }
 
 void Enemy::set_attack_range(const double p_range) {
