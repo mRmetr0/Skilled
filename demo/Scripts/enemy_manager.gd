@@ -1,6 +1,6 @@
 extends Node
 
-@onready var enemy = preload("res://Scenes/Objects/Characters/enemy.tscn")
+#@onready var enemy = preload("res://Scenes/Objects/Characters/enemy.tscn")
 
 @onready var weapon_drop = preload("res://Scenes/Objects/Weapons/weapon_pickup.tscn")
 
@@ -8,11 +8,10 @@ extends Node
 @onready var time_passed = 0.0
 @onready var screen = get_window().size
 
-@export_category("SpawnStats")
-@export var spawn_rate = 5.0
-@export var horde_amount: int = 10
-@export var spawn_amount_max : int = 1
-@export var drop_rate = 5
+@export var wave_data : Array[wave_resource]
+var current_wave : wave_resource
+var wave_progress = 0
+
 @export_category("SpawnLocations")
 @export var Up = true
 @export var Down = true
@@ -28,7 +27,6 @@ enum objectives {
 @export var objective = objectives.SURVIVE
 @export var loot_moved_to_win = 5
 var loot_moved = 0
-var done = false
 
 func _get_closest_enemy(position):
 	var enemies = get_children()
@@ -51,32 +49,31 @@ func _ready ():
 	if Right:
 		spawn_directions.append(Vector2(1, 0))
 	
+	current_wave = wave_data[0]
+	current_wave._get_wave_info()
 	
-func _process(delta):
-	if done:
-		return
-		
-	screen = get_window().size * (1/get_node("/root/Main/Camera2D")._get_zoom())
+func _process(delta):		
+#	screen = get_window().size * (1/get_node("/root/Main/Camera2D")._get_zoom())
 		
 	_check_win_condition()
 			
 	time_passed += delta
-	if (time_passed < spawn_rate):
+	if (time_passed < current_wave.spawn_rate):
 		return;
 	time_passed = 0.0
 
-	var max_amount = max(1, spawn_amount_max)
+	var max_amount = max(1, current_wave.spawn_amount_max)
 	var amount = randi_range(1, max_amount)
 	for i in amount:
 		_spawn_enemy()
 
 
 func _spawn_enemy():	
-	if horde_amount == 0:
+	if current_wave.enemies.size() == 0:
 		return;
 		
-	var init = enemy.instantiate()
-	horde_amount -= 1;
+	var init = load(current_wave.enemies[0]).instantiate();
+	current_wave.enemies.remove_at(0)
 	add_child(init)
 	
 	#Spawn locations 2.0
@@ -94,27 +91,35 @@ func _spawn_enemy():
 	init.position = new_pos
 
 func _remove_enemy(enemy):
-	var drop = randf_range(0, 100) <= drop_rate
-	print(drop)
-	if (drop):
-		var weapon = weapon_drop.instantiate()
-		get_parent().call_deferred("add_child", weapon)
-		weapon.position = enemy.position
+#	var drop = randf_range(0, 100) <= drop_rate
+#	print(drop)
+#	if (drop):
+#		var weapon = weapon_drop.instantiate()
+#		get_parent().call_deferred("add_child", weapon)
+#		weapon.position = enemy.position
 	enemy.queue_free()
 
 func _check_win_condition():
 	match objective:
 		objectives.SURVIVE:
-			if horde_amount <= 0 && get_children().size() == 0:
+			if current_wave.enemies.size() <= 0 && get_children().size() == 0:
 				_end_wave()
 		objectives.PROTECT:
 			if (loot_moved >= loot_moved_to_win):
 				_end_wave()
 
 func _end_wave():
-	done = true
 	await get_tree().create_timer(3.0).timeout
-	GameManager._on_wave_end()
+	
+	wave_data.remove_at(0)
+	
+	if wave_data.size() == 0:
+		GameManager._on_game_end()
+		return 
+	else:
+		current_wave = wave_data[0]
+		current_wave._get_wave_info()
+		GameManager._on_wave_end()
 #	screen = get_node("/root/Main/Camera2D")._get_size();
 	
 func _set_resource(at_end):

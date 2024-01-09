@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="wave_resource" load_steps=2 format=3 uid="uid://cbuo8jiv25ujy"]
+
+[ext_resource type="Script" path="res://resources/wave_resource.gd" id="1_0g25n"]
+
+[resource]
+script = ExtResource("1_0g25n")
+path = "res://Scenes/Objects/Characters/"
+spawn_amount_max = 3
+spawn_rate = 4.5
+enemy1_type = "enemy"
+enemy1_amount = 1
+enemy2_type = ""
+enemy2_amount = 0
+enemy3_type = ""
+enemy3_amount = 0
+boss_type = ""

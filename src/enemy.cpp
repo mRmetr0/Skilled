@@ -60,7 +60,7 @@ void Enemy::_ready() {
     hp_bar = Object::cast_to<ProgressBar>(get_node_or_null(NodePath("ProgressBar")));
     tile_map = Object::cast_to<TileMap>(get_node_or_null(NodePath("/root/Main/TileMap")));
 
-    state = memnew (StormingState);
+    state = memnew (WanderingState);
     health_max = health;
 }
 
@@ -218,14 +218,12 @@ void AttackingState::fixed_update(Enemy& enemy, double delta){
 }
 //WANDERING STATE:
 EnemyState* WanderingState::update(Enemy& enemy, double delta) {
-    if (check_path.size() < 3) {
+    if (check_path.size() <=15) {
         return memnew(HuntingState);
-    } else if (check_path.size() > 10) {
-        return memnew(StormingState);
-    }
-//TODO: WALK TO RANDOM POSITIONS
+    } 
+    //TODO: WALK TO RANDOM POSITIONS
     if (!can_update(enemy, delta)) return nullptr;
-        check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
+        check_path = enemy.tile_map->call("_get_path", Vector2i(13, 8), enemy.player->get_position());
     return nullptr;
 }
 void WanderingState::fixed_update(Enemy& enemy, double delta){

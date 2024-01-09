@@ -4,9 +4,13 @@
 
 [resource]
 script = ExtResource("1_1xqtg")
-enemy_type1 = ""
-enemy1_amount = 0
-enemy_type2 = ""
+path = "res://Scenes/Objects/Characters/"
+spawn_amount_max = 2
+spawn_rate = 5.0
+enemy1_type = "enemy"
+enemy1_amount = 5
+enemy2_type = ""
 enemy2_amount = 0
-enemy_type3 = ""
+enemy3_type = ""
 enemy3_amount = 0
+boss_type = ""

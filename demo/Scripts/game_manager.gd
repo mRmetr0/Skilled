@@ -41,6 +41,8 @@ func  _on_wave_end():
 
 func _on_game_end():
 	BulletPool._clear_all_bullets()
+	get_tree().change_scene_to_file("res://Scenes/Menus/win_menu.tscn")
+	
 
 func _load_next_level():
 	if levels.size() == 0:

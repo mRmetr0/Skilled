@@ -55,7 +55,9 @@ func _get_weapon_sprites():
 
 func _update_wave():
 	wave_amount += 1 
-	wave_display.text = str(\"Wave: \" + wave_amount)
+	var format = \"Wave: ^%s\"
+	var actual = format % wave_amount
+	wave_display.text = actual
 "
 
 [node name="battle_ui" type="Control"]
