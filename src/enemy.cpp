@@ -62,6 +62,9 @@ void Enemy::_ready() {
 
     state = memnew (WanderingState);
     health_max = health;
+
+    if (hp_bar != nullptr)
+        hp_bar->call("_set_health", health_max, health);
 }
 
 void Enemy::_process(double delta){

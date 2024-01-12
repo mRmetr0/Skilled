@@ -37,7 +37,7 @@ func _add_points():
 		else:	##randomize ground tile
 			var cell_id = get_cell_source_id(0, cell)
 			var coords = get_cell_atlas_coords(0, cell)
-			var x_coord = rng.randi_range(0, 2)
+			var x_coord = rng.randi_range(0, 11)
 			set_cell(0, cell, cell_id, Vector2i(x_coord, coords.y))
 			
 	

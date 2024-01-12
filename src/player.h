@@ -25,6 +25,9 @@ private:
     Vector2 target;
     Vector2i crate;
 
+
+    Vector2 move_dir;
+
     WeaponState* weapon_state;
 
     double time_passed;
@@ -41,6 +44,9 @@ private:
     void astar_set();
     void astar_move(double delta);
     bool is_ground();
+
+    void key_input();
+    void key_move(double delta);
 
 protected:
     static void _bind_methods();

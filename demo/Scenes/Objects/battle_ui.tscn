@@ -55,7 +55,7 @@ func _get_weapon_sprites():
 
 func _update_wave():
 	wave_amount += 1 
-	var format = \"Wave: ^%s\"
+	var format = \"Wave: %s\"
 	var actual = format % wave_amount
 	wave_display.text = actual
 "
@@ -96,4 +96,4 @@ offset_top = 20.0
 offset_right = 235.0
 offset_bottom = 113.0
 theme_override_font_sizes/font_size = 65
-text = "Wave:"
+text = "Wave: 1"

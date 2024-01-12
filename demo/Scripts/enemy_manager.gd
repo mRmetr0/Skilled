@@ -109,9 +109,13 @@ func _check_win_condition():
 				_end_wave()
 
 func _end_wave():
+	
+	set_process(false)
 	await get_tree().create_timer(3.0).timeout
 	
 	wave_data.remove_at(0)
+	
+	print("Waves", wave_data.size())
 	
 	if wave_data.size() == 0:
 		GameManager._on_game_end()
@@ -120,6 +124,7 @@ func _end_wave():
 		current_wave = wave_data[0]
 		current_wave._get_wave_info()
 		GameManager._on_wave_end()
+		set_process(true)
 #	screen = get_node("/root/Main/Camera2D")._get_size();
 	
 func _set_resource(at_end):

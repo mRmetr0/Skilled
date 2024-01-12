@@ -54,6 +54,8 @@ Player::Player(){
     is_player = false;
     weapon_state = nullptr;
 
+    move_dir = Vector2(0,0);
+
     if (Engine::get_singleton()->is_editor_hint())
         set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
 }
@@ -77,7 +79,8 @@ void Player::_ready(){
 }
 
 void Player::_process(double delta){
-    astar_set();
+    // astar_set();
+    key_input();
 
     WeaponState* new_weapon = weapon_state->update(*this, delta);
     if (new_weapon != nullptr){
@@ -96,8 +99,31 @@ void Player::_process(double delta){
 }
 
 void Player::_physics_process(double delta){
-    astar_move(delta);
+    key_move(delta);
+    // astar_move(delta);
 }
+
+void Player::key_input(){
+    move_dir = Vector2(0,0);
+    if (input->is_action_pressed("up"))
+        move_dir -= Vector2(0, 1);
+    if (input->is_action_pressed("down"))
+        move_dir += Vector2(0, 1);
+    if (input->is_action_pressed("left"))
+        move_dir -= Vector2(1, 0);
+    if (input->is_action_pressed("right"))
+        move_dir += Vector2(1, 0);
+}
+void Player::key_move(double delta){
+    if (move_dir.length() == 0.0){
+        emit_signal("animate", 0);
+        return;
+    }
+    emit_signal("animate", 1);
+
+    set_position(get_position() + (move_dir.normalized() * move_speed * delta));
+}
+
 void Player::astar_set(){
     if (input->is_action_just_pressed("LClick")){
         PackedVector2Array new_path;
