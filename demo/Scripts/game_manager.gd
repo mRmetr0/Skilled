@@ -1,15 +1,9 @@
 extends Node
 
-var stages = []
-var current_stage = ""
-var stages_till_end
-var levels = []
-var base_path = "res://Scenes/Stages/"
-
 var player_health = 5
 var player_weapon_id : int = 1
 var player_weapon_ammo : int = -1
-var statue_health = 1
+var statue_health = 10
 
 enum hazards {
 	DARK,
@@ -23,36 +17,24 @@ func _ready():
 	_start_game()
 	
 func _start_game():
-	stages.clear()
-	stages_till_end = 0
-	levels.clear()
-	
 	player_health = 0
 	player_weapon_id = -1
 	player_weapon_ammo = 1
-	statue_health = 1
+	statue_health = 10
 	
 	selected_hazards.clear()
-	stages_till_end = stages.size()-1
 
 func  _on_wave_end():
 	get_node("/root/Main/Camera2D/UILayer/battle_ui")._update_wave()
 	get_node("/root/Main/Camera2D")._next_zoom()
 
-func _on_game_end():
+func _on_game_end(has_won):
 	BulletPool._clear_all_bullets()
-	get_tree().change_scene_to_file("res://Scenes/Menus/win_menu.tscn")
-	
+	if has_won:
+		get_tree().change_scene_to_file("res://Scenes/Menus/win_menu.tscn")
+	else:
+		get_tree().change_scene_to_file("res://Scenes/Menus/lose_menu.tscn")
 
-func _load_next_level():
-	if levels.size() == 0:
-		get_tree().change_scene_to_file("res://Scenes/Menus/stage_select.tscn")
-		return
-
-	var scene = levels[0]
-	levels.erase(scene)
-		
-	get_tree().change_scene_to_file(scene)
 		
 ## PLAYER DATA TRANSFER
 func _save_player_data(player = null):

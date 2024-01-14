@@ -77,7 +77,7 @@ void PistolState::shoot(Vector2 position, double angle){
     int accuracy = rand() % (inaccuracy*2) - inaccuracy;
 
     //Marking everything down:
-    init->set_position(position);
+    init->set_position(position + (Vector2(cos(angle), sin(angle)) * 100));
     init->set_rotation(angle + (accuracy * 0.01));
     
     

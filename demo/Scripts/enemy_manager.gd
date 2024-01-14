@@ -109,17 +109,14 @@ func _check_win_condition():
 				_end_wave()
 
 func _end_wave():
-	
 	set_process(false)
 	await get_tree().create_timer(3.0).timeout
 	
 	wave_data.remove_at(0)
 	
-	print("Waves", wave_data.size())
-	
 	if wave_data.size() == 0:
-		GameManager._on_game_end()
-		return 
+		GameManager._on_game_end(true)
+		return
 	else:
 		current_wave = wave_data[0]
 		current_wave._get_wave_info()

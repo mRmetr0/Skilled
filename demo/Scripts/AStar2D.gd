@@ -9,6 +9,7 @@ var wall_cells : Array
 var statue_cells
 var resource_start
 var resource_end
+var statue_health
 
 var path : PackedVector2Array
 
@@ -16,15 +17,16 @@ var path : PackedVector2Array
 func _ready():
 	_add_points()
 	_connect_points()
+	statue_health = GameManager.statue_health
 	
 func _add_points():
 	for cell in used_cells:
 		astar.add_point(id(cell), cell, 1.0)
 		if get_cell_source_id(0, cell) != 0:
-			if get_cell_atlas_coords(0, cell).x > 0: #makes walls unwalkable & adds them to a separate list
-				astar.set_point_disabled(id(cell), true)
-				if (get_cell_source_id(0, cell) == 11): #register statue cells
-					statue_cells = cell
+			astar.set_point_disabled(id(cell), true)
+			if (get_cell_source_id(0, cell) == 11): #register statue cells
+				statue_cells = cell
+				wall_cells.append(cell)
 		else:	##randomize ground tile
 			var cell_id = get_cell_source_id(0, cell)
 			var coords = get_cell_atlas_coords(0, cell)
@@ -36,8 +38,6 @@ func _connect_points():
 	for cell in used_cells:
 		## Only adjacent movement
 		var neighbors = [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0, -1)]
-		## allows diagonal movement (through diagonal walls too)
-		#var neighbors = [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0, -1), Vector2i(1, 1), Vector2i(1, -1), Vector2i(-1, 1), Vector2i(-1, -1)] 
 		for neighbor in neighbors:
 			var next_cell = cell + neighbor
 			if used_cells.has(next_cell):
@@ -48,7 +48,8 @@ func _get_path_raw(start, end):
 	var n_start_id = astar.get_closest_point(local_to_map(start))
 	var n_end = local_to_map(end)
 	var n_path = astar.get_point_path(n_start_id, id(n_end))
-	n_path.remove_at(0)
+	if (n_path.size() > 1):
+		n_path.remove_at(0)
 	return n_path	
 	
 func _get_path_adjacent_raw(start, end):
@@ -90,9 +91,13 @@ func _damage_tile_raw(tile):
 	var tile_id = get_cell_source_id(0, n_tile)
 	if tile_id == 0:
 		return		
+	elif tile_id == 11:
+		statue_health -= 1
+		if (statue_health <= 0):
+			get_tree().change_scene_to_file("res://Scenes/Menus/lose_menu.tscn")
+		return 
+
 	if (value.x == 1):
-		if (tile_id == 10):
-			get_tree().change_scene_to_file("res://Scenes/Menus/end_menu.tscn")
 		set_cell(0, n_tile, tile_id, Vector2i(0, value.y))
 		astar.set_point_disabled(id(n_tile), false)
 		wall_cells.erase(n_tile)

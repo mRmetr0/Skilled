@@ -28,4 +28,4 @@ func _get_player():
 	return player
 
 func _game_over():
-	get_tree().change_scene_to_file("res://Scenes/Menus/lose_menu.tscn")
+	GameManager._on_game_end(false)

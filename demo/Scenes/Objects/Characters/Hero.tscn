@@ -1,11 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://cwj56onkottxv"]
+[gd_scene load_steps=13 format=3 uid="uid://cwj56onkottxv"]
 
 [ext_resource type="Texture2D" uid="uid://b6sjuklqkbqdt" path="res://Assets/Person.png" id="1_2aggy"]
 [ext_resource type="PackedScene" uid="uid://gqbslx8m3sa3" path="res://Scenes/Objects/healthbar.tscn" id="2_7ynhf"]
 [ext_resource type="Texture2D" uid="uid://c0tl127hrt8kd" path="res://Assets/forestSprites_ v1.2/lancelot_.png" id="3_alk4u"]
 [ext_resource type="Script" path="res://Scripts/Animator.gd" id="4_iikt0"]
+[ext_resource type="Texture2D" uid="uid://bioxmyygj733x" path="res://Assets/Weapons/V1.00/PNG/GUN_01_[square_frame]_01_V1.00.png" id="5_13a0u"]
+[ext_resource type="Texture2D" uid="uid://blmp0r4oldg22" path="res://Assets/forestSprites_ v1.2/lancelotHand_.png" id="5_nve6o"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pc772"]
+size = Vector2(13.6, 19.2)
 
 [sub_resource type="Animation" id="Animation_21w7i"]
 resource_name = "Idle"
@@ -65,6 +68,24 @@ _data = {
 "Walking": SubResource("Animation_bkylm")
 }
 
+[sub_resource type="GDScript" id="GDScript_63n1s"]
+resource_name = "hand_controls"
+script/source = "extends Node2D
+
+@onready var gun = get_node(\"Gun\")
+@onready var hand = get_node(\"Hand\")
+var flip_right = true
+@onready var hand_pos_y = hand.position.y
+
+func _process(delta):
+	var mouse = get_global_mouse_position()
+	flip_right = mouse.x > global_position.x
+	gun.set_flip_v(!flip_right)
+	hand.set_flip_v (!flip_right)
+	hand.position.y = abs(hand_pos_y) *  (1 if flip_right else -1)
+	look_at(mouse)
+"
+
 [node name="Hero" type="Player" groups=["Pick_up-er"]]
 normal_speed = 300.0
 slow_speed = 200.0
@@ -79,6 +100,7 @@ metadata/_edit_lock_ = true
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(3, 3)
 scale = Vector2(5, 5)
 shape = SubResource("RectangleShape2D_pc772")
 metadata/_edit_lock_ = true
@@ -97,5 +119,20 @@ libraries = {
 }
 script = ExtResource("4_iikt0")
 follow_mouse = true
+
+[node name="Rotator" type="Node2D" parent="."]
+script = SubResource("GDScript_63n1s")
+
+[node name="Gun" type="Sprite2D" parent="Rotator"]
+texture_filter = 1
+position = Vector2(60, 0)
+scale = Vector2(2, 2)
+texture = ExtResource("5_13a0u")
+
+[node name="Hand" type="Sprite2D" parent="Rotator"]
+texture_filter = 1
+position = Vector2(44, 14)
+scale = Vector2(6, 6)
+texture = ExtResource("5_nve6o")
 
 [connection signal="animate" from="." to="Sprite2D2/AnimationPlayer" method="_set_animation"]

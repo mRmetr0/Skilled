@@ -60,7 +60,7 @@ void Enemy::_ready() {
     hp_bar = Object::cast_to<ProgressBar>(get_node_or_null(NodePath("ProgressBar")));
     tile_map = Object::cast_to<TileMap>(get_node_or_null(NodePath("/root/Main/TileMap")));
 
-    state = memnew (WanderingState);
+    state = memnew (StormingState);
     health_max = health;
 
     if (hp_bar != nullptr)
@@ -152,7 +152,7 @@ bool EnemyState::can_update(Enemy& enemy, double delta){
     enemy.player = Object::cast_to<Player>(enemy.player_manager->call("_get_player"));
 
     if (enemy.player == nullptr) {
-        emit_signal("log", this, "Player NULL");
+        UtilityFunctions::print("No player found");
         return false;
     }
     return true;
@@ -197,10 +197,10 @@ EnemyState* StormingState::update (Enemy& enemy, double delta) {
 
     if (!can_update(enemy, delta)) return nullptr;
     check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
-    if (check_path.size() > 7) {
-        set_storm(enemy);
-    } else {
+    if (check_path.size() < 5) {
         return memnew(HuntingState);
+    } else {
+        set_storm(enemy);
     }
     return nullptr;
 }
