@@ -25,7 +25,7 @@ func _get_wave_info():
 	_add_enemies(enemy3_type, enemy3_amount)
 	enemies.shuffle()
 	if (boss_type != ""):
-		enemies.append(path + boss_type + ".tscn")
+		enemies.push_front(path + boss_type + ".tscn")
 		
 func _add_enemies(type : String, amount : int):
 	if (type != "" && amount > 0):

@@ -10,7 +10,6 @@ func _ready():
 	var player_scene = load(str("res://Scenes/Objects/Characters/Hero.tscn"))
 	var battle_ui_scene = load(str("res://Scenes/Objects/battle_ui.tscn"))
 	var battle_ui = battle_ui_scene.instantiate();
-	var camera = get_node("/root/Main/Camera2D")
 	player = player_scene.instantiate()
 	add_child(player)
 	get_node("/root/Main/Camera2D/UILayer").add_child(battle_ui)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://denmqnm0fgcp7"]
+[gd_scene load_steps=13 format=3 uid="uid://denmqnm0fgcp7"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_bm5nw"]
 [ext_resource type="TileSet" uid="uid://cexljc66ce55p" path="res://Assets/tile_set.tres" id="2_gdw1b"]
@@ -8,6 +8,8 @@
 [ext_resource type="Resource" uid="uid://cbuo8jiv25ujy" path="res://resources/wave1.tres" id="6_0mvtd"]
 [ext_resource type="Resource" uid="uid://bsex3c66mud7j" path="res://resources/wave2.tres" id="7_i0u15"]
 [ext_resource type="Resource" uid="uid://f60a812cnfty" path="res://resources/wave3.tres" id="8_1rff8"]
+[ext_resource type="Resource" uid="uid://dgghl338c2tfw" path="res://resources/wave4.tres" id="9_6seux"]
+[ext_resource type="Resource" uid="uid://bhuwhkgkpfhlw" path="res://resources/wave5.tres" id="10_qfiuj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t0bpp"]
 size = Vector2(25.2, 35.6)
@@ -65,11 +67,11 @@ metadata/_edit_lock_ = true
 script = ExtResource("4_tgvxk")
 
 [node name="SpawnPoint" type="Node2D" parent="PlayerManager"]
-position = Vector2(1293, 1049)
+position = Vector2(1300, 1100)
 
 [node name="EnemyManager" type="Node" parent="."]
 script = ExtResource("5_ofnsa")
-wave_data = Array[Resource("res://resources/wave_resource.gd")]([ExtResource("6_0mvtd"), ExtResource("7_i0u15"), ExtResource("8_1rff8")])
+wave_data = Array[Resource("res://resources/wave_resource.gd")]([ExtResource("6_0mvtd"), ExtResource("7_i0u15"), ExtResource("8_1rff8"), ExtResource("9_6seux"), ExtResource("10_qfiuj")])
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(1300, 800)

@@ -53,17 +53,18 @@ func _get_path_raw(start, end):
 	return n_path	
 	
 func _get_path_adjacent_raw(start, end):
-	var n_start = local_to_map(start)
+	var n_start_id = astar.get_closest_point( local_to_map(start))
 	var n_end = local_to_map(end)
-	if (id(n_start) == id(n_end)): 
+	if (n_start_id == id(n_end)): 
 		return
 		
-	var neighbors = [Vector2i(-1,0), Vector2i(0,1), Vector2i(0, -1)]
-	var best_path = astar.get_point_path(id(n_start), id(n_end + Vector2i(1,0)))
+	var neighbors = [Vector2i(-1,0), Vector2i(0,1), Vector2i(0, -1), Vector2i(1,0)]
+	var best_path = astar.get_point_path(n_start_id, id(n_end))
+#	var best_path = astar.get_point_path(id(n_start), id(n_end + Vector2i(1,0)))
 	for neighbor in neighbors:
-		if !used_cells.has( n_end + neighbor):
+		if !used_cells.has( n_end + neighbor) || !astar.has_point(id(n_end + neighbor)):
 			continue
-		var new_path = astar.get_point_path(id(n_start), id(n_end + neighbor))
+		var new_path = astar.get_point_path(n_start_id, id(n_end + neighbor))
 		if (new_path.size() != 0 && new_path.size() < best_path.size()) || (best_path.size() == 0 && new_path.size() > 0) : 
 			best_path = new_path;
 	best_path.remove_at(0)
@@ -94,7 +95,7 @@ func _damage_tile_raw(tile):
 	elif tile_id == 11:
 		statue_health -= 1
 		if (statue_health <= 0):
-			get_tree().change_scene_to_file("res://Scenes/Menus/lose_menu.tscn")
+			GameManager._on_game_end(false)
 		return 
 
 	if (value.x == 1):

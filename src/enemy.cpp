@@ -175,6 +175,7 @@ void EnemyState::fixed_update(Enemy& enemy, double delta){
     if (enemy.get_position().distance_to(target) < 10) progress++;
     enemy.set_position(enemy.get_position() + velocity * delta);
 }
+
 //STORMING STATE
 void StormingState::set_storm(Enemy& enemy) {
     crate = enemy.tile_map->call("_get_wall_raw", enemy.get_position());
@@ -246,9 +247,11 @@ EnemyState* HuntingState::update (Enemy& enemy, double delta) {
     if (!can_update(enemy, delta)) return nullptr;
     check_path = enemy.tile_map->call("_get_path_raw", enemy.get_position(), enemy.player->get_position());
     if (enemy.get_position().distance_to(enemy.player->get_position()) <= enemy.attack_range){
-        EnemyState* e = memnew(AttackingState);
-        return e;
+        return memnew(AttackingState);
     } else {
+        if (check_path.size() > 7){
+            return memnew(StormingState);
+        }
         set_hunt(enemy);
     }
     return nullptr;

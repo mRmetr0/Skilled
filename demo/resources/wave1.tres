@@ -5,10 +5,10 @@
 [resource]
 script = ExtResource("1_0g25n")
 path = "res://Scenes/Objects/Characters/"
-spawn_amount_max = 3
-spawn_rate = 4.5
+spawn_amount_max = 2
+spawn_rate = 1.5
 enemy1_type = "enemy"
-enemy1_amount = 1
+enemy1_amount = 3
 enemy2_type = "enemy_fast"
 enemy2_amount = 0
 enemy3_type = "enemy_strong"

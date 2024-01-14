@@ -52,9 +52,6 @@ func _save_player_data(player = null):
 	else:
 		player_weapon_ammo = player._get_bullets().x;
 		
-	var tilemap = get_node("/root/Main/TileMap")
-	
-		
 func _set_player_data(player):
 	if player_health <= 0:
 		return
