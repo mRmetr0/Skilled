@@ -66,6 +66,8 @@ _data = {
 }
 
 [node name="Hero" type="Player" groups=["Pick_up-er"]]
+normal_speed = 300.0
+slow_speed = 200.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 visible = false

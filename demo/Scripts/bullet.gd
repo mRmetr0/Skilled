@@ -11,13 +11,18 @@ var has_hit = false;
 func _physics_process(delta):
 	position += transform.x * run_speed * delta
 
-func _on_Bullet_body_entered(body):
+func _on_Bullet_area_entered(body):
 	if body.is_in_group("shootables") && !has_hit:
 		has_hit = true
 		body._take_damage(damage)
 		pierce -= 1
 		if (pierce <= 0):
 			_die()
+
+func _on_Bullet_body_entered(body):
+	if (body.is_in_group("shootables")):
+		has_hit = true
+		_die();
 
 func _set_bullet(p_damage: int, p_pierce: int, p_crit: int = 0):
 	has_hit = false;

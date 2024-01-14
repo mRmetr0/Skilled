@@ -9,7 +9,7 @@ var base_path = "res://Scenes/Stages/"
 var player_health = 5
 var player_weapon_id : int = 1
 var player_weapon_ammo : int = -1
-var core_health = 10
+var statue_health = 1
 
 enum hazards {
 	DARK,
@@ -30,7 +30,7 @@ func _start_game():
 	player_health = 0
 	player_weapon_id = -1
 	player_weapon_ammo = 1
-	core_health = 10
+	statue_health = 1
 	
 	selected_hazards.clear()
 	stages_till_end = stages.size()-1
@@ -71,7 +71,6 @@ func _save_player_data(player = null):
 		player_weapon_ammo = player._get_bullets().x;
 		
 	var tilemap = get_node("/root/Main/TileMap")
-	core_health = tilemap.get_cell_atlas_coords(0, tilemap.core_cell).x
 	
 		
 func _set_player_data(player):

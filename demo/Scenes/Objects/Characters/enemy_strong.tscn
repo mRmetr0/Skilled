@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/Animator.gd" id="4_rptc5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d6vbd"]
+size = Vector2(15.6923, 20.4615)
 
 [sub_resource type="Animation" id="Animation_irbpy"]
 resource_name = "Hurt"
@@ -96,7 +97,7 @@ metadata/_edit_lock_ = true
 [node name="ProgressBar" parent="." instance=ExtResource("2_np2tc")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -7)
+position = Vector2(3, -8.5)
 scale = Vector2(6.5, 6.5)
 shape = SubResource("RectangleShape2D_d6vbd")
 metadata/_edit_lock_ = true

@@ -4,6 +4,11 @@ extends ProgressBar
 @onready var time_passed = 0.0
 @onready var reload_on = false
 var time
+var update_amount = 0
+
+
+func _ready():
+	hide()
 
 func _set_health(_max, current = -1):
 	max_value = _max
@@ -20,7 +25,14 @@ func _process(delta):
 		_set_reload(-1.0)
 
 func _health_update(p_value: int):
+	update_amount += 1
+	show()
 	value = p_value;
+	await get_tree().create_timer(1.0).timeout
+	update_amount -= 1
+	if (update_amount == 0):
+		hide()
+	
 		
 func _set_reload(p_time = -1.0):
 	var active = (p_time != -1.0)

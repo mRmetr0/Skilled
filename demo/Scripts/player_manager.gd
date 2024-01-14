@@ -14,7 +14,7 @@ func _ready():
 	player = player_scene.instantiate()
 	add_child(player)
 	get_node("/root/Main/Camera2D/UILayer").add_child(battle_ui)
-	player.position = camera.offset
+	player.position = get_node("SpawnPoint").position
 	GameManager._set_player_data(player)
 	
 #	if get_tree().get_current_scene().get_name() != "start_stage.tscn":

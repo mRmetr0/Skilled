@@ -6,7 +6,7 @@ class_name AStar_Path
 @onready var rng = RandomNumberGenerator.new()
 
 var wall_cells : Array
-var core_cell
+var statue_cells
 var resource_start
 var resource_end
 
@@ -23,17 +23,8 @@ func _add_points():
 		if get_cell_source_id(0, cell) != 0:
 			if get_cell_atlas_coords(0, cell).x > 0: #makes walls unwalkable & adds them to a separate list
 				astar.set_point_disabled(id(cell), true)
-				if (get_cell_source_id(0, cell) == 10): #register bomb cell
-					core_cell = cell
-					if (GameManager.core_health > 0):	#register resources for labourer
-						set_cell(0, cell, get_cell_source_id(0, cell), Vector2i(GameManager.core_health, 0))
-				if (get_cell_source_id(0, cell) == 21):
-					if get_cell_atlas_coords(0, cell).x == 0:
-						resource_start = cell;
-					else:
-						resource_end = cell
-				if (get_cell_source_id(0, cell) < 20):
-					wall_cells.append(cell);
+				if (get_cell_source_id(0, cell) == 11): #register statue cells
+					statue_cells = cell
 		else:	##randomize ground tile
 			var cell_id = get_cell_source_id(0, cell)
 			var coords = get_cell_atlas_coords(0, cell)

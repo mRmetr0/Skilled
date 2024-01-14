@@ -40,6 +40,14 @@ texture_region_size = Vector2i(100, 100)
 9:0/0 = 0
 10:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_20q4y"]
+texture = ExtResource("6_anr66")
+texture_region_size = Vector2i(100, 100)
+0:0/0 = 0
+1:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ewyyf"]
 resource_name = "wood"
 texture = ExtResource("3_6jvbg")
@@ -67,14 +75,6 @@ texture_region_size = Vector2i(100, 100)
 2:0/0 = 0
 3:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_20q4y"]
-texture = ExtResource("6_anr66")
-texture_region_size = Vector2i(100, 100)
-0:0/0 = 0
-1:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5q1vh"]
 resource_name = "metal"
 texture = ExtResource("4_kfrxy")
@@ -94,4 +94,4 @@ sources/10 = SubResource("TileSetAtlasSource_6x43e")
 sources/20 = SubResource("TileSetAtlasSource_eu21g")
 sources/21 = SubResource("TileSetAtlasSource_cesd0")
 sources/0 = SubResource("TileSetAtlasSource_gabpv")
-sources/4 = SubResource("TileSetAtlasSource_20q4y")
+sources/11 = SubResource("TileSetAtlasSource_20q4y")
