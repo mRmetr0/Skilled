@@ -19,15 +19,6 @@ var wave_progress = 0
 @export var Right = true
 var spawn_directions = []
 
-@export_category("Other")
-enum objectives {
-	SURVIVE,
-	PROTECT
-}
-@export var objective = objectives.SURVIVE
-@export var loot_moved_to_win = 5
-var loot_moved = 0
-
 func _get_closest_enemy(position):
 	var enemies = get_children()
 	if enemies.size() == 0:
@@ -91,22 +82,12 @@ func _spawn_enemy():
 	init.position = new_pos
 
 func _remove_enemy(enemy):
-#	var drop = randf_range(0, 100) <= drop_rate
-#	print(drop)
-#	if (drop):
-#		var weapon = weapon_drop.instantiate()
-#		get_parent().call_deferred("add_child", weapon)
-#		weapon.position = enemy.position
 	enemy.queue_free()
 
 func _check_win_condition():
-	match objective:
-		objectives.SURVIVE:
-			if current_wave.enemies.size() <= 0 && get_children().size() == 0:
-				_end_wave()
-		objectives.PROTECT:
-			if (loot_moved >= loot_moved_to_win):
-				_end_wave()
+	if current_wave.enemies.size() <= 0 && get_children().size() == 0:
+		_end_wave()
+
 
 func _end_wave():
 	set_process(false)
@@ -118,15 +99,14 @@ func _end_wave():
 		GameManager._on_game_end(true)
 		return
 	else:
-		current_wave = wave_data[0]
-		current_wave._get_wave_info()
-		GameManager._on_wave_end()
-		set_process(true)
-#	screen = get_node("/root/Main/Camera2D")._get_size();
-	
-func _set_resource(at_end):
-	if (at_end):
-		loot_moved += 1
-		get_node("root/Main/TileMap")._change_resources_states(at_end, int(4 * (loot_moved / loot_moved_to_win)))
-	else:
-		get_node("root/Main/TileMap")._change_resources_states(!at_end, 4 - int(4 * (loot_moved / loot_moved_to_win)))
+		if current_wave.give_reward_at_end:
+			get_node("/root/Main/Camera2D/UILayer/battle_ui")._set_rewards()
+			pass
+		else:
+			_start_next_wave()
+
+func _start_next_wave():
+	current_wave = wave_data[0]
+	current_wave._get_wave_info()
+	GameManager._on_wave_end()
+	set_process(true)

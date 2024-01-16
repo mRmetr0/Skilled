@@ -4,6 +4,8 @@ class_name wave_resource
 
 @export var path = "res://Scenes/Objects/Characters/"
 
+@export var give_reward_at_end: bool
+
 @export_category("SpawnData")
 @export var spawn_amount_max : int
 @export var spawn_rate : float

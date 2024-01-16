@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://chld1a4qptln3"]
+[gd_scene load_steps=5 format=3 uid="uid://chld1a4qptln3"]
 
 [ext_resource type="Texture2D" uid="uid://bioxmyygj733x" path="res://Assets/Weapons/V1.00/PNG/GUN_01_[square_frame]_01_V1.00.png" id="1_6dy2n"]
 [ext_resource type="FontFile" uid="uid://cxpxmt3gk1fur" path="res://Assets/Fonts/square-deal.ttf" id="1_210wa"]
@@ -10,6 +10,7 @@ script/source = "extends Control
 @onready var bullet_display = get_node(\"bullet_display\")
 @onready var wave_display = get_node(\"wave_display\")
 @onready var weapon_sprite = get_node(\"bullet_display/weapon_sprite\")
+@onready var player_manager = get_node(\"/root/Main/PlayerManager\")
 @onready var player = get_node(\"/root/Main/PlayerManager/Hero\")
 
 var weapons = []
@@ -59,6 +60,60 @@ func _update_wave():
 	var format = \"Wave: %s\"
 	var actual = format % wave_amount
 	wave_display.text = actual
+
+func _set_rewards():
+	player_manager.rewards.shuffle()
+	var buttons = get_node(\"HBoxContainer\").get_children()
+	var i = 0
+	for button in buttons:
+		button._get_item(player_manager.rewards[i])
+		i += 1
+	
+"
+
+[sub_resource type="GDScript" id="GDScript_vlar6"]
+resource_name = "Item_button"
+script/source = "extends Button
+
+var reward : reward_resource
+
+static var buttons : Array
+
+func _ready():
+	buttons.append(self)
+	_setup_rewards(false)
+
+func _get_item(p_item):
+	reward = p_item
+	get_node(\"Label\").text = reward.title	
+	_setup_rewards(true)
+ 
+func _setup_rewards(active : bool):
+	for button in buttons: 
+		button.disabled = !active
+		if active:
+			button.show()
+		else:
+			button.hide()
+	
+
+func _on_pressed():
+	var player_manager = get_node(\"/root/Main/PlayerManager\")
+	var player = player_manager._get_player()
+	match reward.type:
+		reward_resource.Type.HEAL_PLAYER:
+			player.health = 1000
+		reward_resource.Type.HEAL_STATUE:
+			var tilemap = get_node(\"/root/Main/Tilemap\")
+			tilemap.statue_health = GameManager.statue_health
+		reward_resource.Type.GIVE_GUN:
+			player._set_weapon(reward.gun_id, 0)
+			
+	if reward.remove_after_use:
+		player_manager.rewards.remove(reward)
+			
+	_setup_rewards(false)
+	get_node(\"/root/Main/EnemyManager\")._start_next_wave()
 "
 
 [node name="battle_ui" type="Control"]
@@ -99,10 +154,93 @@ texture = ExtResource("1_6dy2n")
 [node name="wave_display" type="Label" parent="."]
 modulate = Color(1, 1, 1, 0.784314)
 layout_mode = 1
-offset_left = 20.0
+offset_left = 40.0
 offset_top = 20.0
-offset_right = 235.0
-offset_bottom = 113.0
+offset_right = 328.0
+offset_bottom = 141.0
 theme_override_fonts/font = ExtResource("1_210wa")
 theme_override_font_sizes/font_size = 100
 text = "Wave: 1"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 100
+alignment = 1
+
+[node name="Reward_1" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(600, 750)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_210wa")
+theme_override_font_sizes/font_size = 150
+script = SubResource("GDScript_vlar6")
+
+[node name="Label" type="Label" parent="HBoxContainer/Reward_1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_210wa")
+theme_override_font_sizes/font_size = 150
+text = "Get a shotgun"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Reward_2" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(600, 750)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_210wa")
+theme_override_font_sizes/font_size = 150
+script = SubResource("GDScript_vlar6")
+
+[node name="Label" type="Label" parent="HBoxContainer/Reward_2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_210wa")
+theme_override_font_sizes/font_size = 150
+text = "Get a shotgun"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Reward_3" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(600, 750)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_210wa")
+theme_override_font_sizes/font_size = 150
+script = SubResource("GDScript_vlar6")
+
+[node name="Label" type="Label" parent="HBoxContainer/Reward_3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_210wa")
+theme_override_font_sizes/font_size = 150
+text = "Get a shotgun"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[connection signal="pressed" from="HBoxContainer/Reward_1" to="HBoxContainer/Reward_1" method="_on_pressed"]
+[connection signal="pressed" from="HBoxContainer/Reward_2" to="HBoxContainer/Reward_2" method="_on_pressed"]
+[connection signal="pressed" from="HBoxContainer/Reward_3" to="HBoxContainer/Reward_3" method="_on_pressed"]

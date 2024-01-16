@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="reward_resource" load_steps=2 format=3 uid="uid://ka75kb51c85"]
+
+[ext_resource type="Script" path="res://resources/reward_resource_health.gd" id="1_2wypj"]
+
+[resource]
+script = ExtResource("1_2wypj")
+title = "Heal the \\nknight"
+type = 0
+remove_after_use = false
+gun_id = 0

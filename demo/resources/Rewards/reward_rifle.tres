@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="reward_resource" load_steps=2 format=3 uid="uid://cin7p86jn61vy"]
+
+[ext_resource type="Script" path="res://resources/reward_resource_health.gd" id="1_cdknt"]
+
+[resource]
+script = ExtResource("1_cdknt")
+title = "Get rifle"
+type = 2
+remove_after_use = false
+gun_id = 2

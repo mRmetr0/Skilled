@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="reward_resource" load_steps=2 format=3 uid="uid://qfuy5sjnmwko"]
+
+[ext_resource type="Script" path="res://resources/reward_resource_health.gd" id="1_syd13"]
+
+[resource]
+script = ExtResource("1_syd13")
+title = "Get shotgun"
+type = 2
+remove_after_use = false
+gun_id = 3
