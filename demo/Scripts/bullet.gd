@@ -29,7 +29,8 @@ func _set_bullet(p_damage: int, p_pierce: int, p_crit: int = 0):
 	run_speed = speed
 	damage = p_damage;
 	pierce = p_pierce;
-	if randi_range(0, 100) <= p_crit:
+	var crit = (p_crit + (10 if (GameManager.set_difficulty == GameManager.difficulty.HARD) else 0))
+	if randi_range(0, 100) <= crit:
 		damage *= 2
 		get_node("Sprite2D").modulate = Color(1, 0, 0)
 	else:

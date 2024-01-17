@@ -114,10 +114,10 @@ void AutoState::start(Node& node, int p_start_clip){
     shot_amount = 1;    
 
     //bullet
-    bullet_damage = 1;
+    bullet_damage = 2;
     bullet_pierce = 0;
     bullet_amount = 0;
-    magazine_size = 40;
+    magazine_size = 74;
 
     WeaponState::start(node, p_start_clip);
 }
@@ -148,7 +148,7 @@ void AutoState::shoot(Vector2 position, double angle){
 
 
     //Marking everything down:
-    init->set_position(position);
+    init->set_position(position + (Vector2(cos(angle), sin(angle)) * 100));
     init->set_rotation(angle + ((double)accuracy * 0.01));
 
     
@@ -160,7 +160,6 @@ void AutoState::shoot(Vector2 position, double angle){
 #pragma endregion auto_rifle
 
 #pragma region spread_gun
-
 void SpreadState::start(Node& node, int p_start_clip){
     id = 3;
 
@@ -177,11 +176,11 @@ void SpreadState::start(Node& node, int p_start_clip){
     in_recoil = false;
 
     //shotgun
-    spread = 0.12; 
-    shot_amount = 5;    
+    spread = 0.09; 
+    shot_amount = 6;    
 
     //bullet
-    bullet_damage = 1;
+    bullet_damage = 3;
     bullet_pierce = 0;
     bullet_amount = 0;
     magazine_size = 25;
@@ -217,7 +216,7 @@ void SpreadState::shoot(Vector2 position, double angle){
 
 
         //Marking everything down:
-        init->set_position(position);
+        init->set_position(position + (Vector2(cos(angle), sin(angle)) * 100));
         init->set_rotation(angle + offset + ((double)accuracy * 0.01));
     }
     

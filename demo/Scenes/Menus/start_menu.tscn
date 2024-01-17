@@ -1,9 +1,43 @@
-[gd_scene load_steps=5 format=3 uid="uid://b3fm5is446m84"]
+[gd_scene load_steps=8 format=3 uid="uid://cfyq1shib16e7"]
 
 [ext_resource type="Script" path="res://Scripts/buttons.gd" id="1_0v75t"]
-[ext_resource type="Texture2D" uid="uid://bkughl01gt8v6" path="res://Assets/backgrounds/origbig.png" id="2_bcqoc"]
+[ext_resource type="Texture2D" uid="uid://b70qrwnejtmmn" path="res://Assets/backgrounds/origbig_2.png" id="2_1vw74"]
 [ext_resource type="FontFile" uid="uid://cxpxmt3gk1fur" path="res://Assets/Fonts/square-deal.ttf" id="3_bqqa0"]
-[ext_resource type="Texture2D" uid="uid://c0tl127hrt8kd" path="res://Assets/forestSprites_ v1.2/lancelot_.png" id="4_au5jw"]
+[ext_resource type="Texture2D" uid="uid://bdbav34wkc30d" path="res://Assets/forestSprites_ v1.2/troll_.png" id="4_mne2p"]
+[ext_resource type="Texture2D" uid="uid://dbwe5p5k74tn8" path="res://Assets/forestSprites_ v1.2/centaur_.png" id="4_n21cl"]
+[ext_resource type="Texture2D" uid="uid://bk15yiub0f07s" path="res://Assets/forestSprites_ v1.2/fungant_.png" id="5_7mm16"]
+
+[sub_resource type="GDScript" id="GDScript_1eclt"]
+resource_name = "difficulty_button"
+script/source = "extends Button
+
+@export var difficulty : GameManager.difficulty
+@export_multiline var description
+
+@onready var mediummods = get_node(\"/root/StartMenu/MEDIUMMODS\")
+@onready var hardmods = get_node(\"/root/StartMenu/HARDMODS\")
+@onready var description_label = get_node(\"/root/StartMenu/DifficultyDescription\")
+
+func _ready():
+	if (difficulty == GameManager.difficulty.MEDIUM):
+		_pressed()
+
+func _pressed():
+	description_label.text = description
+	
+	GameManager.set_difficulty = difficulty
+	mediummods.hide()
+	hardmods.hide()
+	
+	match difficulty:
+		GameManager.difficulty.HARD:
+			hardmods.show()
+			mediummods.show()
+			print(\"HARD\")
+		GameManager.difficulty.MEDIUM:
+			mediummods.show()
+			print(\"MEDIUM\")
+"
 
 [node name="StartMenu" type="Control"]
 layout_mode = 3
@@ -15,76 +49,327 @@ offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_0v75t")
+metadata/_edit_lock_ = true
 
 [node name="Background" type="TextureRect" parent="."]
+modulate = Color(0.803922, 0.803922, 0.803922, 1)
+z_index = -100
+texture_filter = 1
 layout_mode = 0
 offset_right = 2871.0
 offset_bottom = 1613.0
-texture = ExtResource("2_bcqoc")
+texture = ExtResource("2_1vw74")
 stretch_mode = 4
+metadata/_edit_lock_ = true
 
 [node name="Title" type="Label" parent="."]
+z_index = 100
+texture_filter = 1
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -1483.0
-offset_top = 20.0
-offset_right = -19.999
-offset_bottom = 728.0
-grow_horizontal = 0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -1065.5
+offset_top = 50.0
+offset_right = 1065.5
+offset_bottom = 758.0
+grow_horizontal = 2
 pivot_offset = Vector2(50, 15)
 theme_override_fonts/font = ExtResource("3_bqqa0")
 theme_override_font_sizes/font_size = 350
-text = "Knight 
-with a gun"
+text = "Select difficulty"
 horizontal_alignment = 2
+metadata/_edit_lock_ = true
 
-[node name="Hero" type="Sprite2D" parent="."]
-texture_filter = 1
-position = Vector2(610, 990)
-rotation = -0.118682
-scale = Vector2(61.6283, 63.397)
-texture = ExtResource("4_au5jw")
-hframes = 8
-vframes = 6
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-custom_minimum_size = Vector2(150, 50)
+[node name="Start" type="Button" parent="."]
+z_index = 100
+custom_minimum_size = Vector2(700, 180)
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -220.0
+offset_right = 250.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("3_bqqa0")
+theme_override_font_sizes/font_size = 80
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="Start"]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -500.0
-offset_top = -358.0
-offset_right = -50.0
-offset_bottom = -50.0
-grow_horizontal = 0
-grow_vertical = 0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_bqqa0")
+theme_override_font_sizes/font_size = 150
+text = "START"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Start" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(500, 120)
+[node name="DifficultyDescription" type="Label" parent="."]
+z_index = 100
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 12.0
+offset_top = -299.0
+offset_right = 1209.0
+offset_bottom = 301.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_bqqa0")
+theme_override_font_sizes/font_size = 90
+text = "Difficulty"
+autowrap_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+z_index = 100
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -629.0
+offset_top = -300.0
+offset_right = -28.9998
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 60
+metadata/_edit_lock_ = true
+
+[node name="Difficulty_button_3" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(600, 160)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_bqqa0")
 theme_override_font_sizes/font_size = 80
-text = "Start"
+script = SubResource("GDScript_1eclt")
+difficulty = 2
+description = "Hard:
+* enemies have more health
+* more enemies per wave
+* guns have a higher crit chance"
 
-[node name="Options" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(500, 120)
+[node name="Label" type="Label" parent="VBoxContainer/Difficulty_button_3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_bqqa0")
+theme_override_font_sizes/font_size = 120
+text = "HARD"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Difficulty_button_2" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(600, 160)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_bqqa0")
 theme_override_font_sizes/font_size = 80
-text = "Tutorial"
+script = SubResource("GDScript_1eclt")
+difficulty = 1
+description = "Medium
+* the difficulty the game is balanced on
+* enemies have normal health
+* weapons have intended bullet amounts"
 
-[node name="Quit" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(500, 120)
+[node name="Label" type="Label" parent="VBoxContainer/Difficulty_button_2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_bqqa0")
+theme_override_font_sizes/font_size = 120
+text = "MEDIUM"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Difficulty_button_1" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(600, 160)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_bqqa0")
 theme_override_font_sizes/font_size = 80
-text = "Quit"
+script = SubResource("GDScript_1eclt")
+description = "Easy:
+* enemies have lower hp
+* given weapons have more bullets"
 
-[connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_start_pressed"]
-[connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_options_pressed"]
-[connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[node name="Label" type="Label" parent="VBoxContainer/Difficulty_button_1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_bqqa0")
+theme_override_font_sizes/font_size = 120
+text = "EASY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HARDMODS" type="Node2D" parent="."]
+
+[node name="enemy5" type="Sprite2D" parent="HARDMODS"]
+texture_filter = 1
+position = Vector2(138, 734)
+rotation = 0.0523599
+scale = Vector2(45, 45)
+texture = ExtResource("4_n21cl")
+hframes = 8
+vframes = 5
+
+[node name="enemy4" type="Sprite2D" parent="HARDMODS"]
+z_index = 1
+texture_filter = 1
+position = Vector2(725, 1503)
+rotation = 0.0593412
+scale = Vector2(30, 30)
+texture = ExtResource("5_7mm16")
+hframes = 8
+vframes = 5
+frame = 3
+
+[node name="enemy6" type="Sprite2D" parent="HARDMODS"]
+z_index = 1
+texture_filter = 1
+position = Vector2(1007, 1482)
+rotation = -0.0593412
+scale = Vector2(30, 30)
+texture = ExtResource("5_7mm16")
+hframes = 8
+vframes = 5
+frame = 3
+
+[node name="enemy7" type="Sprite2D" parent="HARDMODS"]
+z_index = 1
+texture_filter = 1
+position = Vector2(1581, 1542)
+rotation = 0.118682
+scale = Vector2(30, 30)
+texture = ExtResource("5_7mm16")
+flip_h = true
+hframes = 8
+vframes = 5
+frame = 3
+
+[node name="enemy9" type="Sprite2D" parent="HARDMODS"]
+texture_filter = 1
+position = Vector2(1783, 1485)
+rotation = 0.118682
+scale = Vector2(30, 30)
+texture = ExtResource("5_7mm16")
+flip_h = true
+hframes = 8
+vframes = 5
+frame = 3
+
+[node name="enemy8" type="Sprite2D" parent="HARDMODS"]
+texture_filter = 1
+position = Vector2(2242, 883)
+rotation = -0.125664
+scale = Vector2(40, 40)
+texture = ExtResource("4_mne2p")
+flip_h = true
+hframes = 8
+vframes = 5
+
+[node name="MEDIUMMODS" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="enemy" type="Sprite2D" parent="MEDIUMMODS"]
+z_index = 1
+texture_filter = 1
+position = Vector2(118, 1370)
+rotation = -0.00698132
+scale = Vector2(40, 40)
+texture = ExtResource("4_mne2p")
+hframes = 8
+vframes = 5
+metadata/_edit_lock_ = true
+
+[node name="enemy4" type="Sprite2D" parent="MEDIUMMODS"]
+texture_filter = 1
+position = Vector2(188, 1085)
+rotation = -0.00698132
+scale = Vector2(40, 40)
+texture = ExtResource("4_mne2p")
+hframes = 8
+vframes = 5
+metadata/_edit_lock_ = true
+
+[node name="enemy2" type="Sprite2D" parent="MEDIUMMODS"]
+z_index = 1
+texture_filter = 1
+position = Vector2(2550, 1436)
+rotation = -0.0663225
+scale = Vector2(40, 40)
+texture = ExtResource("4_mne2p")
+flip_h = true
+hframes = 8
+vframes = 5
+metadata/_edit_lock_ = true
+
+[node name="enemy3" type="Sprite2D" parent="MEDIUMMODS"]
+texture_filter = 1
+position = Vector2(2492, 1061)
+rotation = -0.0663225
+scale = Vector2(40, 40)
+texture = ExtResource("4_mne2p")
+flip_h = true
+hframes = 8
+vframes = 5
+metadata/_edit_lock_ = true
+
+[node name="EASYMODS" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="enemy" type="Sprite2D" parent="EASYMODS"]
+texture_filter = 1
+position = Vector2(506, 1372)
+rotation = -0.0593412
+scale = Vector2(40, 40)
+texture = ExtResource("4_mne2p")
+hframes = 8
+vframes = 5
+metadata/_edit_lock_ = true
+
+[node name="enemy2" type="Sprite2D" parent="EASYMODS"]
+texture_filter = 1
+position = Vector2(2301, 1365)
+rotation = 0.118682
+scale = Vector2(40, 40)
+texture = ExtResource("4_mne2p")
+flip_h = true
+hframes = 8
+vframes = 5
+metadata/_edit_lock_ = true
+
+[node name="enemy3" type="Sprite2D" parent="EASYMODS"]
+texture_filter = 1
+position = Vector2(1935, 1520)
+rotation = -0.0593412
+scale = Vector2(30, 30)
+texture = ExtResource("5_7mm16")
+flip_h = true
+hframes = 8
+vframes = 5
+frame = 3
+metadata/_edit_lock_ = true
+
+[connection signal="pressed" from="Start" to="." method="_on_play_pressed"]

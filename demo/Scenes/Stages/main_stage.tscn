@@ -1,8 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://denmqnm0fgcp7"]
+[gd_scene load_steps=18 format=3 uid="uid://denmqnm0fgcp7"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_bm5nw"]
 [ext_resource type="TileSet" uid="uid://cexljc66ce55p" path="res://Assets/tile_set.tres" id="2_gdw1b"]
 [ext_resource type="Script" path="res://Scripts/AStar2D.gd" id="3_oua1l"]
+[ext_resource type="PackedScene" uid="uid://gqbslx8m3sa3" path="res://Scenes/Objects/healthbar.tscn" id="4_t10ir"]
 [ext_resource type="Script" path="res://Scripts/player_manager.gd" id="4_tgvxk"]
 [ext_resource type="Resource" uid="uid://ka75kb51c85" path="res://resources/Rewards/reward_player_health.tres" id="5_ly387"]
 [ext_resource type="Script" path="res://Scripts/enemy_manager.gd" id="5_ofnsa"]
@@ -67,9 +68,15 @@ scale = Vector2(5, 5)
 shape = SubResource("RectangleShape2D_t0bpp")
 metadata/_edit_lock_ = true
 
+[node name="ProgressBar" parent="TileMap" instance=ExtResource("4_t10ir")]
+offset_left = 1242.0
+offset_top = 679.0
+offset_right = 1363.0
+offset_bottom = 702.0
+
 [node name="PlayerManager" type="Node" parent="."]
 script = ExtResource("4_tgvxk")
-rewards = Array[Resource("res://resources/reward_resource_health.gd")]([ExtResource("5_ly387"), ExtResource("6_ap1rl"), ExtResource("7_u66f6"), ExtResource("8_6vlsh")])
+rewards = Array[Resource("res://resources/reward_resource.gd")]([ExtResource("5_ly387"), ExtResource("6_ap1rl"), ExtResource("7_u66f6"), ExtResource("8_6vlsh")])
 
 [node name="SpawnPoint" type="Node2D" parent="PlayerManager"]
 position = Vector2(1300, 1100)

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="reward_resource" load_steps=2 format=3 uid="uid://c4h2y44hlf1v0"]
 
-[ext_resource type="Script" path="res://resources/reward_resource_health.gd" id="1_ixpkl"]
+[ext_resource type="Script" path="res://resources/reward_resource.gd" id="1_ixpkl"]
 
 [resource]
 script = ExtResource("1_ixpkl")

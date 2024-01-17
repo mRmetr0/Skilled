@@ -12,6 +12,12 @@ enum hazards {
 }
 var selected_hazards = []
 var hazard_odds = 33;
+enum difficulty {
+	EASY,
+	MEDIUM,
+	HARD
+}
+var set_difficulty : difficulty
 
 func _ready():
 	_start_game()

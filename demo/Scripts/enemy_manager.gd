@@ -1,9 +1,5 @@
 extends Node
 
-#@onready var enemy = preload("res://Scenes/Objects/Characters/enemy.tscn")
-
-@onready var weapon_drop = preload("res://Scenes/Objects/Weapons/weapon_pickup.tscn")
-
 @onready var rng = RandomNumberGenerator.new()
 @onready var time_passed = 0.0
 @onready var screen = get_window().size
@@ -80,6 +76,9 @@ func _spawn_enemy():
 		new_pos.y =  rng.randf_range(0, screen.y)
 			
 	init.position = new_pos
+	
+	if (GameManager.set_difficulty == GameManager.difficulty.HARD):
+		init.health *= 1.5
 
 func _remove_enemy(enemy):
 	enemy.queue_free()

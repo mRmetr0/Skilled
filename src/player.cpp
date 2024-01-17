@@ -26,6 +26,7 @@ void Player::_bind_methods() {
     ClassDB::bind_method(D_METHOD("_set_weapon", "p_id", "p_ammo"), &Player::_set_weapon);
 
     ADD_SIGNAL(MethodInfo("animate", PropertyInfo(Variant::INT, "type")));
+    ADD_SIGNAL(MethodInfo("set_weapon", PropertyInfo(Variant::INT, "id")));
 }
 
 Player::Player(){
@@ -55,8 +56,10 @@ void Player::_ready(){
     if (hp_bar != nullptr)
         hp_bar->call("_set_health", health_max, health);
 
-    weapon_state = memnew(PistolState);
+    weapon_state = memnew(AutoState);
     weapon_state->start(*this);
+    
+    emit_signal("set_weapon", weapon_state->id);
 }
 
 void Player::_process(double delta){
@@ -65,6 +68,7 @@ void Player::_process(double delta){
         memdelete(weapon_state);
         new_weapon->start(*this);
         weapon_state = new_weapon;
+        emit_signal("set_weapon", new_weapon->id);
     }
 
     //Player slows down when hit
@@ -147,6 +151,7 @@ void Player::_set_weapon(int p_id, int p_ammo = 0){
     default:
         break;
     }
+    emit_signal("set_weapon", p_id);
 }
 
 #pragma region getters_setters

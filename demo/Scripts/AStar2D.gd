@@ -7,9 +7,8 @@ class_name AStar_Path
 
 var wall_cells : Array
 var statue_cells
-var resource_start
-var resource_end
 var statue_health
+@onready var statue_health_bar = get_node("ProgressBar")
 
 var path : PackedVector2Array
 
@@ -18,6 +17,7 @@ func _ready():
 	_add_points()
 	_connect_points()
 	statue_health = GameManager.statue_health
+	statue_health_bar._set_health(statue_health, statue_health)
 	
 func _add_points():
 	for cell in used_cells:
@@ -94,6 +94,7 @@ func _damage_tile_raw(tile):
 		return		
 	elif tile_id == 11:
 		statue_health -= 1
+		statue_health_bar._health_update(statue_health)
 		if (statue_health <= 0):
 			GameManager._on_game_end(false)
 		return 
@@ -113,21 +114,7 @@ func _heal_tile_raw(tile):
 		return
 	if value.x > 0 && value.x < tile_id:
 		set_cell(0, n_tile, tile_id, Vector2i(value.x + 1, value.y))
-		
-func _change_resources_states(change_end, value):
-	var tile
-	if (!change_end):
-		tile = resource_start
-	else:
-		tile = resource_end
-	set_cell(0, tile, get_cell_source_id(0, tile), Vector2i(0, value))
-	
-func _get_resource(get_start):
-	if (get_start):
-		return resource_start
-	else:
-		return resource_end
-		
+
 
 ## STUFF FOR GDSCRIP TESTING ##
 

@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_g7vnt")
 path = "res://Scenes/Objects/Characters/"
+give_reward_at_end = true
 spawn_amount_max = 3
 spawn_rate = 4.0
 enemy1_type = "enemy"

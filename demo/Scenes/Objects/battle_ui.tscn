@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://chld1a4qptln3"]
+[gd_scene load_steps=6 format=3 uid="uid://chld1a4qptln3"]
 
 [ext_resource type="Texture2D" uid="uid://bioxmyygj733x" path="res://Assets/Weapons/V1.00/PNG/GUN_01_[square_frame]_01_V1.00.png" id="1_6dy2n"]
 [ext_resource type="FontFile" uid="uid://cxpxmt3gk1fur" path="res://Assets/Fonts/square-deal.ttf" id="1_210wa"]
@@ -45,13 +45,19 @@ func _update_weapon_display():
 		return
 	if (current_weapon == 0 || current_weapon != data):
 		weapon_sprite.texture = weapons[data]
-
+		if (data == 0):
+			weapon_sprite.scale = Vector2(4, 4)
+			weapon_sprite.offset = Vector2 (0,0)
+		else:
+			weapon_sprite.scale = Vector2(3,3)
+			weapon_sprite.offset = Vector2(30, 5)
+		
 func _get_weapon_sprites():
 	var path = str(\"res://Assets/Weapons/\")
 	var images = []
 	images.append(load(str(path + \"Pistol_2.png\")));
-	images.append(load(str(path + \"Rifle.png\")));
-	images.append(load(str(path + \"Shotgun.png\")));
+	images.append(load(str(path + \"Rifle_2.png\")));
+	images.append(load(str(path + \"Shotgun_2.png\")));
 	print(images.size())
 	return images
 
@@ -63,7 +69,7 @@ func _update_wave():
 
 func _set_rewards():
 	player_manager.rewards.shuffle()
-	var buttons = get_node(\"HBoxContainer\").get_children()
+	var buttons = get_node(\"Reward_ui\").get_children()
 	var i = 0
 	for button in buttons:
 		button._get_item(player_manager.rewards[i])
@@ -95,7 +101,6 @@ func _setup_rewards(active : bool):
 			button.show()
 		else:
 			button.hide()
-	
 
 func _on_pressed():
 	var player_manager = get_node(\"/root/Main/PlayerManager\")
@@ -103,9 +108,11 @@ func _on_pressed():
 	match reward.type:
 		reward_resource.Type.HEAL_PLAYER:
 			player.health = 1000
+			player._take_damage(0)
 		reward_resource.Type.HEAL_STATUE:
-			var tilemap = get_node(\"/root/Main/Tilemap\")
+			var tilemap = get_node(\"/root/Main/TileMap\")
 			tilemap.statue_health = GameManager.statue_health
+			tilemap.statue_health_bar._health_update(GameManager.statue_health)
 		reward_resource.Type.GIVE_GUN:
 			player._set_weapon(reward.gun_id, 0)
 			
@@ -114,6 +121,19 @@ func _on_pressed():
 			
 	_setup_rewards(false)
 	get_node(\"/root/Main/EnemyManager\")._start_next_wave()
+"
+
+[sub_resource type="GDScript" id="GDScript_xaftl"]
+resource_name = "endgame_script"
+script/source = "extends HBoxContainer
+
+
+func _on_return_press():
+	GameManager._on_game_end(true)
+	
+func _on_endless_press():
+#	get_node(\"/root/Main/EnemyManager\")
+	pass
 "
 
 [node name="battle_ui" type="Control"]
@@ -162,7 +182,7 @@ theme_override_fonts/font = ExtResource("1_210wa")
 theme_override_font_sizes/font_size = 100
 text = "Wave: 1"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="Reward_ui" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -178,14 +198,14 @@ grow_vertical = 2
 theme_override_constants/separation = 100
 alignment = 1
 
-[node name="Reward_1" type="Button" parent="HBoxContainer"]
+[node name="Reward_1" type="Button" parent="Reward_ui"]
 custom_minimum_size = Vector2(600, 750)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_210wa")
 theme_override_font_sizes/font_size = 150
 script = SubResource("GDScript_vlar6")
 
-[node name="Label" type="Label" parent="HBoxContainer/Reward_1"]
+[node name="Label" type="Label" parent="Reward_ui/Reward_1"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -199,14 +219,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Reward_2" type="Button" parent="HBoxContainer"]
+[node name="Reward_2" type="Button" parent="Reward_ui"]
 custom_minimum_size = Vector2(600, 750)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_210wa")
 theme_override_font_sizes/font_size = 150
 script = SubResource("GDScript_vlar6")
 
-[node name="Label" type="Label" parent="HBoxContainer/Reward_2"]
+[node name="Label" type="Label" parent="Reward_ui/Reward_2"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -220,14 +240,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Reward_3" type="Button" parent="HBoxContainer"]
+[node name="Reward_3" type="Button" parent="Reward_ui"]
 custom_minimum_size = Vector2(600, 750)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_210wa")
 theme_override_font_sizes/font_size = 150
 script = SubResource("GDScript_vlar6")
 
-[node name="Label" type="Label" parent="HBoxContainer/Reward_3"]
+[node name="Label" type="Label" parent="Reward_ui/Reward_3"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -241,6 +261,65 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[connection signal="pressed" from="HBoxContainer/Reward_1" to="HBoxContainer/Reward_1" method="_on_pressed"]
-[connection signal="pressed" from="HBoxContainer/Reward_2" to="HBoxContainer/Reward_2" method="_on_pressed"]
-[connection signal="pressed" from="HBoxContainer/Reward_3" to="HBoxContainer/Reward_3" method="_on_pressed"]
+[node name="Endgame_menu" type="HBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -375.0
+offset_right = 300.0
+offset_bottom = 375.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 150
+script = SubResource("GDScript_xaftl")
+
+[node name="Reward_1" type="Button" parent="Endgame_menu"]
+custom_minimum_size = Vector2(600, 750)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_210wa")
+theme_override_font_sizes/font_size = 150
+
+[node name="Label" type="Label" parent="Endgame_menu/Reward_1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_210wa")
+theme_override_font_sizes/font_size = 150
+text = "Return to menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Reward_2" type="Button" parent="Endgame_menu"]
+custom_minimum_size = Vector2(600, 750)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_210wa")
+theme_override_font_sizes/font_size = 150
+
+[node name="Label" type="Label" parent="Endgame_menu/Reward_2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_210wa")
+theme_override_font_sizes/font_size = 150
+text = "start endless mode"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[connection signal="pressed" from="Reward_ui/Reward_1" to="Reward_ui/Reward_1" method="_on_pressed"]
+[connection signal="pressed" from="Reward_ui/Reward_2" to="Reward_ui/Reward_2" method="_on_pressed"]
+[connection signal="pressed" from="Reward_ui/Reward_3" to="Reward_ui/Reward_3" method="_on_pressed"]
+[connection signal="pressed" from="Endgame_menu/Reward_1" to="Endgame_menu/Reward_1" method="_on_pressed"]
+[connection signal="pressed" from="Endgame_menu/Reward_2" to="Endgame_menu/Reward_2" method="_on_pressed"]

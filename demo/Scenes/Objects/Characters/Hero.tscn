@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cwj56onkottxv"]
+[gd_scene load_steps=15 format=3 uid="uid://cwj56onkottxv"]
 
 [ext_resource type="Texture2D" uid="uid://b6sjuklqkbqdt" path="res://Assets/Person.png" id="1_2aggy"]
 [ext_resource type="PackedScene" uid="uid://gqbslx8m3sa3" path="res://Scenes/Objects/healthbar.tscn" id="2_7ynhf"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://Scripts/Animator.gd" id="4_iikt0"]
 [ext_resource type="Texture2D" uid="uid://bioxmyygj733x" path="res://Assets/Weapons/V1.00/PNG/GUN_01_[square_frame]_01_V1.00.png" id="5_13a0u"]
 [ext_resource type="Texture2D" uid="uid://blmp0r4oldg22" path="res://Assets/forestSprites_ v1.2/lancelotHand_.png" id="5_nve6o"]
+[ext_resource type="Texture2D" uid="uid://c865wsfoyp5sb" path="res://Assets/Weapons/Shotgun_2.png" id="6_e7hmb"]
+[ext_resource type="Texture2D" uid="uid://dbluwisjvvawb" path="res://Assets/Weapons/Rifle_2.png" id="7_k6fcm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pc772"]
 size = Vector2(13.6, 19.2)
@@ -72,16 +74,40 @@ _data = {
 resource_name = "hand_controls"
 script/source = "extends Node2D
 
-@onready var gun = get_node(\"Gun\")
+@onready var pistol = get_node(\"Pistol\")
+@onready var shotgun = get_node(\"Shotgun\")
+@onready var rifle = get_node(\"Rifle\")
 @onready var hand = get_node(\"Hand\")
 var flip_right = true
 @onready var hand_pos_y = hand.position.y
+@onready var rifle_off_y = rifle.offset.y
+
+func _set_gun_sprite(gun_id : int):
+	pistol.hide()
+	shotgun.hide()
+	rifle.hide()
+
+	match gun_id:
+		1: 
+			pistol.show()
+		2:
+			rifle.show()
+		3: 
+			shotgun.show()
 
 func _process(_delta):
 	var mouse = get_global_mouse_position()
 	flip_right = mouse.x > global_position.x
-	gun.set_flip_v(!flip_right)
+	
+	pistol.set_flip_v(!flip_right)
+	
+	shotgun.set_flip_v(!flip_right)
+	
+	rifle.set_flip_v(!flip_right)
+	rifle.offset.y = abs(rifle_off_y) *  (1 if flip_right else -1)
+	
 	hand.set_flip_v (!flip_right)
+	
 	hand.position.y = abs(hand_pos_y) *  (1 if flip_right else -1)
 	look_at(mouse)
 "
@@ -123,11 +149,26 @@ follow_mouse = true
 [node name="Rotator" type="Node2D" parent="."]
 script = SubResource("GDScript_63n1s")
 
-[node name="Gun" type="Sprite2D" parent="Rotator"]
+[node name="Pistol" type="Sprite2D" parent="Rotator"]
 texture_filter = 1
 position = Vector2(60, 0)
 scale = Vector2(2, 2)
 texture = ExtResource("5_13a0u")
+
+[node name="Shotgun" type="Sprite2D" parent="Rotator"]
+visible = false
+texture_filter = 1
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("6_e7hmb")
+offset = Vector2(12, 0)
+
+[node name="Rifle" type="Sprite2D" parent="Rotator"]
+visible = false
+texture_filter = 1
+position = Vector2(60, 0)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("7_k6fcm")
+offset = Vector2(0, 5)
 
 [node name="Hand" type="Sprite2D" parent="Rotator"]
 texture_filter = 1
@@ -136,3 +177,4 @@ scale = Vector2(6, 6)
 texture = ExtResource("5_nve6o")
 
 [connection signal="animate" from="." to="Sprite2D2/AnimationPlayer" method="_set_animation"]
+[connection signal="set_weapon" from="." to="Rotator" method="_set_gun_sprite"]

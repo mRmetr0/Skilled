@@ -1,10 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://gqbslx8m3sa3"]
 
 [ext_resource type="Script" path="res://Scripts/healthbar.gd" id="1_4mj7q"]
-[ext_resource type="Texture2D" uid="uid://5c4ifjvfirkt" path="res://icon.svg" id="2_lkg1m"]
+[ext_resource type="Texture2D" uid="uid://da1548ra8j5xm" path="res://Assets/Tiles/White_box.png" id="2_ngae7"]
 
 [node name="ProgressBar" type="ProgressBar"]
 self_modulate = Color(1, 0, 0, 1)
+texture_filter = 1
 offset_left = -60.0
 offset_top = -89.0
 offset_right = 61.0
@@ -18,8 +19,8 @@ script = ExtResource("1_4mj7q")
 self_modulate = Color(0, 0, 0, 1)
 show_behind_parent = true
 position = Vector2(60, 11.5)
-scale = Vector2(0.98, 0.210938)
-texture = ExtResource("2_lkg1m")
+scale = Vector2(4, 0.85)
+texture = ExtResource("2_ngae7")
 
 [node name="ReloadBar" type="ProgressBar" parent="."]
 visible = false
