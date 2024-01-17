@@ -17,7 +17,7 @@ enum difficulty {
 	MEDIUM,
 	HARD
 }
-var set_difficulty : difficulty
+var set_difficulty = difficulty.MEDIUM
 
 func _ready():
 	_start_game()

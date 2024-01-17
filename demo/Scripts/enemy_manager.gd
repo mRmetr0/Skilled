@@ -78,7 +78,9 @@ func _spawn_enemy():
 	init.position = new_pos
 	
 	if (GameManager.set_difficulty == GameManager.difficulty.HARD):
-		init.health *= 1.5
+		init._init_health(2.0)
+	elif (GameManager.set_difficulty == GameManager.difficulty.EASY):
+		init._init_health(0.6)
 
 func _remove_enemy(enemy):
 	enemy.queue_free()

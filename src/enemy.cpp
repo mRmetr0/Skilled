@@ -31,6 +31,7 @@ void Enemy::_bind_methods() {
     ClassDB::add_property("Enemy", PropertyInfo(Variant::FLOAT, "attack_range"), "set_attack_range", "get_attack_range");
 
     ClassDB::bind_method(D_METHOD("_take_damage"), &Enemy::_take_damage);
+    ClassDB::bind_method(D_METHOD("_init_health"), &Enemy::_init_health);
     ADD_SIGNAL(MethodInfo("animate", PropertyInfo(Variant::INT, "type")));
     ADD_SIGNAL(MethodInfo("flip", PropertyInfo(Variant::BOOL, "right")));
 }
@@ -94,6 +95,13 @@ void Enemy::_animate(int p_anim, int p_flip_dir){
     emit_signal("animate", p_anim);
     if (p_flip_dir == 0) return;
     emit_signal("flip", p_flip_dir < 0);
+}
+
+void Enemy::_init_health(float p_health_mod){
+    health_max = (int)ceil(p_health_mod * health_max);
+    health = health_max;
+    if (hp_bar != nullptr)
+        hp_bar->call("_set_health", health_max, health);
 }
 
 #pragma region getters_setters

@@ -5,12 +5,18 @@
 [resource]
 script = ExtResource("1_3wprb")
 path = "res://Scenes/Objects/Characters/"
-spawn_amount_max = 3
-spawn_rate = 3.0
+give_reward_at_end = false
+spawn_amount_max_normal = 2
+spawn_rate_normal = 2.5
+spawn_amount_max_hard = 3
+spawn_rate_hard = 2.5
 enemy1_type = "enemy"
 enemy1_amount = 4
+enemy1_amount_hard = 6
 enemy2_type = "enemy_fast"
 enemy2_amount = 4
+enemy2_amount_hard = 10
 enemy3_type = "enemy_strong"
 enemy3_amount = 2
+enemy3_amount_hard = 4
 boss_type = "enemy_boss"

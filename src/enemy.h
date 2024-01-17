@@ -51,6 +51,7 @@ public:
 
     void _take_damage(int p_damage);
     void _animate(int p_anim, int p_flip_dir);
+    void _init_health(float p_health_mod);
 
     void set_health(const int p_health);
     int get_health() const;

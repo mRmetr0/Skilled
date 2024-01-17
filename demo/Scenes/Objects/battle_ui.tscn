@@ -114,7 +114,8 @@ func _on_pressed():
 			tilemap.statue_health = GameManager.statue_health
 			tilemap.statue_health_bar._health_update(GameManager.statue_health)
 		reward_resource.Type.GIVE_GUN:
-			player._set_weapon(reward.gun_id, 0)
+			var extra_bullets = 20 if (GameManager.set_difficulty == GameManager.difficulty.EASY) else 0
+			player._set_weapon(reward.gun_id, extra_bullets)
 			
 	if reward.remove_after_use:
 		player_manager.rewards.remove(reward)

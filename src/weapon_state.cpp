@@ -4,10 +4,7 @@ using namespace godot;
 
 #pragma region base_weapon_state
 void WeaponState::start(Node& node, int p_start_clip) {
-    if (p_start_clip > 0)
-        bullet_amount = p_start_clip;
-    else 
-        bullet_amount = magazine_size;
+    bullet_amount = magazine_size + p_start_clip;
 
     bullet_pool = Object::cast_to<Node>(node.get_node_or_null("/root/BulletPool"));
     input = Input::get_singleton();

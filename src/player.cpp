@@ -56,7 +56,7 @@ void Player::_ready(){
     if (hp_bar != nullptr)
         hp_bar->call("_set_health", health_max, health);
 
-    weapon_state = memnew(AutoState);
+    weapon_state = memnew(PistolState);
     weapon_state->start(*this);
     
     emit_signal("set_weapon", weapon_state->id);
