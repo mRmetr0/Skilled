@@ -34,7 +34,7 @@ void PistolState::start(Node& node, int p_start_clip){
     inaccuracy = 4;
     rate_of_fire;
     fire_time;
-    crit_rate = 2;
+    
     in_recoil = false;
 
     //shotgun

@@ -86,8 +86,12 @@ var reward : reward_resource
 static var buttons : Array
 
 func _ready():
+	if buttons.size() == get_parent().get_children().size():
+		buttons.clear()
+	
 	buttons.append(self)
-	_setup_rewards(false)
+	disabled = true
+	hide()
 
 func _get_item(p_item):
 	reward = p_item
@@ -95,6 +99,7 @@ func _get_item(p_item):
 	_setup_rewards(true)
  
 func _setup_rewards(active : bool):
+	print(\"buttons size\", buttons.size())
 	for button in buttons: 
 		button.disabled = !active
 		if active:

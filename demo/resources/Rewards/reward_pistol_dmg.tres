@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="reward_resource" load_steps=2 format=3 uid="uid://b1okwjy314eh4"]
+
+[ext_resource type="Script" path="res://resources/reward_resource.gd" id="1_rt7kc"]
+
+[resource]
+script = ExtResource("1_rt7kc")
+title = "Pistol damage +1"
+type = 3
+remove_after_use = true
+gun_id = 0

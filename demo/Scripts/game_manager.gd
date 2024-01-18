@@ -3,6 +3,9 @@ extends Node
 var player_health = 5
 var player_weapon_id : int = 1
 var player_weapon_ammo : int = -1
+
+var pistol_dmg_mod = 0 
+
 var statue_health = 10
 
 enum hazards {
@@ -26,6 +29,9 @@ func _start_game():
 	player_health = 0
 	player_weapon_id = -1
 	player_weapon_ammo = 1
+	
+	pistol_dmg_mod = 0 
+	
 	statue_health = 10
 	
 	selected_hazards.clear()

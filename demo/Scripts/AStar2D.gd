@@ -9,6 +9,8 @@ var wall_cells : Array
 var statue_cells
 var statue_health
 @onready var statue_health_bar = get_node("ProgressBar")
+@onready var statue_sprite = get_node("Sprite2D")
+var player
 
 var path : PackedVector2Array
 
@@ -18,6 +20,15 @@ func _ready():
 	_connect_points()
 	statue_health = GameManager.statue_health
 	statue_health_bar._set_health(statue_health, statue_health)
+	await get_tree().create_timer(0.5).timeout
+	player = get_node("/root/Main/PlayerManager")._get_player()
+	
+
+func _process(delta):
+	if (player == null):
+		return
+	var index_z = 0 if player.global_position.y > 800 else 10;
+	statue_sprite.set_z_index(index_z)
 	
 func _add_points():
 	for cell in used_cells:

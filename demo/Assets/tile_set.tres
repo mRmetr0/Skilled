@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=15 format=3 uid="uid://cexljc66ce55p"]
+[gd_resource type="TileSet" load_steps=14 format=3 uid="uid://cexljc66ce55p"]
 
 [ext_resource type="Texture2D" uid="uid://sbghuertmb3h" path="res://Assets/Tiles/Ground_2.png" id="1_vxkts"]
 [ext_resource type="Texture2D" uid="uid://c548rlcfbkp6e" path="res://Assets/Tiles/Bomb_sheet.png" id="2_3f64e"]
@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://c87tiak1qv74m" path="res://Assets/Tiles/invuln_tiles.png" id="4_8snh1"]
 [ext_resource type="Texture2D" uid="uid://d3cmfkcuefhha" path="res://Assets/Tiles/Metal_Crate_File.png" id="4_kfrxy"]
 [ext_resource type="Texture2D" uid="uid://dpcvdrrk26lns" path="res://Assets/Tiles/Resources_Tiles.png" id="5_6vfwj"]
-[ext_resource type="Texture2D" uid="uid://dw3ywymacphsh" path="res://Assets/Tiles/Statue_2.png" id="6_anr66"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gabpv"]
 texture = ExtResource("1_vxkts")
@@ -42,12 +41,20 @@ texture_region_size = Vector2i(100, 100)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_20q4y"]
 resource_name = "statue"
-texture = ExtResource("6_anr66")
+texture = ExtResource("1_vxkts")
 texture_region_size = Vector2i(100, 100)
 0:0/0 = 0
 1:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ewyyf"]
 resource_name = "wood"
