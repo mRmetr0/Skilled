@@ -24,7 +24,7 @@ func _ready():
 	player = get_node("/root/Main/PlayerManager")._get_player()
 	
 
-func _process(delta):
+func _process(_delta): #TODO: TURN STATUE INTO 2 IMAGES WITH DIFFERENT Z-VALUES, INSTEAD OF THIS STUFF
 	if (player == null):
 		return
 	var index_z = 0 if player.global_position.y > 800 else 10;

@@ -101,7 +101,7 @@ func _end_wave():
 		return
 	else:
 		if current_wave.give_reward_at_end:
-			get_node("/root/Main/Camera2D/UILayer/battle_ui")._set_rewards()
+			get_node("/root/Main/UILayer/battle_ui")._set_rewards()
 			pass
 		else:
 			_start_next_wave()

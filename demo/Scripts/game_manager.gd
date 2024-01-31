@@ -37,7 +37,7 @@ func _start_game():
 	selected_hazards.clear()
 
 func  _on_wave_end():
-	get_node("/root/Main/Camera2D/UILayer/battle_ui")._update_wave()
+	get_node("/root/Main/UILayer/battle_ui")._update_wave()
 	get_node("/root/Main/Camera2D")._next_zoom()
 
 func _on_game_end(has_won):

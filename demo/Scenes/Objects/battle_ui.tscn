@@ -85,6 +85,9 @@ var reward : reward_resource
 
 static var buttons : Array
 
+@onready var player_manager = get_node(\"/root/Main/PlayerManager\")
+@onready var player = player_manager._get_player()
+
 func _ready():
 	if buttons.size() == get_parent().get_children().size():
 		buttons.clear()
@@ -99,17 +102,16 @@ func _get_item(p_item):
 	_setup_rewards(true)
  
 func _setup_rewards(active : bool):
-	print(\"buttons size\", buttons.size())
 	for button in buttons: 
 		button.disabled = !active
+		player.set_process(!active)
+		player.set_physics_process(!active)
 		if active:
 			button.show()
 		else:
 			button.hide()
 
 func _on_pressed():
-	var player_manager = get_node(\"/root/Main/PlayerManager\")
-	var player = player_manager._get_player()
 	match reward.type:
 		reward_resource.Type.HEAL_PLAYER:
 			player.health = 1000
@@ -143,7 +145,8 @@ func _on_endless_press():
 "
 
 [node name="battle_ui" type="Control"]
-z_index = 100
+process_mode = 1
+z_index = 20
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -267,7 +270,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Endgame_menu" type="HBoxContainer" parent="."]
+[node name="EndgameMenu" type="HBoxContainer" parent="."]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -284,13 +287,13 @@ grow_vertical = 2
 theme_override_constants/separation = 150
 script = SubResource("GDScript_xaftl")
 
-[node name="Reward_1" type="Button" parent="Endgame_menu"]
+[node name="Reward_1" type="Button" parent="EndgameMenu"]
 custom_minimum_size = Vector2(600, 750)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_210wa")
 theme_override_font_sizes/font_size = 150
 
-[node name="Label" type="Label" parent="Endgame_menu/Reward_1"]
+[node name="Label" type="Label" parent="EndgameMenu/Reward_1"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -304,13 +307,13 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Reward_2" type="Button" parent="Endgame_menu"]
+[node name="Reward_2" type="Button" parent="EndgameMenu"]
 custom_minimum_size = Vector2(600, 750)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_210wa")
 theme_override_font_sizes/font_size = 150
 
-[node name="Label" type="Label" parent="Endgame_menu/Reward_2"]
+[node name="Label" type="Label" parent="EndgameMenu/Reward_2"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -327,5 +330,5 @@ autowrap_mode = 3
 [connection signal="pressed" from="Reward_ui/Reward_1" to="Reward_ui/Reward_1" method="_on_pressed"]
 [connection signal="pressed" from="Reward_ui/Reward_2" to="Reward_ui/Reward_2" method="_on_pressed"]
 [connection signal="pressed" from="Reward_ui/Reward_3" to="Reward_ui/Reward_3" method="_on_pressed"]
-[connection signal="pressed" from="Endgame_menu/Reward_1" to="Endgame_menu/Reward_1" method="_on_pressed"]
-[connection signal="pressed" from="Endgame_menu/Reward_2" to="Endgame_menu/Reward_2" method="_on_pressed"]
+[connection signal="pressed" from="EndgameMenu/Reward_1" to="EndgameMenu/Reward_1" method="_on_pressed"]
+[connection signal="pressed" from="EndgameMenu/Reward_2" to="EndgameMenu/Reward_2" method="_on_pressed"]

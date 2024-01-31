@@ -42,6 +42,17 @@ text = "Knight
 with a gun"
 horizontal_alignment = 2
 
+[node name="DemoTitle" type="Label" parent="."]
+layout_mode = 1
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 1513.0
+offset_bottom = 758.0
+pivot_offset = Vector2(50, 15)
+theme_override_fonts/font = ExtResource("3_bqqa0")
+theme_override_font_sizes/font_size = 250
+text = "demo"
+
 [node name="Hero" type="Sprite2D" parent="."]
 texture_filter = 1
 position = Vector2(610, 990)
@@ -89,7 +100,6 @@ vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="Options" type="Button" parent="VBoxContainer"]
-visible = false
 custom_minimum_size = Vector2(500, 120)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_bqqa0")

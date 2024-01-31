@@ -34,7 +34,7 @@ void PistolState::start(Node& node, int p_start_clip){
     inaccuracy = 4;
     rate_of_fire;
     fire_time;
-    
+    crit_rate = 2;
     in_recoil = false;
 
     //shotgun
@@ -50,7 +50,7 @@ void PistolState::start(Node& node, int p_start_clip){
     WeaponState::start(node, p_start_clip);
 }
 WeaponState* PistolState::update(Node2D& node,double delta){
-    if (input->is_action_just_pressed("RClick")){
+    if (input->is_action_just_pressed("LClick")){
         shoot(node.get_position(), (node.get_global_mouse_position() - node.get_position()).angle());
     } else if (input->is_action_just_pressed("reload")){
         reload();
@@ -127,7 +127,7 @@ WeaponState* AutoState::update(Node2D& node,double delta){
         }
     }
 
-    if (input->is_action_pressed("RClick") && !in_recoil){
+    if (input->is_action_pressed("LClick") && !in_recoil){
         shoot(node.get_position(), (node.get_global_mouse_position() - node.get_position()).angle());
         in_recoil = true;
     } 
@@ -193,7 +193,7 @@ WeaponState* SpreadState::update(Node2D& node,double delta){
         }
     }
 
-    if (input->is_action_pressed("RClick") && !in_recoil){
+    if (input->is_action_pressed("LClick") && !in_recoil){
         shoot(node.get_position(), (node.get_global_mouse_position() - node.get_position()).angle());
         in_recoil = true;
     } 

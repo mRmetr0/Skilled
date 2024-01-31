@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://denmqnm0fgcp7"]
+[gd_scene load_steps=20 format=3 uid="uid://denmqnm0fgcp7"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_bm5nw"]
 [ext_resource type="TileSet" uid="uid://cexljc66ce55p" path="res://Assets/tile_set.tres" id="2_gdw1b"]
@@ -16,6 +16,7 @@
 [ext_resource type="Resource" uid="uid://f60a812cnfty" path="res://resources/Waves/wave3.tres" id="8_skjnh"]
 [ext_resource type="Resource" uid="uid://dgghl338c2tfw" path="res://resources/Waves/wave4.tres" id="9_prl5v"]
 [ext_resource type="Resource" uid="uid://bhuwhkgkpfhlw" path="res://resources/Waves/wave5.tres" id="10_vma3r"]
+[ext_resource type="PackedScene" uid="uid://c8yydof7ddq7e" path="res://Scenes/Objects/pause_ui.tscn" id="17_sbd1k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t0bpp"]
 size = Vector2(25.2, 13.6)
@@ -44,9 +45,11 @@ func _get_zoom():
 "
 
 [node name="Main" type="Node"]
+process_mode = 3
 script = ExtResource("1_bm5nw")
 
 [node name="TileMap" type="TileMap" parent="."]
+process_mode = 1
 tile_set = ExtResource("2_gdw1b")
 format = 2
 layer_0/name = "Ground"
@@ -78,8 +81,10 @@ offset_left = 1242.0
 offset_top = 679.0
 offset_right = 1363.0
 offset_bottom = 702.0
+metadata/_edit_use_anchors_ = true
 
 [node name="PlayerManager" type="Node" parent="."]
+process_mode = 1
 script = ExtResource("4_tgvxk")
 rewards = Array[Resource("res://resources/reward_resource.gd")]([ExtResource("5_ly387"), ExtResource("6_ap1rl"), ExtResource("7_u66f6"), ExtResource("8_6vlsh")])
 
@@ -87,14 +92,19 @@ rewards = Array[Resource("res://resources/reward_resource.gd")]([ExtResource("5_
 position = Vector2(1300, 1100)
 
 [node name="EnemyManager" type="Node" parent="."]
+process_mode = 1
 script = ExtResource("5_ofnsa")
 wave_data = Array[Resource("res://resources/wave_resource.gd")]([ExtResource("6_bqy6y"), ExtResource("7_ts2vu"), ExtResource("8_skjnh"), ExtResource("9_prl5v"), ExtResource("10_vma3r")])
 
 [node name="Camera2D" type="Camera2D" parent="."]
+process_mode = 3
 offset = Vector2(1300, 800)
 zoom = Vector2(1.1, 1.1)
 script = SubResource("GDScript_6rwqb")
 zoom_levels = [1.1]
 metadata/_edit_lock_ = true
 
-[node name="UILayer" type="CanvasLayer" parent="Camera2D"]
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="PauseControl" parent="UILayer" instance=ExtResource("17_sbd1k")]
+visible = false

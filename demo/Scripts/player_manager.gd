@@ -10,7 +10,8 @@ func _ready():
 	var battle_ui = battle_ui_scene.instantiate();
 	player = player_scene.instantiate()
 	add_child(player)
-	get_node("/root/Main/Camera2D/UILayer").add_child(battle_ui)
+#	get_node("/root/Main/Camera2D/UILayer").add_child(battle_ui)
+	get_node("/root/Main/UILayer").add_child(battle_ui)
 	player.position = get_node("SpawnPoint").position
 	GameManager._set_player_data(player)
 	
