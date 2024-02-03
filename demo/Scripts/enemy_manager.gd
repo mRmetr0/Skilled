@@ -2,7 +2,7 @@ extends Node
 
 @onready var rng = RandomNumberGenerator.new()
 @onready var time_passed = 0.0
-@onready var screen = get_window().size
+@onready var screen = Vector2i(2600, 1600)
 
 @export var wave_data : Array[wave_resource]
 var current_wave : wave_resource

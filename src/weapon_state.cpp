@@ -2,7 +2,7 @@
 
 using namespace godot;
 
-#pragma region base_weapon_state
+#pragma region base_weapon_state    
 void WeaponState::start(Node& node, int p_start_clip) {
     bullet_amount = magazine_size + p_start_clip;
 

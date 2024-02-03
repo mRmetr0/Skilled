@@ -16,7 +16,27 @@
         {
             "label": "build release",
             "type": "shell",
-            "command": "bash -c \"scons platform=linux target=template_release & scons platform=windows target=template_release arch=x86_64\"",
+            "command": "bash -c \"scons platform=linux target=template_release; scons platform=windows target=template_release arch=x86_64\"",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build release linux",
+            "type": "shell",
+            "command": "bash -c \"scons platform=linux target=template_release\"",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build release windows",
+            "type": "shell",
+            "command": "bash -c \"scons platform=windows target=template_release arch=x86_64\"",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
