@@ -7,7 +7,6 @@
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 
-#include "gdexample.h"
 #include "player.h"
 #include "labourer.h"
 #include "enemy.h"
@@ -18,9 +17,7 @@ using namespace godot;
 void initialize_example_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
         return;
-    }    
-
-    ClassDB::register_class<GDExample>();
+    }
 
     
     ClassDB::register_class<Player>();

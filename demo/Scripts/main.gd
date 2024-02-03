@@ -15,8 +15,9 @@ func _input(event):
 	if event.is_action_pressed("pause"):
 		_set_pause(!paused)
 	if event.is_action_pressed("backspace") && paused:
-		get_tree().change_scene_to_file("res://Scenes/Menus/main_menu.tscn")
+		BulletPool._clear_all_bullets()
 		get_tree().paused = false # TODO: MAKE PAUSE MENU WORK WITH BUTTONS INSTEAD OF KEY INPUTS
+		get_tree().change_scene_to_file("res://Scenes/Menus/main_menu.tscn")
 
 func _set_pause(set_paused):
 	get_tree().paused = set_paused

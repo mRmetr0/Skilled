@@ -16,4 +16,4 @@ mono_crash.*.json
 
 #CPP specific
 SConstruct
-godot-cpp/
+godot-cpp*/
