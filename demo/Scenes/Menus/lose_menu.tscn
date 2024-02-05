@@ -16,9 +16,12 @@ script = ExtResource("1_l1pnw")
 [node name="TextureRect" type="TextureRect" parent="."]
 modulate = Color(0.817521, 0.817521, 0.817521, 1)
 texture_filter = 1
-layout_mode = 0
-offset_right = 2568.0
-offset_bottom = 1616.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("2_cqbu6")
 expand_mode = 1
 

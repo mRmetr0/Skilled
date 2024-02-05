@@ -130,7 +130,7 @@ public:
 class DamagedState : public EnemyState {
 private:
     bool animated = false;
-    double hit_stun = 0.3;
+    double hit_stun = 0.1;
 public:
     DamagedState(){}
     ~DamagedState(){}
